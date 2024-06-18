@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+                xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	  
+<head th:replace="~{layout/comm/config :: configFragment}"></head>
+<body>
+	<!-- header -->
+	<header th:replace="~{layout/comm/header :: headerFragment}"></header>
+
+	<main>
+		<!-- 페이지별 메인컨텐츠 -->
+		<th:block layout:fragment = "content">
+			<!-- 각페이지의 메인 컨텐츠 코드-->
+		</th:block>
+		
+		
+		<!-- footer -->
+		<footer th:replace="~{layout/comm/footer :: footerFragment}"></footer>
+	</main>
+
+	<!-- script -->
+	<th:block th:replace="~{layout/comm/script :: script}"></th:block>
+
+
+	<!-- 페이지별 필요한 스크립트 재정의 -->
+    <th:block layout:fragment = "script">
+      <!--각각의 페이지에서 필요한 자바사크립트 작성-->  
+    </th:block>
+
+
+
+
+</body>
+</html>
