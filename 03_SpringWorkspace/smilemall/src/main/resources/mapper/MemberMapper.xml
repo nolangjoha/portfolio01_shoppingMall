@@ -2,6 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.smilemall.basic.member.MemberMapper">
 
+	<!-- [아이디 중복체크] -->
+	<select id="idCheck" parameterType="String" resultType="String">
+		SELECT
+			mbsp_id
+		FROM
+			mbsp_tbl
+		WHERE
+			mbsp_id= #{mbsp_id}
+	</select>
+
+
+
+
 
 
 </mapper>

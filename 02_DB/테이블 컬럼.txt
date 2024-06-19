@@ -1,0 +1,14 @@
+- 아이디 : mbsp_id
+- 이름 : mbsp_name 
+- 이메일 : mbsp_email
+- 비밀번호 : mbsp_password 
+- 우편번호 : mbsp_zipcode 
+- 주소 : mbsp_addr
+- 세부주소 : mbsp_deaddr 
+- 연락처 : mbsp_phone 
+- 별명 : mbsp_nick
+- 마케팅 수신여부 : mbsp_receive 
+- 포인트 : mbsp_point
+- 마지막 접속 : mbsp_lastlogin
+- 최초등록일 : mbsp_datesub 
+- 최근 정보갱신일 mbsp_updatedate

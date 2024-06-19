@@ -10,4 +10,10 @@ public class MemberService {
 
 	private final MemberMapper memberMapper;
 	
+	//[아이디 중복체크]
+	public String idCheck(String mbsp_id) {
+		return memberMapper.idCheck(mbsp_id);
+	}
+	
+	
 }
