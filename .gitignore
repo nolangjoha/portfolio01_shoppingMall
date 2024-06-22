@@ -1,2 +1,3 @@
 **/application.properties
+**/email.properties
 02_DB/01_포르젝트계정 생성_관리자_sys.sql

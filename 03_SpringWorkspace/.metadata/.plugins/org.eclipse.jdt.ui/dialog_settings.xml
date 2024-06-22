@@ -11,7 +11,7 @@
 		<item key="create_package_info_java" value="false"/>
 	</section>
 	<section name="NewPackageCreationWizard.dialogBounds">
-		<item key="DIALOG_X_ORIGIN" value="352"/>
+		<item key="DIALOG_X_ORIGIN" value="705"/>
 		<item key="DIALOG_Y_ORIGIN" value="324"/>
 		<item key="DIALOG_WIDTH" value="622"/>
 		<item key="DIALOG_HEIGHT" value="505"/>
@@ -37,8 +37,8 @@
 		<item key="create_unimplemented" value="true"/>
 	</section>
 	<section name="NewClassCreationWizard.dialogBounds">
-		<item key="DIALOG_X_ORIGIN" value="903"/>
-		<item key="DIALOG_Y_ORIGIN" value="329"/>
+		<item key="DIALOG_X_ORIGIN" value="705"/>
+		<item key="DIALOG_Y_ORIGIN" value="246"/>
 		<item key="DIALOG_WIDTH" value="696"/>
 		<item key="DIALOG_HEIGHT" value="783"/>
 		<item key="DIALOG_FONT_NAME" value="1|맑은 고딕|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|맑은 고딕"/>

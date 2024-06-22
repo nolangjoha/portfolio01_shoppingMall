@@ -44,4 +44,24 @@ public class MemberController {
 		return entity;
 	}
 	
+	// [닉네임 중복체크]
+	@GetMapping("/nickCheck")
+	public ResponseEntity<String> nickCheck(String mbsp_nick) throws Exception{
+		log.info("닉네임 중복체크(nickCheck):" + mbsp_nick);
+		
+		ResponseEntity<String> entity = null;
+		
+		String nickUse = "";
+		
+		if(memberService.nickCheck(mbsp_nick) != null) {	//사용자가 입력한 네임이가 DB에 존재하면
+			nickUse ="no";								//no : 사용불가
+		}else {
+			nickUse ="yes";								//yes : 사용가능
+		}
+			
+		entity = new ResponseEntity<String>(nickUse, HttpStatus.OK);
+		
+		return entity;
+	}
+	
 }

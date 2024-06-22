@@ -15,5 +15,8 @@ public class MemberService {
 		return memberMapper.idCheck(mbsp_id);
 	}
 	
-	
+	//[닉네임 중복체크]
+	public String nickCheck(String mbsp_nick) {
+		return memberMapper.idCheck(mbsp_nick);
+	}
 }

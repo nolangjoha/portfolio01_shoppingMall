@@ -9,7 +9,7 @@
 		<th:block layout:fragment="content">
 			
 			<div class="container">
-			<h1 class="mt-5" >회원가입</h1>
+			<h1 class="mt-5 text-center" >회원가입</h1>
 				<div calss="row">
 					<div class="col">
 					
@@ -33,25 +33,26 @@ mbsp_point, mbsp_lastlogin, mbsp_datesub, mbsp_updatedate
 										<div class="col-sm-2">
 											<button type="button" class="btn btn-outline-primary" id="btnIDCheck">아이디 중복확인</button>									
 										</div>
-									    <span for="mbsp_id" class="col-sm-3 col-form-label" id="idCheckMsg" style="color:red"></span>									
+									    <span for="mbsp_id" class="col-sm-3 col-form-label" id="idCheckMsg" style="color:blue"></span>									
 									</div>
 									<div class="form-group row">
-										<label for="mbsp_nick" class="col-sm-2 col-form-label">별명</label>
+										<label for="mbsp_nick" class="col-sm-2 col-form-label">닉네임</label>
 										<div class="col-sm-4">
 											<input type="text" class="form-control" id="mbsp_nick" name="mbsp_nick" placeholder="닉네임">
 										</div>
 										<div class="col-sm-2">
 											<button type="button" class="btn btn-outline-primary" id="btnNickCheck">닉네임 중복확인</button>									
-										</div>										
+										</div>		
+										<span for="mbsp_nick" class="col-sm-3 col-form-label" id="nickCheckMsg" style="color:blue"></span>									
 									</div>									
 									<div class="form-group row">
 										<label for="mbsp_password" class="col-sm-2 col-form-label">비밀번호</label>
 										<div class="col-sm-4">
 											<input type="text" class="form-control" id="mbsp_password" name="mbsp_password" placeholder="비밀번호">
 										</div>
-										<label for="inputEmail3" class="col-sm-2 col-form-label">비밀번호 확인</label>
+										<label for="mbsp_password_confirm" class="col-sm-2 col-form-label">비밀번호 확인</label>
 										<div class="col-sm-4">
-											<input type="text" class="form-control" id="mbsp_id" name="mbsp_id" placeholder="비밀번호확인">
+											<input type="text" class="form-control" id="mbsp_password_confirm" name="mbsp_password_confirm" placeholder="비밀번호확인">
 										</div>									
 									</div>
 									<div class="form-group row">
@@ -90,12 +91,18 @@ mbsp_point, mbsp_lastlogin, mbsp_datesub, mbsp_updatedate
 									</div>
 									<div class="form-group row">
 										<label for="mbsp_email" class="col-sm-2 col-form-label">이메일</label>
-										<div class="col-sm-4">
+										<div class="col-sm-3">
 											<input type="text" class="form-control" id="mbsp_email" name="mbsp_email" placeholder="이메일">
 										</div>
 										<div class="col-sm-2">
-											<button type="button" class="btn btn-outline-primary">이메일 인증확인</button>									
-										</div>											
+											<button type="button" class="btn btn-outline-primary" id="btnMailAuthcode">메일인증 요청</button>									
+										</div>
+										<div class="col-sm-3">
+											<input type="text" class="form-control" id="mbsp_authcode" name="mbsp_authcode" placeholder="인증코드 입력">
+										</div>
+										<div class="col-sm-2">
+											<button type="button" class="btn btn-outline-primary" id="btnConfirmAuth">이메일 인증확인</button>									
+										</div>																						
 									</div>									
 					
 									<div class="form-group row">
@@ -228,7 +235,8 @@ mbsp_point, mbsp_lastlogin, mbsp_datesub, mbsp_updatedate
 		<script>
 			$(document).ready(function(){
 				
-				let userIDEhcek = false;   // 아이디 중복체크 기능을 사용했는지 유무 확인(전역변수)
+				let userIDChcek = false;   // 아이디 중복체크 기능을 사용했는지 유무 확인(전역변수)
+				
 				
 				// [1. 아이디 체크 기능]
 				$("#btnIDCheck").on("click", function(){	//아이디 중복체크 기능을 클릭하면
@@ -262,8 +270,100 @@ mbsp_point, mbsp_lastlogin, mbsp_datesub, mbsp_updatedate
 					});	//회원가입폼 DB연결 ajax. 끝 		
 				}); // [1. 아이디 체크 기능]. 끝	
 				
+		
+				// [2. 닉네임 체크 기능]
+				$("#btnNickCheck").on("click", function(){	//아이디 중복체크 기능을 클릭하면
+					
+					if($("#mbsp_nick").val() == "") {		    //아이디 값이 없으면
+						alert("아이디를 입력해주세요.");		    //경고창 출력
+						$("#mbsp_nick").focus();			    //아이디 입력칸 집중
+						
+						return; //아이디값없이 진행을 막기위해 return사용.
+					}
+					
+					// [회원가입폼 DB연결]
+					$.ajax({
+						url: '/member/nickCheck',
+						type: 'get',
+						data: {mbsp_nick : $("#mbsp_nick").val()},
+						dataType: 'text',
+						success: function(result) {
+							if(result == "yes"){
+								alert("사용 가능한 닉네임 입니다.")
+								$("#nickCheckMsg").html("※사용 가능한 닉네임 입니다.")
+							}
+							else{
+								alert("중복된 아이디 입니다.")
+								$("#btnNickCheck").html("※중복된 닉네임 입니다.")
+								$("#mbsp_nick").val("");
+								$("#mbsp_nick").focus();
+							}
+						}
+
+					});	//회원가입폼 DB연결 ajax. 끝 		
+				}); // [2. 닉네임 체크 기능]. 끝	
 				
-			});
+				
+				// [3. 이메일 인증코드 요청]
+				$("#btnMailAuthcode").on("click", function() {	//이메일 인증버튼 클릭시
+					
+					// 값이 없으면 경고창 출력
+					if($("#mbsp_email").val() == "") {
+						alert("메일을 입력하세요.")
+						$("#mbsp_email"),focus();
+						return;
+					}
+					
+				$.ajax ({
+						url: '/email/authcode', 
+						type: 'get',
+						data: {receiverMail : $("#mbsp_email").val(), type: "emailJoin"},
+						dataType: 'text',
+						success: function(result) {
+							if(result == "success") {
+								alert("메일로 인증코드가 발급되었습니다.")
+							}
+						}					
+					});
+				}); //[3. 이메일 인증코드 요청]. 끝.
+
+				
+				// [4. 이메일 인증코드 확인]					
+				$("#btnConfirmAuth").on("click", function() {
+					
+					if($("#mbsp_authcode").val() == "") {
+						alert("인증코드를 입력하세요");
+						$("#mbsp_authcode").focus;
+						return;
+					}
+					$.ajax({
+						url : '/email/confirm_authcode',
+						type : 'get',
+						data : {authcode : $("#mbsp_authcode").val()},
+						dataType : 'text',
+ 						success : function(result) {
+ 							if(result == "success") {
+ 								alert("인증이 확인되었습니다.");
+ 							}else if(result == "fail") {
+ 								alert("인증코드 값을 확인해주세요.");
+ 							}else if(result == "request") {
+ 								alert("인증코드가 소멸되었습니다. \n인증요청메일을 다시 진행해주세요.")
+ 							}
+ 							
+ 						},
+ 						//스프링쪽에서 에러가 발생해서 클라이언트 쪽에 표시 될 때 아래 코드 실행.
+ 						error : function(){ 							
+ 						}
+					});
+				});// [4. 이메일 인증코드 확인]. 끝.	
+				
+				
+				
+				
+				
+				
+			}); //제이쿼리. 끝.
+		
 		
 		
 		</script>

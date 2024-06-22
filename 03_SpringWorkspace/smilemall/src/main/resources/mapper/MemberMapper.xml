@@ -12,7 +12,15 @@
 			mbsp_id= #{mbsp_id}
 	</select>
 
-
+	<!-- [닉네임 중복체크] -->
+	<select id="nickCheck" parameterType="String" resultType="String">
+		SELECT
+			mbsp_nick
+		FROM
+			mbsp_tbl
+		WHERE
+			mbsp_nick= #{mbsp_nick}
+	</select>
 
 
 
