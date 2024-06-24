@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 public class EmailConfig {
 
 	public EmailConfig() throws Exception{
-		log.info("EmailConfig생성자 called");
+		log.info("EmailConfig 생성자 called");
 	}
 	
 	//현재 사용되지 않는듯 하나 영향을 주는것 같으므로 작성

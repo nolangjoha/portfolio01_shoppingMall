@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+				layout:decorate="~{/layout/baselayout}">
+				
+  
+<body>
+	<main role="main">
+
+		<th:block layout:fragment="content">
+			
+			<div class="container">
+			<h1 class="mt-5 text-center" >로그인</h1>
+				<div calss="row">
+					<div class="col">
+					
+						<!-- 메인 Content 시작 -->
+						<div class="card card-info">
+							<div class="card-header">
+								<h3 class="card-title">로그인 정보 입력</h3>
+							</div>
+							
+							<form class="form-horizontal" id="loginForm" action="/member/login" method="post">
+								<div class="card-body">
+									<div class="form-group row">
+										<label for="mbsp_id" class="col-sm-4 col-form-label">아이디</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" id="mbsp_id" name="mbsp_id" placeholder="아이디">
+										</div>									
+									</div>
+									<div class="form-group row">
+										<label for="mbsp_password" class="col-sm-4 col-form-label">비밀번호</label>
+										<div class="col-sm-8">
+											<input type="password" class="form-control" id="mbsp_password" name="mbsp_password" placeholder="비밀번호">
+										</div>
+									</div>
+
+								</div>
+								
+								<div class="card-footer text-center">
+									<button type="submit" class="btn btn-info btn-block" id="btnlogin">로그인</button>
+								</div>
+							
+							</form>
+							
+								<div class="card-footer text-center">
+									<a href="/member/idfind">아이디 찾기</a>
+									<sapn> | </sapn>
+									<a href="#">비밀번호 찾기</a>
+								</div>
+							
+						</div>					
+						<!-- 메인 Content 끝 -->
+					
+					</div>
+				</div>
+			</div>
+
+		</th:block>
+	</main>
+	
+	
+	<!-- 페이지별 필요한 스크립트 재정의 -->
+    <th:block layout:fragment = "script">
+
+    
+    	<script th:inline ="javascript">
+    		let msg = [[ ${msg} ]];
+    		if(msg == "failID") {
+                alert("아이디를 정확히 입력해주세요.");
+                document.getElementById("mbsp_id").focus();
+
+            } else if(msg == "failPW") {
+                alert("비밀번호를 정확히 입력해주세요.");
+                document.getElementById("mbsp_id").focus();
+            }
+			
+		</script>
+		
+    
+    </th:block>
+    
+
+		
+   
+    
+    
+</body>
+</html> 

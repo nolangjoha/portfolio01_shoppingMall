@@ -22,7 +22,56 @@
 			mbsp_nick= #{mbsp_nick}
 	</select>
 
+	<!-- [회원가입 저장] // parameterType 경로 생략을 위한 환경설정 등록-->
+	<insert id="join" parameterType="MemberVO">
+		INSERT INTO
+			mbsp_tbl(
+				 mbsp_id, 
+				 mbsp_name, 
+				 mbsp_email, 
+				 mbsp_password, 
+				 mbsp_zipcode, 
+				 mbsp_addr, 
+				 mbsp_deaddr, 
+				 mbsp_phone, 
+				 mbsp_nick, 
+				 mbsp_receive)
+			VALUES(
+				 #{mbsp_id}, 
+				 #{mbsp_name}, 
+				 #{mbsp_email}, 
+				 #{mbsp_password}, 
+				 #{mbsp_zipcode}, 
+				 #{mbsp_addr}, 
+				 #{mbsp_deaddr}, 
+				 #{mbsp_phone}, 
+				 #{mbsp_nick}, 
+				 #{mbsp_receive})
+	</insert>
 
+	<!-- [로그인 작업] -->
+	<select id="login" resultType="MemberVO" parameterType="String">
+		SELECT
+			mbsp_id, 
+			mbsp_password
+		FROM
+			mbsp_tbl
+		WHERE
+			mbsp_id = #{mbsp_id} 
+	</select>
+
+	
+	<!-- [아이디 찾기] -->
+	<select id="idfind" resultType="String">
+		SELECT
+			mbsp_id
+		FROM
+			mbsp_tbl
+		WHERE
+			mbsp_name = #{mbsp_name}
+		AND
+			mbsp_email = #{mbsp_email}	
+	</select>
 
 
 </mapper>

@@ -23,6 +23,7 @@ public class EmailController {
 	public ResponseEntity<String> authcode(String type, EmailDTO dto, HttpSession session){
 		
 		log.info("dto확인:" + dto);
+		
 		ResponseEntity<String> entity = null;
 		
 		//인증코드 생성
