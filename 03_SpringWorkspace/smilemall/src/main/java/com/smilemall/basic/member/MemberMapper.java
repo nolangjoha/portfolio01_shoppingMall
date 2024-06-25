@@ -20,6 +20,13 @@ public interface MemberMapper {
 	// [아이디 찾기]
 	String idfind(@Param("mbsp_name") String mbsp_name, @Param("mbsp_email") String mbsp_email);
 	
+	// [비밀번호 찾기]
+	String pwfind(@Param("mbsp_id") String mbsp_id, @Param("mbsp_name") String mbsp_name, @Param("mbsp_email") String mbsp_email);
+	// [비밀번호 업데이트(재설정)]
+	void tempPwUpdate(@Param("mbsp_id") String mbsp_id, @Param("temp_enc_pw") String temp_enc_pw);
+	
+	// [마이페이지(수정하기)]
+	void modify(MemberVO vo);
 	
 	
 }

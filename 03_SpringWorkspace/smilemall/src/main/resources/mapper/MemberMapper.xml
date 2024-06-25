@@ -74,4 +74,46 @@
 	</select>
 
 
+	<!-- [비밀번호 찾기] -->
+	<select id="pwfind" resultType="String" parameterType="map">
+		SELECT
+			mbsp_email
+		FROM
+			mbsp_tbl
+		WHERE
+			mbsp_id = #{mbsp_id}
+		AND
+			mbsp_name = #{mbsp_name}				
+		AND
+			mbsp_email = #{mbsp_email}
+	</select>
+
+	<!-- [비밀번호 업데이트(재설정)] -->
+	<update id="tempPwUpdate" parameterType="map">
+		UPDATE
+			mbsp_tbl
+		SET
+			mbsp_password = #{temp_enc_pw}
+		WHERE
+			mbsp_id = #{mbsp_id}
+	</update>
+	
+
+	<!-- [마이페이지(수정하기)] -->
+	<update id="modify" parameterType="MemberVO">
+		UPDATE
+			mbsp_tbl
+		SET
+			mbsp_email = #{mbsp_email}
+			mbsp_zipcode = #{mbsp_zipcode}
+			mbsp_addr = #{mbsp_addr}
+			mbsp_deaddr = #{mbsp_deaddr}
+			mbsp_phone = #{mbsp_phone}
+			mbsp_nick = #{mbsp_nick}
+			mbsp_receive = #{mbsp_receive}
+		WHERE
+			mbsp_id = #{mbsp_id}
+	</update>
+
+
 </mapper>

@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -197,6 +198,93 @@ public class MemberController {
 		
 		return "redirect:" + url; 
 	}
+	
+	
+	
+	// [비밀번호 찾기 페이지]
+	@GetMapping("/pwfind")
+	public void pwfindForm() {
+		log.info("pwfindFrom페이지");
+	}
+	
+	// [비밀번호 찾기(재설정)]
+	@PostMapping("/pwfind")
+	public String pwfindOk(String mbsp_id,  String mbsp_name, String mbsp_email, String authcode, HttpSession session, RedirectAttributes rttr) throws Exception {
+		
+		String url = "";
+		String msg = "";
+		
+		// 발송한 인증코드가 입력한 인증코드와 같다면
+		if(authcode.equals(session.getAttribute("authcode"))) {
+			//사용자가 입력한 이메일을 d_email에 대입한다.
+			String d_email = memberService.pwfind(mbsp_id, mbsp_name, mbsp_email);
+			
+			//만약 입력된 이메일이 낫null이면
+			if(d_email != null) {
+				
+				//임시비밀번호 생성
+				String tempPw = memberService.getTemPw();
+				
+				// 임시비밀번호 암호화
+				String temp_enc_pw = passwordEncoder.encode(tempPw);
+				
+				// 암호화된 임시비빌번호를 사용자가 입력한 아이디어와 일치하는 DB에 저장
+				memberService.tempPwUpdate(mbsp_id, temp_enc_pw);
+				
+				EmailDTO dto = new EmailDTO("SmileMall", "SmileMall", d_email, "SmileMall에서 임시비밀번호를 보내드립니다.", tempPw);
+				
+				emailService.sendMail("emailPwResult", dto, tempPw);
+				
+				session.removeAttribute("authcode");
+				msg = "success";
+				url = "/member/pwfind";
+			//그렇지 않으면 다시 비밀번호 찾기 페이지 출력
+			}else {
+				msg = "failInput";
+				url = "/member/pwfind";
+			}
+			
+		}else {
+			msg = "failAuth";
+			url = "/member/pwfind";
+		}
+		
+		rttr.addFlashAttribute("msg", msg);
+		
+		return "redirect:" + url;  // 마이페이지 구현하면 로그인 화면나오게하고 비밀번호 변경 페이지로 이동하게 하기
+	}
+	
+	
+	//[마이페이지]
+	@GetMapping("/mypage")
+	public void mypage(HttpSession session, Model model) throws Exception {
+		
+		//만약 로그인 상태라면
+		if(session.getAttribute("login_status") != null) {
+			//로그인상태로 지정된 세션의 아이디를 mbsp_id에 대입한다.
+			String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
+			//사용자가 넣은 아이디로 로그인한 정보들을 vo에 대입한다.
+			MemberVO vo = memberService.login(mbsp_id);
+			log.info("수정할 아이디 정보" + mbsp_id);
+			model.addAttribute("user", vo);
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 }
