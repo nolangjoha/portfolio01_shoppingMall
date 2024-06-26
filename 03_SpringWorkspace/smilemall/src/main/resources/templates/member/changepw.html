@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+				layout:decorate="~{/layout/baselayout}">
+				
+  
+<body>
+	<main role="main">
+
+		<th:block layout:fragment="content">
+			
+			<div class="container">
+			<h1 class="mt-5 text-center" >비밀번호 변경</h1>
+				<div class="row">
+					
+				
+						<div class="col-3">
+							<section th:replace="~{member/comm/mypage_menu}"></section>
+						</div>
+													
+						<div class="col-9">
+							<form class="form-horizontal" id="changePwForm" action="/member/changepw" method="post">
+								<div class="card-body">
+									<div class="form-group row">
+										<label for="cur_mbsp_password" class="col-sm-4 col-form-label">현재 비밀번호</label>
+										<div class="col-sm-8">
+											<input type="password" class="form-control" id="cur_mbsp_password" name="cur_mbsp_password" >
+										</div>									
+									</div>
+									<div class="form-group row">
+										<label for="new_mbsp_password" class="col-sm-4 col-form-label">신규비밀번호</label>
+										<div class="col-sm-8">
+											<input type="password" class="form-control" id="new_mbsp_password" name="new_mbsp_password">
+										</div>									
+									</div>
+									<div class="form-group row">
+										<label for="new_mbsp_password2" class="col-sm-4 col-form-label">비밀번호 확인</label>
+										<div class="col-sm-8">
+											<input type="password" class="form-control" id="new_mbsp_password2" name="new_mbsp_password2">
+										</div>
+									</div>
+								</div>
+								
+								<div class="card-footer text-center">
+									<button type="button" class="btn btn-info btn-block" id="btnChangePw">비밀번호 변경</button>
+								</div>
+							
+							</form>
+						</div>					
+						<!-- 메인 Content 끝 -->
+					
+					
+				</div>
+			</div>
+
+		</th:block>
+	</main>
+	
+	
+	<!-- 페이지별 필요한 스크립트 재정의 -->
+    <th:block layout:fragment = "script">
+
+		<script>
+			$(document).ready(function(){
+				
+				// [비밀번호 버튼 클릭시]
+				$("#btnChangePw").on("click", function() {
+					if($("#cur_mbsp_password").val() == "") {
+						alert("현재비밀번호를 입력하세요.");
+						$("#cur_mbsp_password").focus();
+						return;
+					}
+					
+					if($("#new_mbsp_password").val()== "") {
+						alert("신규 비밀번호를 입력하세요.");
+						$("#new_mbsp_password").focus();
+						return;
+					}
+				
+					if($("#new_mbsp_password2").val()== "") {
+						alert("비밀번호 확인을 입력하세요.");
+						$("#new_mbsp_password2").focus();
+						return;
+					}
+					
+					if($("#new_mbsp_password").val() != $("#new_mbsp_password2").val()) {
+						alert("신규비밀번호가 일치하지 않습니다.");
+						$("#new_mbsp_password2").focus();
+						$("#new_mbsp_password2").val("");
+						return;
+					}
+					
+					
+					$("#changePwForm").submit();
+				});		
+				
+				
+			});  //ready event 끝.
+		</script>
+		    
+		<script>
+			let msg = [[${msg}]];
+			if(msg == "success") {
+				alert("비밀번호가 변경되었습니다.");
+			}else if (msg == "failPW") {
+				alert("현재 비밀번호를 확인해주세요.");
+			}
+				
+		
+		</script>	    
+		    
+    </th:block>
+    
+</body>
+</html> 

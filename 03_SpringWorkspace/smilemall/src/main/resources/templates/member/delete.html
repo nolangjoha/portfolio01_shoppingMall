@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+				layout:decorate="~{/layout/baselayout}">
+				
+  
+<body>
+	<main role="main">
+
+		<th:block layout:fragment="content">
+			
+			<div class="container">
+			<h1 class="mt-5 text-center" >회원탈퇴</h1>
+				<div class="row">
+					
+				
+						<div class="col-3">
+							<section th:replace="~{member/comm/mypage_menu}"></section>
+						</div>
+													
+						<div class="col-9">
+							<form class="form-horizontal" id="deleteForm" action="/member/delete" method="post">
+								<div class="card-body">
+									<div class="form-group row">
+										<label for="mbsp_password" class="col-sm-4 col-form-label">현재 비밀번호</label>
+										<div class="col-sm-8">
+											<input type="password" class="form-control" id="mbsp_password" name="mbsp_password" >
+										</div>									
+									</div>
+								</div>
+								
+								<div class="card-footer text-center">
+									<button type="button" class="btn btn-danger btn-block" id="btnDelete">회원탈퇴</button>
+								</div>
+							
+							</form>
+						</div>					
+						<!-- 메인 Content 끝 -->
+					
+					
+				</div>
+			</div>
+
+		</th:block>
+	</main>
+	
+	
+	<!-- 페이지별 필요한 스크립트 재정의 -->
+    <th:block layout:fragment = "script">
+
+		<script th:inline="javascript">
+			let msg = [[${msg}]];
+				if(msg == "failPW") {
+					alert("비밀번호를 확인해주세요");
+				}
+		
+			$(document).ready(function() {
+				$("#btnDelete").on("click", function() {
+					if($("#mbsp_password").val() == "") {
+						alert("현재 비밀번호를 입력하세요");
+						$("#mbsp_password").focus();
+						return;
+					}
+					
+					$("#deleteForm").submit();
+				});
+				
+				
+				
+			});  //ready event 끝.
+		</script>
+		    
+    
+		    
+    </th:block>
+    
+</body>
+</html> 

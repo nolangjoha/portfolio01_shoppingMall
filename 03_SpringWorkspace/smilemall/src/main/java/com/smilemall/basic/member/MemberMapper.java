@@ -25,8 +25,15 @@ public interface MemberMapper {
 	// [비밀번호 업데이트(재설정)]
 	void tempPwUpdate(@Param("mbsp_id") String mbsp_id, @Param("temp_enc_pw") String temp_enc_pw);
 	
-	// [마이페이지(수정하기)]
+	//[마이페이지 수정하기]
 	void modify(MemberVO vo);
+	
+	// [비밀번호 변경 작업]
+	void changePw(@Param("mbsp_id") String mbsp_id, @Param("new_mbsp_password") String new_mbsp_password);
+	
+	// [회원탈퇴]
+	void delete(String mbsp_id);
+	
 	
 	
 }

@@ -255,7 +255,7 @@ public class MemberController {
 	}
 	
 	
-	//[마이페이지]
+	//[마이페이지 출력]
 	@GetMapping("/mypage")
 	public void mypage(HttpSession session, Model model) throws Exception {
 		
@@ -266,25 +266,112 @@ public class MemberController {
 			//사용자가 넣은 아이디로 로그인한 정보들을 vo에 대입한다.
 			MemberVO vo = memberService.login(mbsp_id);
 			log.info("수정할 아이디 정보" + mbsp_id);
-			model.addAttribute("user", vo);
+			model.addAttribute("member", vo);
 		}
+	}
+	
+	// [마이페이지 수정하기]
+	@PostMapping("/modify")
+	public String modifyOk(MemberVO vo, HttpSession session, RedirectAttributes rttr) throws Exception {
+		log.info("수정된 아이디 정보 : " + vo);
+		
+		// 만약 로그인 상태가 아니라면 로그인 폼으로 이동
+		if(session.getAttribute("login_status") == null) return "redirect:/member/login";
+		
+		// 로그인 상태의 아이디를 대입한다.
+		String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
+		//vo에 로그인한 아이디의 정보들을 담는다.
+		vo.setMbsp_id(mbsp_id);
+		
+		//해당 정보들을 수정한다.
+		memberService.modify(vo);
+		
+		rttr.addFlashAttribute("msg", "success");
+		
+		return "redirect:/member/mypage";
 	}
 	
 	
 	
+	//[비밀번호 변경 페이지]
+	@GetMapping("/changepw")
+	public void changePwForm() {
+		log.info("changePwForm출력");
+	}
 	
 	
+	// [비밀번호 변경하기]
+	@PostMapping("/changepw")
+	public String changepwOk(String cur_mbsp_password, String new_mbsp_password, HttpSession session, RedirectAttributes rttr) {
+		
+		//사용자가 입력한 아이디를 대입한다.
+		String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
+		
+		//로그인 기능으로 받아온 데이터를 대입한다.
+		MemberVO vo = memberService.login(mbsp_id);
+		
+		//if문 실행 후 대입될 메세지
+		String msg = "";
+		
+		//만약에 DB데이터가 있다면 if문을 실행한다.
+		if(vo != null) {
+			// 만약 사용자가 입력한 비밀번호가 DB의 암호화된 비밀번호와 일치한다면?
+			if(passwordEncoder.matches(cur_mbsp_password, vo.getMbsp_password())) {
+				
+				// 새비밀번호를 인코딩해 대입한다.
+				String enc_new_mbsp_password = passwordEncoder.encode(new_mbsp_password);
+				// 로그인한 아이디의 비밀번호를 인코딩된 비밀번호로 변경한다.
+				memberService.changePw(mbsp_id, enc_new_mbsp_password);
+				//success 문자열 msg에 대입
+				msg = "success";
+			}else {
+				msg = "failPW";
+			}
+		}
+		//타임리프에서 msg변수를 사용할 예정. if문 진행 시 msg에는 success가 대입되어 있음.
+		rttr.addFlashAttribute("msg", msg);
+		
+		return "redirect:/member/changepw";
+	}
 	
 	
+	// [회원탈퇴 페이지]
+	@GetMapping("/delete")
+	public void deletdForm() {
+		log.info("deleteForm 출력");
+	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	// [회원탈퇴 기능]
+	@PostMapping("/delete")
+	public String deleteOk(String mbsp_password, HttpSession session, RedirectAttributes rttr) throws Exception {
+		
+		//사용자가 입력한 아이디를 대입한다.
+		String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
+		
+		//로그인 기능으로 받아온 데이터를 대입한다.
+		MemberVO vo = memberService.login(mbsp_id);
+		
+		
+		String msg = "";
+		String url = "/";
+		
+		//db에 아이디가 있으면 if문 실행
+		if(vo != null) {
+			//사용자가 입력한 비밀번호가 암호화된 비밀번호와 매치된다면 if문 실행
+			if(passwordEncoder.matches(mbsp_password, vo.getMbsp_password())) {
+				// 해당 아이디와 정보를 삭제한다.
+				memberService.delete(mbsp_id);
+				// 세션을 제거한다.
+				session.invalidate();
+			}else {
+				// 암호화된 메세지와 매치되지 않는다면
+				msg = "failPW"; 
+				url = "/member/delete"; // 회원탈퇴 폼 재출력
+			
+				rttr.addFlashAttribute("msg", msg);
+			}
+		}
+		
+		return "redirect:" + url;
+	}
 }

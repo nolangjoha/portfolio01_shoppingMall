@@ -10,47 +10,46 @@
 			
 			<div class="container">
 			<h1 class="mt-5 text-center" >마이페이지</h1>
-				<div calss="row">
-					<div class="col">
+				<div class="row">
 					
-						<!-- 메인 Content 시작 -->
-						<div class="card card-info">
-							<div class="card-header">
-								<h3 class="card-title">내정보</h3>
-							</div>
-<!-- 
-mbsp_id, mbsp_name, mbsp_email, mbsp_password, mbsp_zipcode, mbsp_addr, mbsp_deaddr, mbsp_phone, mbsp_nick, mbsp_receive, 
-mbsp_point, mbsp_lastlogin, mbsp_datesub, mbsp_updatedate
- -->							
+				
+						<div class="col-3">
+							<section th:replace="~{member/comm/mypage_menu}"></section>
+						</div>
+													
+						<div class="col-9">
 							
-							<form class="form-horizontal" id="joinForm" action="/member/join" method="post">
+							<form class="form-horizontal" id="modifyForm" th:action="@{/member/modify}" method="post">
 								<div class="card-body">
+									<div class="form-group row">
+										<label for="mbsp_datesub" class="col-sm-2 col-form-label">가입일</label>
+										<div class="col-sm-4">
+											<input type="text" class="form-control" th:value="${#dates.format(member.mbsp_datesub, 'yyyy-MM-dd HH:mm:ss')}" readonly>
+										</div>																
+									</div>								
 									<div class="form-group row">
 										<label for="mbsp_id" class="col-sm-2 col-form-label">아이디</label>
 										<div class="col-sm-4">
-											<input type="text" class="form-control" id="mbsp_id" name="mbsp_id" placeholder="아이디" readonly>
-										</div>					
+											<input type="text" class="form-control" id="mbsp_id" name="mbsp_id" th:value="${member.mbsp_id}" readonly>
+										</div>
+										<label for="mbsp_name" class="col-sm-1 col-form-label">이름</label>
+										<div class="col-sm-5">
+											<input type="text" class="form-control" id="mbsp_name" name="mbsp_name" th:value=${member.mbsp_name} readonly>
+										</div>																
 									</div>
 									<div class="form-group row">
 										<label for="mbsp_nick" class="col-sm-2 col-form-label">닉네임</label>
-										<div class="col-sm-4">
-											<input type="text" class="form-control" id="mbsp_nick" name="mbsp_nick" placeholder="닉네임">
+										<div class="col-sm-7">
+											<input type="text" class="form-control" id="mbsp_nick" name="mbsp_nick" th:value=${member.mbsp_nick} readonly>
 										</div>
-										<div class="col-sm-2">
-											<button type="button" class="btn btn-outline-primary" id="btnNickCheck">닉네임 중복확인</button>									
-										</div>		
-										<span for="mbsp_nick" class="col-sm-3 col-form-label" id="nickCheckMsg" style="color:blue"></span>									
-									</div>									
-									<div class="form-group row">
-										<label for="mbsp_name" class="col-sm-2 col-form-label">이름</label>
-										<div class="col-sm-4">
-											<input type="text" class="form-control" id="mbsp_name" name="mbsp_name" placeholder="이름" readonly>
-										</div>
-									</div>
+										<div class="col-sm-3">
+											<button type="button" class="btn btn-outline-primary" id="btnNickCheck">닉네임변경</button>									
+										</div>	
+									</div>								
 									<div class="form-group row">
 										<label for="mbsp_zipcode" class="col-sm-2 col-form-label">우편번호</label>
 										<div class="col-sm-4">
-											<input type="text" class="form-control" id="sample2_postcode" name="mbsp_zipcode" placeholder="우편번호">
+											<input type="text" class="form-control" id="sample2_postcode" name="mbsp_zipcode" th:value=${member.mbsp_zipcode}>
 										</div>
 										<div class="col-sm-2">
 											<button type="button" class="btn btn-outline-primary" onclick="sample2_execDaumPostcode()">우편번호</button>									
@@ -59,43 +58,36 @@ mbsp_point, mbsp_lastlogin, mbsp_datesub, mbsp_updatedate
 									<div class="form-group row">
 										<label for="mbsp_addr" class="col-sm-2 col-form-label">주소</label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control" id="sample2_address" name="mbsp_addr" placeholder="주소">
+											<input type="text" class="form-control" id="sample2_address" name="mbsp_addr" th:value=${member.mbsp_addr}>
 										</div>
 									</div>
 									<div class="form-group row">
 										<label for="mbsp_deaddr" class="col-sm-2 col-form-label">상세주소</label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control" id="sample2_detailAddress" name="mbsp_deaddr" placeholder="상세주소">
+											<input type="text" class="form-control" id="sample2_detailAddress" name="mbsp_deaddr" th:value=${member.mbsp_deaddr}>
 											<input type="hidden" id="sample2_extraAddress" placeholder="참고항목">
 										</div>
 									</div>
 									<div class="form-group row">
 										<label for="mbsp_phone" class="col-sm-2 col-form-label">연락처</label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control" id="mbsp_phone" name="mbsp_phone" placeholder="연락처">
+											<input type="text" class="form-control" id="mbsp_phone" name="mbsp_phone" th:value=${member.mbsp_phone}>
 										</div>
 									</div>
 									<div class="form-group row">
 										<label for="mbsp_email" class="col-sm-2 col-form-label">이메일</label>
-										<div class="col-sm-3">
-											<input type="text" class="form-control" id="mbsp_email" name="mbsp_email" placeholder="이메일">
+										<div class="col-sm-8">
+											<input type="text" class="form-control" id="mbsp_email" name="mbsp_email" th:value=${member.mbsp_email} readonly>
 										</div>
 										<div class="col-sm-2">
-											<button type="button" class="btn btn-outline-primary" id="btnMailAuthcode">메일인증 요청</button>									
-										</div>
-										<div class="col-sm-3">
-											<input type="text" class="form-control" id="mbsp_authcode" name="mbsp_authcode" placeholder="인증코드 입력">
-										</div>
-										<div class="col-sm-2">
-											<button type="button" class="btn btn-outline-primary" id="btnConfirmAuth">이메일 인증확인</button>									
-										</div>																						
+											<button type="button" class="btn btn-outline-primary" id="btnMailAuthcode">메일변경</button>									
+										</div>																					
 									</div>									
 					
 									<div class="form-group row">
 										<div class="offset-sm-2 col-sm-10">
 											<div class="form-check">
-												<input type="checkbox" class="form-check-input" onclick="$('#mbsp_receive').val('Y')">
-												<input type="hidden" class="form-check-input" id="mbsp_receive" name="mbsp_receive" value="N">	
+												<input type="checkbox" class="form-check-input" id=mbsp_receive name="mbsp_receive" th:value="${member.mbsp_receive}">
 												<label class="form-check-label" for="mbsp_receive">메일수신 동의</label>
 											</div>
 										</div>
@@ -110,7 +102,7 @@ mbsp_point, mbsp_lastlogin, mbsp_datesub, mbsp_updatedate
 						</div>					
 						<!-- 메인 Content 끝 -->
 					
-					</div>
+					
 				</div>
 			</div>
 
@@ -219,176 +211,23 @@ mbsp_point, mbsp_lastlogin, mbsp_datesub, mbsp_updatedate
 		
 		<!-- 제이쿼리 사용 시작 -->
 		<script>
+			let msg = [[${msg}]];
+			if(msg == "success"){
+				alert("회원정보가 수정되었습니다.");
+			}	
+			
 			$(document).ready(function(){
-				
-				let userIDChcek = false;   // 아이디 중복체크 기능을 사용했는지 유무 확인(전역변수)
-				
-				
-				// [1. 아이디 체크 기능]
-				$("#btnIDCheck").on("click", function(){	//아이디 중복체크 기능을 클릭하면
-					
-					if($("#mbsp_id").val() == "") {		    //아이디 값이 없으면
-						alert("아이디를 입력해주세요.");		    //경고창 출력
-						$("#mbsp_id").focus();			    //아이디 입력칸 집중
-						
-						return; //아이디값없이 진행을 막기위해 return사용.
-					}
-					
-					// [회원가입폼 DB연결]
-					$.ajax({
-						url: '/member/idCheck',
-						type: 'get',
-						data: {mbsp_id : $("#mbsp_id").val()},
-						dataType: 'text',
-						success: function(result) {
-							if(result == "yes"){
-								alert("사용 가능한 아이디 입니다.")
-								$("#idCheckMsg").html("※사용 가능한 아이디 입니다.")
-							}
-							else{
-								alert("중복된 아이디 입니다.")
-								$("#idCheckMsg").html("※중복된 아이디 입니다.")
-								$("#mbsp_id").val("");
-								$("#mbsp_id").focus();
-							}
-						}
-
-					});	//회원가입폼 DB연결 ajax. 끝 		
-				}); // [1. 아이디 체크 기능]. 끝	
-				
-		
-				// [2. 닉네임 체크 기능]
-				$("#btnNickCheck").on("click", function(){	//아이디 중복체크 기능을 클릭하면
-					
-					if($("#mbsp_nick").val() == "") {		    //아이디 값이 없으면
-						alert("아이디를 입력해주세요.");		    //경고창 출력
-						$("#mbsp_nick").focus();			    //아이디 입력칸 집중
-						
-						return; //아이디값없이 진행을 막기위해 return사용.
-					}
-					
-					// [회원가입폼 DB연결]
-					$.ajax({
-						url: '/member/nickCheck',
-						type: 'get',
-						data: {mbsp_nick : $("#mbsp_nick").val()},
-						dataType: 'text',
-						success: function(result) {
-							if(result == "yes"){
-								alert("사용 가능한 닉네임 입니다.")
-								$("#nickCheckMsg").html("※사용 가능한 닉네임 입니다.")
-							}
-							else{
-								alert("중복된 닉네임 입니다.")
-								$("#nickCheckMsg").html("※중복된 닉네임 입니다.")
-								$("#mbsp_nick").val("");
-								$("#mbsp_nick").focus();
-							}
-						}
-
-					});	//회원가입폼 DB연결 ajax. 끝 		
-				}); // [2. 닉네임 체크 기능]. 끝	
-				
-				
-				// [3. 이메일 인증코드 요청]
-				$("#btnMailAuthcode").on("click", function() {	//이메일 인증버튼 클릭시
-					
-					// 값이 없으면 경고창 출력
-					if($("#mbsp_email").val() == "") {
-						alert("메일을 입력하세요.")
-						$("#mbsp_email"),focus();
-						return;
-					}
-					
-				$.ajax ({
-						url: '/email/authcode', 
-						type: 'get',
-						data: {receiverMail : $("#mbsp_email").val(), type: "emailJoin"},
-						dataType: 'text',
-						success: function(result) {
-							if(result == "success") {
-								alert("메일로 인증코드가 발급되었습니다.")
-							}
-						}					
-					});
-				}); //[3. 이메일 인증코드 요청]. 끝.
-
-				
-				// [4. 이메일 인증코드 확인]					
-				$("#btnConfirmAuth").on("click", function() {
-					
-					if($("#mbsp_authcode").val() == "") {
-						alert("인증코드를 입력하세요");
-						$("#mbsp_authcode").focus;
-						return;
-					}
-					$.ajax({
-						url : '/email/confirm_authcode',
-						type : 'get',
-						data : {authcode : $("#mbsp_authcode").val()},
-						dataType : 'text',
- 						success : function(result) {
- 							if(result == "success") {
- 								alert("인증이 확인되었습니다.");
- 							}else if(result == "fail") {
- 								alert("인증코드 값을 확인해주세요.");
- 							}else if(result == "request") {
- 								alert("인증코드가 소멸되었습니다. \n인증요청메일을 다시 진행해주세요.")
- 							}
- 							
- 						},
- 						//스프링쪽에서 에러가 발생해서 클라이언트 쪽에 표시 될 때 아래 코드 실행.
- 						error : function(){ 							
- 						}
-					});
-				});// [4. 이메일 인증코드 확인]. 끝.	
-				
-				/*
-				//[5. 마케팅 수신여부 체크박스 값 가져오기]mbsp_receive  //n값이 전송되지 않는다.
-				$("#mbsp_receive").click(function(){
-					if(this.checked){
-						$(this).attr('value', 'Y');
-					}else
-						$(this).attr('value', 'N');
+				$("#btnModify").on("click", function() {
+					$("#modifyForm").submit();
 				});
-				*/
-				
-				// [6. 회원가입 클릭시]	
-				$("#btnJoin").on("click", function(){
-					console.log("click event");
-					
-					//회원가입 유효성 검사
-					$("#joinForm").submit();
-				});
-				
-				
-				
-				
-				
-				
-				
-			}); //제이쿼리. 끝.
-		
-		
-		
+			});
+			
+			
+			
 		</script>
-		<!-- 제이쿼리 사용 끝 -->
 		
-		<script>
-		function onClickcheckbox(){
-			if($("#mbsp_receive").is(':checked')) {
-				$("#mbsp_receive").val('Y');
-			}else {
-				$("#mbsp_receive").val('N');
-			}
-		}
 		
-		<!--
-		if(document.getElementById("mbsp_receive").checked) {
-			document.getElementById("mbsp_receive_hidden").disabled = true;
-		}
-		-->
-		</script>
+		
 		
     
     </th:block>

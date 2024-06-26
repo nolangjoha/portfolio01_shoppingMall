@@ -53,7 +53,19 @@
 	<select id="login" resultType="MemberVO" parameterType="String">
 		SELECT
 			mbsp_id, 
-			mbsp_password
+			mbsp_name,
+			mbsp_email,
+			mbsp_password,
+			mbsp_zipcode,
+			mbsp_addr,
+			mbsp_deaddr,
+			mbsp_phone,
+			mbsp_nick,
+			mbsp_receive,
+			mbsp_point,
+			mbsp_lastlogin,
+			mbsp_datesub,
+			mbsp_updatedate
 		FROM
 			mbsp_tbl
 		WHERE
@@ -98,22 +110,38 @@
 			mbsp_id = #{mbsp_id}
 	</update>
 	
-
-	<!-- [마이페이지(수정하기)] -->
-	<update id="modify" parameterType="MemberVO">
+	<!-- 마이페이지 수정하기 -->
+	<update id="modify" parameterType="MemberVO">  
 		UPDATE
 			mbsp_tbl
 		SET
-			mbsp_email = #{mbsp_email}
-			mbsp_zipcode = #{mbsp_zipcode}
-			mbsp_addr = #{mbsp_addr}
-			mbsp_deaddr = #{mbsp_deaddr}
-			mbsp_phone = #{mbsp_phone}
-			mbsp_nick = #{mbsp_nick}
-			mbsp_receive = #{mbsp_receive}
+ 			mbsp_email = #{mbsp_email}, 
+		    mbsp_zipcode = #{mbsp_zipcode}, 
+		    mbsp_addr = #{mbsp_addr}, 
+		    mbsp_deaddr = #{mbsp_deaddr}, 
+		    mbsp_phone = #{mbsp_phone}  
 		WHERE
 			mbsp_id = #{mbsp_id}
 	</update>
+
+	<!-- 비밀번호 변경 -->
+	<update id="changePw" parameterType="map">
+		UPDATE
+			mbsp_tbl
+		SET
+			mbsp_password = #{new_mbsp_password}
+		WHERE
+			mbsp_id = #{mbsp_id}
+	</update>
+
+
+	<!-- 회원탈퇴 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM
+			mbsp_tbl
+		WHERE
+			mbsp_id = #{mbsp_id}
+	</delete>
 
 
 </mapper>
