@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.smilemall.basic.mail.EmailDTO;
 import com.smilemall.basic.mail.EmailService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -81,11 +82,14 @@ public class MemberController {
 	
 	// [회원가입 저장]
 	@PostMapping("/join")
-	public String joinOk(MemberVO vo) throws Exception {
+	public String joinOk(MemberVO vo, HttpServletRequest request) throws Exception {
 		log.info("회원정보(joinOk) :" + vo); 
+		
 		
 		//비밀번호 암호화
 		vo.setMbsp_password(passwordEncoder.encode(vo.getMbsp_password()));
+		
+
 		
 		//사용자가 입력한 회원정보 DB저장.
 		memberService.join(vo);
@@ -282,6 +286,7 @@ public class MemberController {
 		String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
 		//vo에 로그인한 아이디의 정보들을 담는다.
 		vo.setMbsp_id(mbsp_id);
+		
 		
 		//해당 정보들을 수정한다.
 		memberService.modify(vo);

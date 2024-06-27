@@ -85,11 +85,12 @@
 									</div>									
 					
 									<div class="form-group row">
-										<div class="offset-sm-2 col-sm-10">
-											<div class="form-check">
-												<input type="checkbox" class="form-check-input" id=mbsp_receive name="mbsp_receive" th:value="${member.mbsp_receive}">
-												<label class="form-check-label" for="mbsp_receive">메일수신 동의</label>
-											</div>
+										<label for="mbsp_receive" class="col-sm-2 col-form-label">마케팅수신</label>
+										<div class="form-check">
+											<input type="radio"  th:field="*{mbsp_receive}">
+											<label class="form-check-label" for="mbsp_receive1">Y</label>
+											<input type="radio" th:field="*{mbsp_receive}">
+											<label class="form-check-label" for="mbsp_receive2">N</label>
 										</div>
 									</div>
 								</div>
@@ -220,13 +221,20 @@
 				$("#btnModify").on("click", function() {
 					$("#modifyForm").submit();
 				});
+				
+				//[체크박스 값]
 			});
-			
-			
-			
 		</script>
 		
-		
+		<script>
+			$(document).ready(function(){
+				if($("#mbsp_receive").val() == 'Y') {
+					$("#mbsp_receive").prop("checked", true)
+				} else {
+					$("#mbsp_receive").prop("checked", false)
+				}
+			});
+		</script>
 		
 		
     
