@@ -24,3 +24,19 @@ ADD CONSTRAINT PK_MBSP_ID PRIMARY KEY (MBSP_ID);
 --DROP TABLE MBSP_TBL;
 
 COMMIT;
+
+
+
+--2. 관리자(Admin) 테이블
+CREATE TABLE ADMIN_TBL (
+    ADMIN_ID    VARCHAR2(15)    PRIMARY KEY,
+    ADMIN_PW    CHAR(60)    NOT NULL,
+    ADMIN_VISIT_DATE    DATE
+);
+-- admin_tbl, admin_id, admin_pw, admin_visit_date
+
+--관리자 계정 데이터 삽입
+INSERT INTO ADMIN_TBL(ADMIN_ID, ADMIN_PW)VALUES('admin', '$2a$10$M2k.eIgxdKXrkuqzlq441ukiEeLH19YwjsgDx6NUADL/NyI3HoYCW');
+
+
+COMMIT;

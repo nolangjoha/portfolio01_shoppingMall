@@ -276,7 +276,7 @@ public class MemberController {
 	
 	// [마이페이지 수정하기]
 	@PostMapping("/modify")
-	public String modifyOk(MemberVO vo, HttpSession session, RedirectAttributes rttr) throws Exception {
+	public String modifyOk(MemberVO vo, HttpSession session, RedirectAttributes rttr, Model model) throws Exception {
 		log.info("수정된 아이디 정보 : " + vo);
 		
 		// 만약 로그인 상태가 아니라면 로그인 폼으로 이동

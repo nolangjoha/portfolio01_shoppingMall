@@ -119,7 +119,8 @@
 		    mbsp_zipcode = #{mbsp_zipcode}, 
 		    mbsp_addr = #{mbsp_addr}, 
 		    mbsp_deaddr = #{mbsp_deaddr}, 
-		    mbsp_phone = #{mbsp_phone}  
+		    mbsp_phone = #{mbsp_phone},
+		    mbsp_receive = #{mbsp_receive}  
 		WHERE
 			mbsp_id = #{mbsp_id}
 	</update>
