@@ -14,5 +14,10 @@ public class AdminService {
 	private final AdminMapper adminMapper;
 	
 	
+	// [관리자 로그인]
+	public AdminVo loginOk(String admin_id) {
+		return adminMapper.loginOk(admin_id);
+	}
+	
 	
 }

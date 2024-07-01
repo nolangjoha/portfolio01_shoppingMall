@@ -6,4 +6,15 @@
 	// admin_tbl // admin_id, admin_pw, admin_visit_date
 	 -->
 
+	<!-- [관리자 로그인] -->
+	<select id="loginOk" parameterType="String" resultType="com.smilemall.basic.admin.AdminVo">
+		SELECT
+			admin_id, admin_pw, admin_visit_date
+		FROM	
+			admin_tbl
+		WHERE
+			admin_id = #{admin_id}
+	</select>
+
+
 </mapper>
