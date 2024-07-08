@@ -18,4 +18,10 @@ public class AdminCategoryService {
 		return adminCategoryMapper.getFirstCategoryList();
 	}
 	
+	// [2차 카테고리 목록]
+	public List<CategoryVo> getSecondCategoryList(int cat_prtcode) {
+		return adminCategoryMapper.getSecondCategoryList(cat_prtcode);
+	}
+	
+	
 }

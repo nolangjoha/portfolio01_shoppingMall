@@ -16,12 +16,14 @@
 
 	<!-- 2차 카테고리 -->
 	<select id="getSecondCategoryList" resultType="CategoryVo">
+	
 		SELECT
 			cat_code, cat_prtcode, cat_name
 		FROM
 			category_tbl
 		WHERE
 			cat_prtcode = #{cat_prtcode}
+	
 	</select>
 
 </mapper>

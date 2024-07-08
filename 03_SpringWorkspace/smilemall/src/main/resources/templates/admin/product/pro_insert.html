@@ -22,14 +22,15 @@
 						<form role="form" method="post" action="/admin/product/pro_insert" enctype="multipart/form-data" style="padding-right:40px; padding-left:40px;">
 							<div class="box-body">
 							<div class="form-group row">
-							  <label for="title" class="col-sm-1 col-form-label">카테고리</label>
-				              <div class="col-sm-3">
+							  <label class="col-sm-2 col-form-label">1차 카테고리</label>
+				              <div class="col-sm-4">
 					          <select class="form-control" id="btn_firstCategory">
 					            <option>1차카테고리 선택</option>
 					            <option th:each="category : ${cate_list}" th:value="${category.cat_code}" th:text="${category.cat_name}"></option>
 					          </select>
 				              </div>
-				              <div class="col-sm-3">
+				              <label class="col-sm-2 col-form-label">2차 카테고리</label>
+				              <div class="col-sm-4">
 				                <select class="form-control" id="btn_secondCategory" name="cat_code">
 				                  <option>2차카테고리 선택</option>
 				                </select>
@@ -37,48 +38,48 @@
 							</div>
 							<hr>
 							<div class="form-group row">
-							  <label for="title" class="col-sm-1 col-form-label">상품명</label>
-				              <div class="col-sm-5">
+							  <label for="title" class="col-sm-2 col-form-label">상품명</label>
+				              <div class="col-sm-4">
 				                <input type="text" class="form-control" name="pro_name" id="pro_name" placeholder="상품명 입력...">
 				              </div>
-				              <label for="title" class="col-sm-1 col-form-label">상품가격</label>
-				              <div class="col-sm-5">
+				              <label for="title" class="col-sm-2 col-form-label">상품가격</label>
+				              <div class="col-sm-4">
 				                <input type="text" class="form-control" name="pro_price" id="pro_price" placeholder="상품가격 입력...">
 				              </div>
 							</div>
 							<div class="form-group row">
-							  <label for="title" class="col-sm-1 col-form-label">할인율</label>
-				              <div class="col-sm-5">
+							  <label for="title" class="col-sm-2 col-form-label">할인율</label>
+				              <div class="col-sm-4">
 				                <input type="text" class="form-control" name="pro_discount" id="pro_discount" placeholder="할인율 입력...">
 				              </div>
-				              <label for="title" class="col-sm-1 col-form-label">제조사</label>
-				              <div class="col-sm-5">
+				              <label for="title" class="col-sm-2 col-form-label">제조사</label>
+				              <div class="col-sm-4">
 				                <input type="text" class="form-control" name="pro_publisher" id="pro_publisher" placeholder="제조사 입력...">
 				              </div>
 							</div>
 							<div class="form-group row">
-							  <label for="title" class="col-sm-1 col-form-label">상품이미지</label>
-				              <div class="col-sm-5">
+							  <label for="title" class="col-sm-2 col-form-label">상품이미지</label>
+				              <div class="col-sm-4">
 				                <input type="file" class="form-control" name="uploadFile" id="uploadFile">
 				              </div>
-				              <label for="title" class="col-sm-1 col-form-label">대표이미지</label>
-				              <div class="col-sm-5">
+				              <label for="title" class="col-sm-2 col-form-label">대표이미지</label>
+				              <div class="col-sm-4">
 				               	<img id="img_preview" style="width:200px;height:200px;">
 				              </div>
 							</div>
 							<div class="form-group row">
-							  <label for="title" class="col-sm-1 col-form-label">상품설명</label>
-				              <div class="col-sm-11">
+							  <label for="title" class="col-sm-2 col-form-label">상품설명</label>
+				              <div class="col-sm-10">
 				                <textarea class="form-control" name="pro_content" id="pro_content" rows="3"></textarea>
 				              </div>
 				            </div>
 				            <div class="form-group row">
-							  <label for="title" class="col-sm-1 col-form-label">수량</label>
-				              <div class="col-sm-5">
+							  <label for="title" class="col-sm-2 col-form-label">수량</label>
+				              <div class="col-sm-4">
 				                <input type="text" class="form-control" name="pro_amount" id="pro_amount" placeholder="수량 입력...">
 				              </div>
-				              <label for="title" class="col-sm-1 col-form-label">판매여부</label>
-				              <div class="col-sm-5">
+				              <label for="title" class="col-sm-2 col-form-label">판매여부</label>
+				              <div class="col-sm-4">
 				               	<select class="form-control" id="pro_buy" name="pro_buy">
 				                  <option value="Y">판매가능</option>
 				                  <option value="N">판매불가능</option>
@@ -117,45 +118,60 @@
 			$("#btn_firstCategory").on("change", function() {
 
 				let cat_code = $("#btn_firstCategory").val();
-				let url = "/admin/category/secondcategory/" + cat_doce;
+				
+				  //2차 카테고리 주소
+		          let url = "/admin/category/secondcategory/" + cat_code;
 
-				$.getJSON(url, function(secondcategory_result) {
+				  //function(secondcategory_result) : 콜백함수, secondcategory_result: 임의로 정한 이름. 값은 url에서 받아옴. 
+				  $.getJSON(url, function(secondcategory_result) {
+
 					let btn_secondCategory = $("#btn_secondCategory");
 					let optionStr = "";
 
-					for(let i=0; i<secondcategory_result.lenth; i++) {
-						optionStr += "<option value ='" + secondcategory_result[i].cat_code + "'>" + secondcategory_result[i].cat_name + "</option>";
+					
+					for(let i=0; i<secondcategory_result.length; i++) {
+						optionStr += "<option value='" + secondcategory_result[i].cat_code + "'>" + secondcategory_result[i].cat_name + "</option>"; 
 					}
-				
-					btn_secondCategory.find("option").remove();
-					btn_secondCategory.append("<option>2차 카테고리 선택</option>");
-					btn_secondCategory.append(optionStr);
-				});
+
+					btn_secondCategory.find("option").remove();  // 제거 안해주면 계속 생김.
+					btn_secondCategory.append("<option>2차 카테고리 선택</option>"); 
+					btn_secondCategory.append(optionStr); 	// 2차 카테고리 재생성
+				  }); 
 			});
 
 			
-			// [파일첨부시 미리보기]
+			// [파일첨부시 이미지 미리보기]
 			$("#uploadFile").on("change", function(e) {
+
+				// 관리자가 넣은 파일 
 				let file = e.target.files[0];
-				
+
+				//reader객체 생성, FileReader: 파일을 읽고 파일의 내용을 다양한 방식으로 반환할 수 있는 객체 
 				let reader = new FileReader();
+				//file의 객체를 읽고 데이터 url로 변환
 				reader.readAsDataURL(file);
 
+				// 읽기 동작이 성공적으로 완료됐을 때 발생
 				reader.onload = function(e) {
+					// src속성을 읽어온 이미지데이터url로 변경
 					$("#img_preview").attr("src", e.target.result);
 				}
 			});
 
+
 			// [ckeditor 환경설정]
 			var ckeditor_config = {
-					resize_enabled : false,
-					enterMode : CKEDITOR.ENTER_BR,
-					shiftEnterMode : CKEDITOR.ENTER_P,
-					toolbarCanCollapse : true,
-					removePlugins : "elementpath",
-					filebrowserUploadUrl : '/admin/product/imageupload'
+				resize_enabled: false,					//사이즈 조정	
+				enterMode: CKEDITOR.ENTER_BR,			//엔터키 입력시 br 태그 변경
+				shiftEnterMode: CKEDITOR.ENTER_P,		//엔터키 입력시 pxormfh qusrud
+				toolbarCanCollapse: true,				//툴바 접히는 기능 넣을 때 사용
+				removePlugins: "elementspath",			//에디터 하단 상태바 태그 표시
+				//업로드 탭기능 추가 속성. CKEDITOR에서 파일 업로드해서 서버로 전송 버튼을 클릭하면, 이 주소가 동작된다.
+				filebrowserUploadUrl: '/admin/product/ckeditor_image_upload'  
+
 			}
-			
+
+
 			CKEDITOR.replace("pro_content", ckeditor_config);
 
 

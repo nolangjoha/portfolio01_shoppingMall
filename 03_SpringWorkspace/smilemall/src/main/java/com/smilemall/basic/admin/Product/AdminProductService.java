@@ -12,4 +12,10 @@ public class AdminProductService {
 
 	private final AdminProductMapper adminProductMapper;
 	
+	//[상품등록]
+	public void pro_insert(ProductVo vo) {
+		adminProductMapper.pro_insert(vo);
+	}
+	
+	
 }

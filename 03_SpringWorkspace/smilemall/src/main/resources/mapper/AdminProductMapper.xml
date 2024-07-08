@@ -2,6 +2,43 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.smilemall.basic.admin.Product.AdminProductMapper">
 
+<!-- 
+product_tbl
+/*
+pro_num, cat_code, pro_name, pro_price, pro_discount, pro_publisher, pro_content, pro_up_folder, pro_img, 
+pro_amount, pro_buy, pro_date, pro_updatedate
+*/
+ -->
+
+	<!-- [상품 등록하기]  -->
+	<insert id="pro_insert" parameterType="com.smilemall.basic.admin.Product.AdminProductMapper">
+		INSERT INTO product_tbl (
+			pro_num, 
+			cat_code, 
+			pro_name, 
+			pro_price, 
+			pro_discount, 
+			pro_publisher, 
+			pro_content, 
+			pro_up_folder, 
+			pro_img, 
+			pro_amount, 
+			pro_buy
+			)
+		VALUES (
+			seq_pro_num.NEXTVAL, 
+			#{cat_code}, 
+			#{pro_name}, 
+			#{pro_price}, 
+			#{pro_discount}, 
+			#{pro_publisher}, 
+			#{pro_content},
+			#{pro_up_folder}, 
+			#{pro_img}, 
+			#{pro_amount}, 
+			#{pro_buy}
+			)
+	</insert>
 
 
 </mapper>

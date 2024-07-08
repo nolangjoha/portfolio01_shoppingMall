@@ -122,3 +122,6 @@ INSERT INTO category_tbl (cat_code, cat_prtcode, cat_name)
     VALUES (14, 4, 'аж╬С╦╝');  
   
 COMMIT;
+
+
+
