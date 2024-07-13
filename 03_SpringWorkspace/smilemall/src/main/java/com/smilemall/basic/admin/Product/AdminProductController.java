@@ -18,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.smilemall.basic.admin.category.AdminCategoryService;
 import com.smilemall.basic.admin.category.CategoryVo;
+import com.smilemall.basic.common.dto.Criteria;
+import com.smilemall.basic.common.dto.PageDTO;
 import com.smilemall.basic.common.util.FileManagerUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -133,6 +135,40 @@ public class AdminProductController {
 		
 		return entity;
 	}
+	
+	
+	// [상품리스트]
+	@GetMapping("/pro_list")
+	public void pro_list(Criteria cri, Model model) throws Exception {
+		
+		// 리스트 목록 임시 5개만 출력
+		cri.setAmount(5);
+		
+		//DB에서 상품데이터 가져오기
+		List<ProductVo> pro_list = adminProductService.pro_list(cri);
+		
+		//이미지 폴더 구분자 변환
+		pro_list.forEach(vo -> {
+			vo.setPro_up_folder(vo.getPro_up_folder().replace("\\", "/"));
+		});
+		
+		// 상품데이터 총합
+		int totalCount = adminProductService.getTotalCount(cri);
+		
+		model.addAttribute("pro_list", pro_list);
+		model.addAttribute("pageMaker", new PageDTO(cri, totalCount));
+	}
+	
+	
+	
+	// 상품리스트에서 사용할 이미지 보여주기
+	@GetMapping("/image_display")
+	public ResponseEntity<byte[]> image_display(String dateFolderName, String fileName) throws Exception {
+		
+		return FileManagerUtils.getFile(uploadPath + dateFolderName, fileName);
+	}
+	
+	
 	
 	
 	

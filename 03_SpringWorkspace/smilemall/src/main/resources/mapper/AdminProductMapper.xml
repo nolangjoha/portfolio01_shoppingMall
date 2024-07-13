@@ -40,5 +40,56 @@ pro_amount, pro_buy, pro_date, pro_updatedate
 			)
 	</insert>
 
+	<!-- [상품리스트] -->
+	<select id="pro_list" parameterType="Criteria" resultType="ProductVo">
+		SELECT
+			pro_num, 
+			cat_code, 
+			pro_name, 
+			pro_price,
+			pro_discount, 
+			pro_publisher, 
+			pro_content, 
+			pro_up_folder, 
+			pro_img, 
+			pro_amount, 
+			pro_buy, 
+			pro_date, 
+			pro_updatedate
+		FROM (
+			SELECT
+				/*+ INDEX_DESC (product_tbl PK_PRO_NUM)*/
+				ROWNUM AS RN, 
+							pro_num, 
+							cat_code, 
+							pro_name, 
+							pro_price,
+							pro_discount, 
+							pro_publisher, 
+							pro_content, 
+							pro_up_folder, 
+							pro_img, 
+							pro_amount, 
+							pro_buy, 
+							pro_date, 
+							pro_updatedate
+			FROM
+				product_tbl
+			WHERE
+				<![CDATA[
+					ROWNUM <= (#{pageNum} * #{amount})
+				]]>
+			)
+		WHERE
+			RN > (#{pageNum} - 1) * #{amount}
+	</select>	
+
+	<select id="getTotalCount" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			product_tbl
+	</select>
+
 
 </mapper>

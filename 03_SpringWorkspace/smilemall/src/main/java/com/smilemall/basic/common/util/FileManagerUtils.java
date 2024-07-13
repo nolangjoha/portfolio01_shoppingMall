@@ -67,6 +67,9 @@ public class FileManagerUtils {
 				
 				//save파일을 읽어와서 bo_img에 대입, BufferedImage :이미지데이터를 메모리에 저장하고 조작 할 수 있다.
 				BufferedImage bo_img = ImageIO.read(saveFile);
+				
+				BufferedImage bt_img = new BufferedImage(300, 300, BufferedImage.TYPE_3BYTE_BGR);
+			
 				double ratio = 3;
 				int width = (int) (bo_img.getWidth() / ratio);
 				int height = (int) (bo_img.getHeight() / ratio);
