@@ -69,6 +69,13 @@ CREATE SEQUENCE seq_pro_num;
 ALTER TABLE product_tbl
 ADD CONSTRAINT PK_PRO_NUM PRIMARY KEY (PRO_NUM);
 
+--테스트용 데이터
+INSERT INTO product_tbl (pro_num, cat_code, pro_name, pro_price, pro_discount, pro_publisher, pro_content, pro_up_folder, pro_img, 
+pro_amount, pro_buy, pro_date, pro_updatedate) 
+    VALUES (seq_pro_num.NEXTVAL,6,'베이지 숄', 6000, 20, '초록초록', '<img alt="" src="/admin/product/display/beige_shawl.jpg" style="height:4622px; width:3220px" /><br />
+산뜻한 베이지숄','2024\07\15','842f4ce8-7766-4484-96c5-17f72ad0e027-beige_shawl.jpg', 1,'Y', '24/07/15', '24/07/15');
+
+
 COMMIT;
 
 --4. 카테고리 테이블

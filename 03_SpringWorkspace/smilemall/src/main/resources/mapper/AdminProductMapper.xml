@@ -40,6 +40,28 @@ pro_amount, pro_buy, pro_date, pro_updatedate
 			)
 	</insert>
 
+	<!-- 검색조건 : 상품명, 제조사, 내용-->
+	<sql id="criteria">
+		<trim prefix="(" suffix=")AND" prefixOverrides="OR">
+			<foreach collection="typeArr" item="type">
+				<trim prefix="OR">
+					<choose>
+						<when test="type == 'N'.toString()">
+							pro_name like '%' || #{keyword} || '%'
+						</when>
+						<when test="type == 'P'.toString()">
+							pro_publisher like '%' || #{keyword} || '%'
+						</when>
+						<when test="type == 'C'.toString()">
+							pro_content like '%' || #{keyword} || '%'
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	</sql>
+
+
 	<!-- [상품리스트] -->
 	<select id="pro_list" parameterType="Criteria" resultType="ProductVo">
 		SELECT
@@ -76,6 +98,7 @@ pro_amount, pro_buy, pro_date, pro_updatedate
 			FROM
 				product_tbl
 			WHERE
+				<include refid="criteria"></include>
 				<![CDATA[
 					ROWNUM <= (#{pageNum} * #{amount})
 				]]>
@@ -89,6 +112,10 @@ pro_amount, pro_buy, pro_date, pro_updatedate
 			COUNT(*)
 		FROM
 			product_tbl
+		WHERE
+			<include refid="criteria"></include> 
+			pro_num > 0 		<!-- 사용자가 검색기능을 사용하지 않았을때 where절까지만 작성되고 끊기므로 해당 조건 기입. 
+									 해당 조건 사용시 include문이 생성되지 않아도 에러가 발생하지 않음. -->
 	</select>
 
 

@@ -22,18 +22,20 @@
 						  <div class="box-body">
 							<!-- 검색옵션 -->
 							<div>
-								<form>
+								<form action="/admin/product/pro_list" method="get">
 									<div style="display: inline-block">
-									  <select class="form-control">
-				                        <option>검색종류 선택</option>
-				                        <option>상품명</option>
-				                        <option>상품코드</option>
-				                        <option>제조사</option>
-				                        <option>상품명 or 제조사</option>
+									  <select class="form-control" name="type">
+				                        <option selected>검색종류 선택</option>
+				                        <option value="N">상품명</option>
+				                        <option value="C">상품코드</option>
+				                        <option value="P">제조사</option>
+				                        <option value="NP">상품명 or 제조사</option>
 				                      </select>
 				     				</div>
 									<div style="display: inline-block">
-										<input type="text" class="form-control" style="width:150px;">
+										<input type="text" class="form-control" name="keyword" th:value="${pageMaker.cri.keyword}" style="width:150px;" />
+										<input type="hidden" name="pageNum" th:value="${pageMaker.cri.pageNum}"/>
+										<input type="hidden" name="amount" th:value="${pageMaker.cri.amount}"/>
 									</div>
 									<div style="display: inline-block">
 										<button type="submit" class="btn btn-primary">검색</button>
@@ -85,7 +87,7 @@
 							
 							<div class="row">
 
-								<div class="col-md-4">
+								<div class="col-md-2">
 							
 									<button type="reset" class="btn btn-success">체크항목 일괄수정</button>
 								
@@ -93,12 +95,13 @@
 								<form id="actionForm" action="" method="get">
 									<input type="hidden" name="pageNum" id="pageNum" th:value="${pageMaker.cri.pageNum}" />
 									<input type="hidden" name="amount" id="amount" th:value="${pageMaker.cri.amount}" />
-
+									<input type="hidden" name="type" id="type" th:value="${pageMaker.cri.type}" />
+									<input type="hidden" name="keyword" id="keyword" th:value="${pageMaker.cri.keyword}" />
 								</form>
 
 								</div>
 								<!--페이징-->
-								<div class="col-md-4 text-center">
+								<div class="col-md-8 text-center">
 									
 									  <nav aria-label="...">
 										<ul class="pagination">
@@ -120,16 +123,16 @@
 		
 											<!--  다음 표시여부 -->
 											<th:block th:if="${pageMaker.next }">
-											  <li class="page-item">
-												<a th:href="${pageMaker.endPage + 1 }" class="page-link movepage">Next</a>
-											  </li>
+												<li class="page-item">
+													<a th:href="${pageMaker.endPage + 1 }" class="page-link movepage">Next</a>
+												</li>
 											</th:block>
 											
 										</ul>
 										</nav>
 								</div>
-								<div class="col-md-4 text-right">
-									<button type="submit" class="btn btn-primary">상품등록</button>
+								<div class="col-md-2 text-right">
+									<a class="btn btn-primary" th:href="@{/admin/product/pro_insert}">상품등록</a>
 								</div>
 							</div>
         
@@ -150,15 +153,24 @@
       <script>
 		$(document).ready(function(){
 
-		let actionForm = $("#actionForm")
-		$(".movepage").on("click", function(e) {
-			e.preventDefault();
+			// 액션폼 전역변수
+			let actionForm = $("#actionForm"); 
 
-			actionForm.attr("action", "/admin/product/pro_list");
-			actionForm.find("input[name='pageNum']").val($(this).attr("href"));
-			actionForm.submit();
-		});
+			// [페이징]
+			$(".movepage").on("click", function(e) {
+				e.preventDefault();
+
+				actionForm.attr("action", "/admin/product/pro_list");
+				actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+				actionForm.submit();
+			});
+
 			
+			
+
+
+
+
 
 
 		});  //ready end
