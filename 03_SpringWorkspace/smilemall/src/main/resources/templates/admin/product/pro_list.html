@@ -76,8 +76,8 @@
 				                      		<option value="N" th:selected="${product.pro_buy =='N'}">판매불가능</option>
 				                      	</select>
 				                      </td>
-				                      <td style="text-align: center; vertical-align: middle;"><button type="button" class="btn btn-primary">수정</button></td>
-				                      <td style="text-align: center; vertical-align: middle;"><button type="button" class="btn btn-danger">삭제</button></td>
+				                      <td style="text-align: center; vertical-align: middle;"><button type="button" class="btn btn-primary" name="btn_pro_edit" th:data-pro_num="${product.pro_num}">수정</button></td>
+				                      <td style="text-align: center; vertical-align: middle;"><button type="button" class="btn btn-danger" th:data-pro_num="${product.pro_num}">삭제</button></td>
 				                    </tr>
 			                 	</tbody>
 			                 </table>								
@@ -162,12 +162,32 @@
 
 				actionForm.attr("action", "/admin/product/pro_list");
 				actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+				
+				
+				
 				actionForm.submit();
 			});
 
 			
-			
+			//[수정버튼 클릭시]- 여기서 pageNum을 보내주는 작업
+			$("button[name='btn_pro_edit']").on("click", function() {
+				let pro_num = $(this).data("pro_num");  //수정버튼에 숨겨져 있던 상품번호
 
+				actionForm.find("input[name='pro_num']").remove();
+
+				console.log("상품코드 : " + pro_num);
+
+				let str = `<input type="hidden" name="pro_num" id="pro_num" th:value="${pro_num}" />`;
+
+				actionForm.append(`<input type="hidden" name="pro_num" id="pro_num" value="${pro_num}"/>`);
+				
+				actionForm.attr("method", "get");
+				actionForm.attr("action", "/admin/product/pro_edit");
+				
+				actionForm.submit();
+
+
+			});
 
 
 

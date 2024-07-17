@@ -16,5 +16,11 @@ public interface AdminProductMapper {
 	// [전체 데이터 갯수]
 	int getTotalCount(Criteria cri);
 	
+	// [상품 수정 페이지] : 수정할 데이터 불러오기
+	ProductVo pro_edit(Integer pro_num);
+	
+	// [상품 수정 기능] : 수정한 데이터 DB로 보냄.
+	void pro_edit_ok(ProductVo vo);
+	
 	
 }

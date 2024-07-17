@@ -107,6 +107,7 @@ pro_amount, pro_buy, pro_date, pro_updatedate
 			RN > (#{pageNum} - 1) * #{amount}
 	</select>	
 
+	<!-- [전체 데이터 갯수]  -->
 	<select id="getTotalCount" resultType="int">
 		SELECT
 			COUNT(*)
@@ -118,5 +119,50 @@ pro_amount, pro_buy, pro_date, pro_updatedate
 									 해당 조건 사용시 include문이 생성되지 않아도 에러가 발생하지 않음. -->
 	</select>
 
+	<!-- [상품 수정 페이지] : 수정할 데이터 불러오기 -->
+	<select id="pro_edit" parameterType="Integer" resultType="ProductVo">
+		SELECT
+			pro_num, 
+			cat_code, 
+			pro_name, 
+			pro_price,
+			pro_discount, 
+			pro_publisher, 
+			pro_content, 
+			pro_up_folder, 
+			pro_img, 
+			pro_amount, 
+			pro_buy, 
+			pro_date, 
+			pro_updatedate
+		FROM
+			product_tbl
+		WHERE
+			pro_num = #{pro_num}
+	</select>
+
+	<!--  [상품 수정 기능] : 수정한 데이터 DB로 보냄.   -->
+	<update id="pro_edit_ok" parameterType="ProductVo">
+		UPDATE
+			product_tbl
+		SET 
+			cat_code = #{cat_code}, 
+			pro_name = #{pro_name}, 
+			pro_price = #{pro_price},
+			pro_discount = #{pro_discount}, 
+			pro_publisher = #{pro_publisher}, 
+			pro_content = #{pro_content}, 
+			pro_up_folder = #{pro_up_folder}, 
+			pro_img = #{pro_img}, 
+			pro_amount = #{pro_amount}, 
+			pro_buy = #{pro_buy}, 
+			pro_updatedate = sysdate
+		WHERE
+			pro_num = #{pro_num}
+	</update>
+	
+	
+	
+	
 
 </mapper>

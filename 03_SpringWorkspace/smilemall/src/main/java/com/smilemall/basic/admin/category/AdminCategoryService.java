@@ -23,5 +23,9 @@ public class AdminCategoryService {
 		return adminCategoryMapper.getSecondCategoryList(cat_prtcode);
 	}
 	
+	// [2차 카테고리 정보를 이용한 1차 카테고리 정보]
+	public CategoryVo getFirstCategoryBySecondCategory(int cat_code) {
+		return adminCategoryMapper.getFirstCategoryBySecondCategory(cat_code);
+	}
 	
 }

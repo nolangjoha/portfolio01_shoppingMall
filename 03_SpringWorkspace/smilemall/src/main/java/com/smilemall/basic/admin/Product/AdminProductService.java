@@ -31,5 +31,13 @@ public class AdminProductService {
 		return adminProductMapper.getTotalCount(cri);
 	}
 	
+	// [상품 수정 페이지] : 수정할 데이터 불러오기
+	public ProductVo pro_edit(Integer pro_num) {
+		return adminProductMapper.pro_edit(pro_num);
+	}
 	
+	// [상품 수정 기능] : 수정한 데이터 DB로 보냄.
+	public void pro_edit_ok(ProductVo vo) {
+		adminProductMapper.pro_edit_ok(vo);
+	};
 }
