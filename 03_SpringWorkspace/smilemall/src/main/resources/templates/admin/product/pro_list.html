@@ -49,7 +49,7 @@
 							<table class="table table-bordered">
 			                    <tbody>
 				                    <tr>
-				                      <th style="width: 3%; text-align: center;"><input type="checkbox"></th>
+				                      <th style="width: 3%; text-align: center;"><input type="checkbox" id="checkAll"></th>
 				                      <th style="width: 7%; text-align: center;">상품코드</th>
 				                      <th style="width: 30%; text-align: center;">상품명</th>
 				                      <th style="width: 15%; text-align: center;">가격</th>
@@ -77,7 +77,7 @@
 				                      	</select>
 				                      </td>
 				                      <td style="text-align: center; vertical-align: middle;"><button type="button" class="btn btn-primary" name="btn_pro_edit" th:data-pro_num="${product.pro_num}">수정</button></td>
-				                      <td style="text-align: center; vertical-align: middle;"><button type="button" class="btn btn-danger" th:data-pro_num="${product.pro_num}">삭제</button></td>
+				                      <td style="text-align: center; vertical-align: middle;"><button type="button" class="btn btn-danger" name="btn_pro_del" th:data-pro_num="${product.pro_num}">삭제</button></td>
 				                    </tr>
 			                 	</tbody>
 			                 </table>								
@@ -87,10 +87,9 @@
 							
 							<div class="row">
 
-								<div class="col-md-2">
+								<div class="col-md-3">
 							
-									<button type="reset" class="btn btn-success">체크항목 일괄수정</button>
-								
+									<button type="reset" class="btn btn-success" id="btn_check_modify">체크항목 일괄수정</button>
 								<!--actionForm-->	
 								<form id="actionForm" action="" method="get">
 									<input type="hidden" name="pageNum" id="pageNum" th:value="${pageMaker.cri.pageNum}" />
@@ -131,7 +130,7 @@
 										</ul>
 										</nav>
 								</div>
-								<div class="col-md-2 text-right">
+								<div class="col-md-1 text-right">
 									<a class="btn btn-primary" th:href="@{/admin/product/pro_insert}">상품등록</a>
 								</div>
 							</div>
@@ -169,7 +168,7 @@
 			});
 
 			
-			//[수정버튼 클릭시]- 여기서 pageNum을 보내주는 작업
+			//[수정버튼 클릭시]
 			$("button[name='btn_pro_edit']").on("click", function() {
 				let pro_num = $(this).data("pro_num");  //수정버튼에 숨겨져 있던 상품번호
 
@@ -177,19 +176,101 @@
 
 				console.log("상품코드 : " + pro_num);
 
-				let str = `<input type="hidden" name="pro_num" id="pro_num" th:value="${pro_num}" />`;
+				let str = `<input type="hidden" name="pro_num" id="pro_num" value="${pro_num}" />`;
 
-				actionForm.append(`<input type="hidden" name="pro_num" id="pro_num" value="${pro_num}"/>`);
+				actionForm.append(str);
 				
 				actionForm.attr("method", "get");
 				actionForm.attr("action", "/admin/product/pro_edit");
-				
 				actionForm.submit();
+			});
 
+
+			//[삭제버튼 클릭시] name=btn_pro_del
+			$("button[name='btn_pro_del']").on("click", function() {
+				
+				// 관라자가 상품 삭제 클릭시, 취소할 경우를 true로 해서 return 진행.
+				if(!confirm("상품을 삭제하시겠습니까?")) return;
+
+				// 상품 번호 받아옴.
+				let pro_num = $(this).data("pro_num");
+
+				// 뒤로버튼 클릭시 사용되어 문제를 일으킴 방지목적. 
+				// 같은 컴퓨터를 사용하는 2명의사용자가 있는데 1명의 사용자가 상품정보 삭제후 자리를 비우고 2번 사용자가 자리에 와서 뒤로가기 를 눌렀을 때
+				// 제거를 하지 않은 input태그(name=pro_num)가 있는 상태에서 또 동일한 태그가 추가되어 오류가 발생할 수 있으므로,
+				// 혹시모를 상황을 대비해 미리 제거하고 진행한다.
+				// 추후 뒤로가기를 막는 방법을 찾아볼 것.
+				actionForm.find("input[name='pro_num']").remove();
+
+				//console.log("");
+
+				let str = `<input type="hidden" name="pro_num" id="pro_num" value="${pro_num}" />`;
+
+				actionForm.append(str);
+				
+				actionForm.attr("method", "post");
+				actionForm.attr("action", "/admin/product/pro_delete");
+				actionForm.submit();
 
 			});
 
 
+			// 제목행 checkBox 체크시 일괄체크하기 // id="checkAll
+			let ischeck = true;   
+			$("#checkAll").on("click", function() {
+
+				$("input[name='check']").prop("checked", this.checked);
+				isChecke = this.checked;
+			});
+
+
+			// 목록 데이터행 체크하기
+			$("input[name='check']").on("click", function() {
+				$("#checkAll").prop("checked", this.checked);
+
+				$("input[name='check']").each(function() {
+					if(!$(this).is(":checked")) {
+						$("#checkAll").prop("checked", false);
+					}
+				});
+			});
+
+
+			//체크상품 일괄 수정 id="btn_check_modify"
+			$("#btn_check_modify").on("click", function() {
+
+				if($("input[name='check']:checked").length == 0) {
+					alert("수정할 상품을 체크하세요");
+					return;
+				}
+
+				let pro_num_arr = [];
+				let pro_price_arr = [];
+				let pro_buy_arr = [];
+
+				$("input[name = 'check']:checked").each(function() {
+					pro_num_arr.push($(this).val());
+					pro_price_arr.push($(this).parent().parent().find("input[name='pro_price']").val());
+					pro_buy_arr.push($(this).parent().parent().find("select[name='pro_buy']").val());
+				});
+
+				$.ajax({
+					url: "/admin/product/pro_checked_modify",
+					type: 'post',
+					data: {pro_num_arr : pro_num_arr, pro_price_arr: pro_price_arr, pro_buy_arr: pro_buy_arr},
+					dataType : 'text',
+					success: function(result) {
+						if(result == 'success') {
+							alert("체크상품이 수정되었습니다.");
+						}
+					}
+
+
+
+				});
+
+
+			});
 
 
 

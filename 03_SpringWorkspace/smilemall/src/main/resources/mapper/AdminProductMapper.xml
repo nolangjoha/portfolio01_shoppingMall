@@ -161,8 +161,26 @@ pro_amount, pro_buy, pro_date, pro_updatedate
 			pro_num = #{pro_num}
 	</update>
 	
+	<!-- [상품삭제] : DB데이터 삭제  -->
+	<delete id="pro_delete" parameterType="Integer">
+		DELETE FROM
+			product_tbl
+		WHERE
+			pro_num = #{pro_num}
+	</delete>
 	
-	
-	
+	<!-- [상품 일괄수정] -->
+	<update id="pro_checked_modify" parameterType="list">
+		<foreach collection="list" item="item" open="declare begin" separator=";" close="; end;">
+			UPDATE
+				product_tbl
+			SET
+				pro_price = #{item.pro_price}, pro_buy = #{item.pro_buy}
+			WHERE
+				pro_num = #{item.pro_num}
+		</foreach>
+	</update>
+
+
 
 </mapper>

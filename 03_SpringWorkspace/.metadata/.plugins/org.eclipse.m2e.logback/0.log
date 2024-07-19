@@ -6135,3 +6135,213 @@
 2024-07-17 16:16:14,720 [Worker-59: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
 2024-07-17 16:16:15,246 [Worker-59: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
 2024-07-17 16:16:15,251 [Worker-59: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-17 16:34:46,749 [Worker-6: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
+2024-07-17 16:35:20,058 [Worker-18: Launching smilemall - SmilemallApplication] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-17 16:35:20,118 [Worker-18: Launching smilemall - SmilemallApplication] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-17 16:35:45,071 [Worker-18: Launching smilemall - SmilemallApplication] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-17 16:38:57,626 [Worker-11: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-17 16:38:57,949 [Worker-11: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-17 16:38:58,970 [Worker-11: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-17 16:39:53,759 [Worker-23: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-17 16:39:54,042 [Worker-23: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-17 16:39:54,931 [Worker-23: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-17 16:40:36,388 [Worker-20: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-17 16:40:36,646 [Worker-20: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-17 16:40:37,619 [Worker-20: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-17 16:40:51,985 [Worker-22: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-17 16:40:52,503 [Worker-22: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-17 16:40:52,510 [Worker-22: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-17 16:42:35,595 [Worker-25: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-17 16:42:36,132 [Worker-25: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-17 16:42:36,138 [Worker-25: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-17 16:43:21,152 [Worker-23: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-17 16:43:21,421 [Worker-23: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-17 16:43:22,338 [Worker-23: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-17 16:43:35,567 [Worker-22: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-17 16:43:35,895 [Worker-22: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-17 16:43:36,873 [Worker-22: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-17 16:45:40,631 [Worker-21: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-17 16:45:40,873 [Worker-21: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-17 16:45:41,792 [Worker-21: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-17 16:46:45,492 [Worker-22: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-17 16:46:45,744 [Worker-22: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-17 16:46:46,608 [Worker-22: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-17 17:00:59,877 [Worker-11: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-17 17:01:00,349 [Worker-11: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-17 17:01:00,353 [Worker-11: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-17 17:03:53,382 [Worker-11: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-17 17:03:53,906 [Worker-11: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-17 17:03:53,911 [Worker-11: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-17 17:15:40,764 [Worker-31: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-17 17:15:41,310 [Worker-31: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2 resources from src\main\resources to target\classes
+2024-07-17 17:15:41,315 [Worker-31: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-17 17:16:24,941 [Worker-31: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-17 17:16:25,428 [Worker-31: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-17 17:16:25,432 [Worker-31: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-17 17:25:41,187 [Worker-37: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-17 17:25:41,747 [Worker-37: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2 resources from src\main\resources to target\classes
+2024-07-17 17:25:41,758 [Worker-37: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-17 17:25:59,057 [Worker-38: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-17 17:25:59,635 [Worker-38: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-17 17:25:59,642 [Worker-38: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-18 09:23:02,715 [Worker-42: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-18 09:23:03,267 [Worker-42: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-18 09:23:03,273 [Worker-42: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-18 17:19:51,657 [Worker-2: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
+2024-07-18 17:23:39,894 [Worker-6: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-18 17:23:39,953 [Worker-6: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-18 17:23:42,190 [Worker-6: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-18 22:57:49,610 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-18 22:57:49,923 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-18 22:57:50,958 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-18 22:58:44,710 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-18 22:58:45,008 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-18 22:58:46,070 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-18 22:59:32,895 [Worker-27: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-18 22:59:33,194 [Worker-27: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-18 22:59:34,188 [Worker-27: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-18 22:59:53,773 [Worker-30: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-18 22:59:54,079 [Worker-30: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-18 22:59:55,115 [Worker-30: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-18 23:01:17,718 [Worker-18: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-18 23:01:18,349 [Worker-18: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-18 23:01:18,356 [Worker-18: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-18 23:01:20,555 [Worker-18: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-18 23:01:21,133 [Worker-18: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-18 23:01:21,153 [Worker-18: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-18 23:02:49,987 [Worker-18: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-18 23:02:50,492 [Worker-18: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-18 23:02:50,496 [Worker-18: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 00:01:44,865 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-19 00:01:45,429 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 00:01:45,434 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 00:01:49,030 [Worker-34: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-19 00:01:49,559 [Worker-34: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 00:01:49,563 [Worker-34: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 00:02:31,508 [Worker-36: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 00:02:31,764 [Worker-36: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-19 00:02:32,833 [Worker-36: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 00:06:02,007 [Worker-33: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 00:06:02,252 [Worker-33: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-19 00:06:03,313 [Worker-33: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 00:08:07,025 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 00:08:07,284 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-19 00:08:08,334 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 00:09:00,377 [Worker-35: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 00:09:00,675 [Worker-35: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-19 00:09:01,673 [Worker-35: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 00:11:51,444 [Worker-37: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 00:11:51,731 [Worker-37: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-19 00:11:52,710 [Worker-37: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 00:14:14,098 [Worker-32: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 00:14:14,427 [Worker-32: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-19 00:14:15,381 [Worker-32: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 00:14:35,186 [Worker-32: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 00:14:35,440 [Worker-32: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-19 00:14:36,410 [Worker-32: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 00:31:14,882 [Worker-40: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-19 00:31:15,443 [Worker-40: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 00:31:15,449 [Worker-40: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 00:35:04,423 [Worker-43: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-19 00:35:04,967 [Worker-43: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 00:35:04,971 [Worker-43: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 01:03:05,761 [Worker-48: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-19 01:03:06,245 [Worker-48: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 01:03:06,250 [Worker-48: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 01:05:56,522 [Worker-51: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-19 01:05:57,141 [Worker-51: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 01:05:57,146 [Worker-51: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 01:08:37,582 [Worker-52: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-19 01:08:38,197 [Worker-52: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 01:08:38,201 [Worker-52: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 01:16:38,852 [Worker-62: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-19 01:16:39,344 [Worker-62: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 01:16:39,347 [Worker-62: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 01:18:41,399 [Worker-63: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-19 01:18:42,034 [Worker-63: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 01:18:42,039 [Worker-63: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 01:19:06,034 [Worker-63: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-19 01:19:06,551 [Worker-63: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 01:19:06,555 [Worker-63: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 01:19:44,263 [Worker-61: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-19 01:19:44,815 [Worker-61: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 01:19:44,820 [Worker-61: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 01:20:40,660 [Worker-63: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-19 01:20:41,332 [Worker-63: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 01:20:41,337 [Worker-63: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 01:21:19,016 [Worker-61: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-19 01:21:19,654 [Worker-61: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 01:21:19,658 [Worker-61: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 01:21:35,887 [Worker-61: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-19 01:21:36,426 [Worker-61: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 01:21:36,430 [Worker-61: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 01:24:32,322 [Worker-68: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 01:24:32,643 [Worker-68: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-19 01:24:33,668 [Worker-68: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 01:25:19,588 [Worker-64: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-19 01:25:20,156 [Worker-64: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 01:25:20,160 [Worker-64: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 01:26:33,119 [Worker-61: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-19 01:26:33,681 [Worker-61: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 01:26:33,686 [Worker-61: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 01:37:13,166 [Worker-72: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-19 01:37:13,678 [Worker-72: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 01:37:13,685 [Worker-72: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 08:58:05,443 [Worker-75: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 08:58:05,816 [Worker-75: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-19 08:58:06,884 [Worker-75: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 08:58:13,466 [Worker-76: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 08:58:13,723 [Worker-76: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-19 08:58:14,839 [Worker-76: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 09:09:33,720 [Worker-74: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 09:09:33,970 [Worker-74: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-19 09:09:34,934 [Worker-74: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 09:10:52,094 [Worker-79: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 09:10:52,390 [Worker-79: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-19 09:10:53,412 [Worker-79: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 09:11:20,487 [Worker-75: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 09:11:20,877 [Worker-75: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-19 09:11:21,840 [Worker-75: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 09:15:05,474 [Worker-79: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 09:15:05,738 [Worker-79: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-19 09:15:06,716 [Worker-79: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 09:15:58,249 [Worker-83: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 09:15:58,575 [Worker-83: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-19 09:15:59,564 [Worker-83: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 20:38:36,327 [Worker-4: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
+2024-07-19 20:40:02,978 [Worker-8: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 20:40:03,033 [Worker-8: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-19 20:40:04,357 [Worker-8: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 21:13:45,408 [Worker-17: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 21:13:45,652 [Worker-17: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-19 21:13:46,650 [Worker-17: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 21:14:05,485 [Worker-20: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-19 21:14:05,941 [Worker-20: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 21:14:05,948 [Worker-20: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 21:14:14,935 [Worker-18: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-19 21:14:15,403 [Worker-18: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 21:14:15,406 [Worker-18: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 21:23:39,432 [Worker-17: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 21:23:39,684 [Worker-17: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-19 21:23:40,573 [Worker-17: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 21:23:42,977 [Worker-21: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-07-19 21:23:43,461 [Worker-21: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 21:23:43,465 [Worker-21: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 21:23:46,473 [Worker-17: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 21:23:46,726 [Worker-17: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-19 21:23:47,606 [Worker-17: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 21:26:54,466 [Worker-24: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 21:26:54,707 [Worker-24: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-19 21:26:55,557 [Worker-24: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 21:26:58,663 [Worker-24: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 21:26:58,911 [Worker-24: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-19 21:26:59,784 [Worker-24: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 21:27:07,635 [Worker-24: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 21:27:07,941 [Worker-24: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-19 21:27:08,800 [Worker-24: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 21:29:17,905 [Worker-24: Launching smilemall - SmilemallApplication] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 21:29:18,179 [Worker-24: Launching smilemall - SmilemallApplication] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-19 21:29:19,040 [Worker-24: Launching smilemall - SmilemallApplication] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources
+2024-07-19 21:30:21,490 [Worker-25: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-07-19 21:30:21,797 [Worker-25: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2968 resources from src\main\resources to target\classes
+2024-07-19 21:30:22,684 [Worker-25: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\asy91\OneDrive\πŸ≈¡ »≠∏È\portfolio01_shoppingMall\03_SpringWorkspace\smilemall\src\test\resources

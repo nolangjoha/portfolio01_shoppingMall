@@ -1,12 +1,12 @@
 package com.smilemall.basic.admin.Product;
 
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -142,7 +143,7 @@ public class AdminProductController {
 	@GetMapping("/pro_list")
 	public void pro_list(Criteria cri, Model model) throws Exception {
 		
-
+		//cri.setAmount(2); 페이지 갯수 임의조정
 		
 		//DB에서 상품데이터 가져오기
 		List<ProductVo> pro_list = adminProductService.pro_list(cri);
@@ -213,9 +214,7 @@ public class AdminProductController {
 			// 새로운 파일명과 날짜 폴더명을 지정
 			vo.setPro_img(saveFileName);
 			vo.setPro_up_folder(dateFolder);
-			
 		}
-		
 		
 		// DB수정(업데잍)
 		adminProductService.pro_edit_ok(vo);
@@ -227,11 +226,31 @@ public class AdminProductController {
 	
 	
 	
+	// [상품삭제] : DB데이터 삭제
+	@PostMapping("/pro_delete")
+	public String pro_delete(Integer pro_num, Criteria cri) throws Exception {
+		
+		adminProductService.pro_delete(pro_num);
+		
+		return "redirect:/admin/product/pro_list" + cri.getListLink();
+	}
 	
+	// 체크상품 수정작업
+	@PostMapping("/pro_checked_modify")
+	public ResponseEntity<String> pro_checked_modify(
+			@RequestParam("pro_num_arr") List<Integer>pro_num_arr, 
+			@RequestParam("pro_price_arr") List<Integer>pro_price_arr, 
+			@RequestParam("pro_buy_arr") List<String> pro_buy_arr) throws Exception {
+		
+		adminProductService.pro_checked_modify(pro_num_arr, pro_price_arr, pro_buy_arr);
+		
+	    ResponseEntity<String> entity = null;
+	    entity = new ResponseEntity<>("success", HttpStatus.OK);
+		
+		return entity;
+	}
 	
-	
-	
-	
+
 	
 	
 	

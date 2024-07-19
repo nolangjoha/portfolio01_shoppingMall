@@ -22,5 +22,14 @@ public interface AdminProductMapper {
 	// [상품 수정 기능] : 수정한 데이터 DB로 보냄.
 	void pro_edit_ok(ProductVo vo);
 	
+	// [상품삭제] : DB데이터 삭제
+	void pro_delete(Integer pro_num);
+	
+	// [상품 일괄수정]
+	void pro_checked_modify(List<ProductDTO> pro_modify_list);
+	
+
+	
+	
 	
 }
