@@ -89,7 +89,8 @@
 
 								<div class="col-md-3">
 							
-									<button type="reset" class="btn btn-success" id="btn_check_modify">체크항목 일괄수정</button>
+									<button type="button" class="btn btn-success" id="btn_check_modify">일괄수정</button>
+									<button type="button" class="btn btn-danger" id="btn_check_delete">일괄삭제</button>
 								<!--actionForm-->	
 								<form id="actionForm" action="" method="get">
 									<input type="hidden" name="pageNum" id="pageNum" th:value="${pageMaker.cri.pageNum}" />
@@ -218,19 +219,29 @@
 			// 제목행 checkBox 체크시 일괄체크하기 // id="checkAll
 			let ischeck = true;   
 			$("#checkAll").on("click", function() {
+			//id값이 checkAll인 요소를 클릭하면 아래 구문 실행
 
 				$("input[name='check']").prop("checked", this.checked);
-				isChecke = this.checked;
+				// name값이 check인 input태그들에 checked속성을 this.checked속성으로 설정
+				// this.checked는 #checkAll의 체크상태를 의미.
+
+				isCheck = this.checked;
+				// 전체 체크박스의 상태를 대입.
 			});
 
 
 			// 목록 데이터행 체크하기
 			$("input[name='check']").on("click", function() {
+				//name값이 check인 input태그들을 클릭했을 때 아래 구문 실행
+
 				$("#checkAll").prop("checked", this.checked);
+				// id값이 checkAll인 태그의 checked상태를 현재 클릭된 체크박스 상태로 설정.
 
 				$("input[name='check']").each(function() {
 					if(!$(this).is(":checked")) {
+						//name이 check인 input태그들의 상태가 checked가 아닐경우 아래 구문 실행
 						$("#checkAll").prop("checked", false);
+						// id값이 checkAll인 요소의 checked 상태는 거짓. 즉 전체체크 상태 해제
 					}
 				});
 			});
@@ -238,10 +249,14 @@
 
 			//체크상품 일괄 수정 id="btn_check_modify"
 			$("#btn_check_modify").on("click", function() {
+			// 수정버튼 클릭시
 
 				if($("input[name='check']:checked").length == 0) {
+				// 만약 name이 check인 input태그 중 체크된 항목이 없다면(0이면)
+
 					alert("수정할 상품을 체크하세요");
 					return;
+					// 함수 종료
 				}
 
 				let pro_num_arr = [];
@@ -249,6 +264,9 @@
 				let pro_buy_arr = [];
 
 				$("input[name = 'check']:checked").each(function() {
+					//name이 check인 input태그들이 체크될 경우
+
+					// 해당 태그들의 값을 추가
 					pro_num_arr.push($(this).val());
 					pro_price_arr.push($(this).parent().parent().find("input[name='pro_price']").val());
 					pro_buy_arr.push($(this).parent().parent().find("select[name='pro_buy']").val());
@@ -262,16 +280,52 @@
 					success: function(result) {
 						if(result == 'success') {
 							alert("체크상품이 수정되었습니다.");
+							location.reload();
 						}
+					},
+					error: function(xhr, status, error) {
+						alert("에러가 발생했습니다:" + error);
 					}
-
-
-
 				});
-
-
 			});
 
+
+			// 체크상품 일괄 삭제 id="btn_check_delete"
+			$("#btn_check_delete").on("click", function() {
+			//삭제버튼 클릭시
+
+				//선택한 체크박스가 없다면 함수 종료
+				if($("input[name='check']:checked").length == 0) {
+					alert("삭제할 상품을 체크하세요");
+					return;
+				}
+
+				let pro_num = [];
+
+				//체크된 체크박스 값을 pro_num배열에 추가
+				$("input[name = 'check']:checked").each(function() {
+					pro_num.push($(this).val());
+				});
+
+				$.ajax({
+					url: "/admin/product/pro_checked_delete",
+					type: 'post',
+					data: {pro_num : pro_num},
+					dataType : 'text',
+					success: function(result) {
+						if(result == 'success') {
+							alert("체크상품이 삭제되었습니다.");
+							location.reload();
+						}
+					},
+					error: function(xhr, status, error) {
+						alert("에러가 발생했습니다:" + error);
+					}
+				});
+			});
+
+	
+			
 
 
 		});  //ready end

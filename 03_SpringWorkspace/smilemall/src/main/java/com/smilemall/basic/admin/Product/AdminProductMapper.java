@@ -28,8 +28,9 @@ public interface AdminProductMapper {
 	// [상품 일괄수정]
 	void pro_checked_modify(List<ProductDTO> pro_modify_list);
 	
-
+	// [삼품 일괄 삭제]
+	void pro_checked_delete(List<Integer> pro_num);
 	
-	
+	 
 	
 }

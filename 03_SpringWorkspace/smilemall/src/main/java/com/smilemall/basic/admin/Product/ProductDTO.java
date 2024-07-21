@@ -10,7 +10,6 @@ import lombok.ToString;
 @Setter
 @ToString
 public class ProductDTO {
-
 	
 	// 전체상품관리목록에서 체크박스로 받아낼 필드들
 	private Integer pro_num;  // 상품코드

@@ -241,7 +241,7 @@ public class AdminProductController {
 			@RequestParam("pro_num_arr") List<Integer>pro_num_arr, 
 			@RequestParam("pro_price_arr") List<Integer>pro_price_arr, 
 			@RequestParam("pro_buy_arr") List<String> pro_buy_arr) throws Exception {
-		
+				
 		adminProductService.pro_checked_modify(pro_num_arr, pro_price_arr, pro_buy_arr);
 		
 	    ResponseEntity<String> entity = null;
@@ -250,8 +250,18 @@ public class AdminProductController {
 		return entity;
 	}
 	
-
 	
+	// [상품 일괄삭제]
+	@PostMapping("/pro_checked_delete")
+	public ResponseEntity<String> pro_checked_delete(@RequestParam("pro_num") List<Integer>pro_num) throws Exception {
+				
+		adminProductService.pro_checked_delete(pro_num);
+		
+	    ResponseEntity<String> entity = null;
+	    entity = new ResponseEntity<>("success", HttpStatus.OK);
+		
+		return entity;
+	}
 	
 	
 	

@@ -181,6 +181,14 @@ pro_amount, pro_buy, pro_date, pro_updatedate
 		</foreach>
 	</update>
 
-
+	<!-- [삼품 일괄 삭제] -->
+	<delete id="pro_checked_delete" parameterType="List">
+		<foreach collection="list" item="item" open="declare begin" separator=";" close="; end;">
+			DELETE FROM
+				product_tbl
+			WHERE
+				pro_num = #{item}
+		</foreach>
+	</delete>
 
 </mapper>
