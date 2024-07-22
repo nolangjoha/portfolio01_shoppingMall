@@ -7,6 +7,10 @@
 	<!-- header -->
 	<header th:replace="~{layout/comm/header :: headerFragment}"></header>
 
+	<!-- category -->
+	<div th:replace="~{layout/comm/category :: categoryFragment}"></div>
+	
+
 	<main>
 		<!-- 페이지별 메인컨텐츠 -->
 		<th:block layout:fragment = "content">
@@ -27,7 +31,39 @@
       <!--각각의 페이지에서 필요한 자바사크립트 작성-->  
     </th:block>
 
+	<script>
+		// [1차 카테고리 선택]
+		$("nav#category_menu div ul li a").on("mouseover", function(e) {
 
+			e.preventDefault();
+
+			let cur_first_category = $(this);
+			let cat_code =  $(this).data("cat_code");
+			
+			//console.log("cat_code: " + cat_code);  //정상출력확인
+
+				//2차 카테고리 주소
+				let url = "/admin/category/secondcategory/" + cat_code;
+
+				//function(secondcategory_result) : 콜백함수, secondcategory_result: 임의로 정한 이름. 값은 url에서 받아옴. 
+				$.getJSON(url, function(secondcategory_result) {
+
+					let str = '<div class="dropdown-menu" id="second_categry">';
+
+					for(let i=0; i<secondcategory_result.length; i++) {
+						str += `<a class="dropdown-item" href="#" data-cat_code="${secondcategory_result[i].cat_code}">${secondcategory_result[i].cat_name}</a>`;
+					}
+					str += "</div>";
+
+					console.log("str:", str); //정상출력확인
+					//cur_first_category.parents("nav#category_menu").find("div#second_categry").remove();
+					cur_first_category.parents("nav#category_menu div ul li").append(str);
+
+
+				}); 
+		});
+	
+	</script>
 
 
 </body>

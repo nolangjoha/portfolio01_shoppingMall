@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+
+<nav id="category_menu" class="navbar navbar-expand-lg navbar-light bg-light" th:fragment="categoryFragment" >
+  
+  <div class="collapse navbar-collapse" id="second_categry">
+    <ul class="navbar-nav mr-auto" id="first_category">
+      <li class="nav-item dropdown" th:each="category:${user_cate_list}">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false" th:data-cat_code = ${category.cat_code} th:text="${category.cat_name}"></a>
+        <!-- <div class="dropdown-menu" id="second_categry">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Action</a>
+        </div> -->
+      </li>
+    </ul>
+  </div>
+  
+
+
+
+</nav>
+
+
+
+</html>
