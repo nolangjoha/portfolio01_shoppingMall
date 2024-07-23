@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+				layout:decorate="~{/layout/baselayout}">
+				
+  
+<body>
+	<main role="main">
+		<th:block layout:fragment="content">
+			
+
+<!-- 카테고리 제목 -->
+  <section class="jumbotron text-center">
+    <div class="container">
+      <h1 th:utext="${cat_name}"></h1> <!-- ProductController.java에서 cat_name매개변수로 작업 -->
+    </div>
+  </section>
+<!-- 카테고리 제목 끝 -->
+
+<!-- 상품 템플릿 시작 -->
+  <div class="album py-5 bg-light">
+    <div class="container">
+      <div class="row">
+
+        <div class="col-md-4" th:each="product : ${pro_list}">  
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+              <image width="100%" height="255px" href="/image/flower_blouse.jpg" />       
+            </svg>
+
+            <div class="card-body">
+              <p class="card-text"><span th:text="${product.pro_name}"></span></p><br>    <!--상품명-->
+              <span th:text="${product.pro_price}"></span>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">바로구매</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">장바구니</button>
+                </div>
+                <small class="text-muted">(review : 0)</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div> 
+<!--상품 템플릿 끝 -->
+
+
+
+
+
+
+
+
+		</th:block>
+	</main>
+	
+	
+	<!-- 페이지별 필요한 스크립트 재정의 -->
+    <th:block layout:fragment = "script">
+		
+		<!-- 제이쿼리 사용 시작 -->
+		<script>
+			$(document).ready(function(){
+				
+			}); //ready 끝.
+		</script>
+		<!-- 제이쿼리 사용 끝 -->
+		
+    </th:block>
+    
+</body>
+</html> 

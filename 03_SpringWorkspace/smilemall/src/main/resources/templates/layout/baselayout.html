@@ -8,7 +8,7 @@
 	<header th:replace="~{layout/comm/header :: headerFragment}"></header>
 
 	<!-- category -->
-	<div th:replace="~{layout/comm/category :: categoryFragment}"></div>
+	<nav th:replace="~{layout/comm/category :: categoryFragment}"></nav>
 	
 
 	<main>
@@ -56,13 +56,26 @@
 					str += "</div>";
 
 					console.log("str:", str); //정상출력확인
-					//cur_first_category.parents("nav#category_menu").find("div#second_categry").remove();
+					cur_first_category.parents("nav#category_menu").find("div#second_categry").remove();
 					cur_first_category.parents("nav#category_menu div ul li").append(str);
-
-
 				}); 
 		});
 	
+		// [2차 카테고리 선택]
+		$("nav#category_menu").on("click", "div#second_categry a", function(e) {
+
+			e.preventDefault();
+
+			let cat_code = $(this).data("cat_code");
+			let cat_name = encodeURIComponent($(this).html());
+
+			console.log("2차 카테고리 코드:", cat_code);
+			console.log("2차 카테고리 이름:", cat_name);
+
+			location.href = `/product/pro_list?cat_code=${cat_code}&cat_name=${cat_name}`;	
+		});
+
+
 	</script>
 
 
