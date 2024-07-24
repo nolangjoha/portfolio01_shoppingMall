@@ -38,7 +38,7 @@ public class PageDTO {
 		// 블럭별 끝 페이지(10)   //Math.ceil(cri.getPageNum()/ (double)pageSize)) : 뭘해도 1이 출력   // 1*pageSize = 1*10 = 10
 		this.endPage = (int) (Math.ceil(cri.getPageNum()/ (double)pageSize)) * pageSize;
 		
-		// 10-1 = 9
+		// 10-9 = 1
 		this.startPage = this.endPage - endPageInfo;
 		
 		// 실제 끝번호		   // (데이터 갯수 / 페이지마다 출력할 데이터의 양) 무조건 올림  // 1.0으로 계산하여 무조건 실수로 계산됨.

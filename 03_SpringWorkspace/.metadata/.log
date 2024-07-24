@@ -11052,3 +11052,281 @@ java.lang.Exception: Resolve classpath: unable to resolve a Java project from : 
 	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655)
 	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622)
 	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165)
+!SESSION 2024-07-23 17:21:34.244 -----------------------------------------------
+eclipse.buildId=4.22.1.202405011620
+java.version=17.0.11
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
+Framework arguments:  -product org.springframework.boot.ide.branding.sts4
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.springframework.boot.ide.branding.sts4
+
+!ENTRY org.eclipse.emf.ecore 2 0 2024-07-23 17:21:36.859
+!MESSAGE Both 'org.eclipse.jst.j2ee.core' and 'org.eclipse.jst.j2ee.core' register a package for 'application.xmi'
+
+!ENTRY ch.qos.logback.classic 1 0 2024-07-23 17:21:37.096
+!MESSAGE Activated before the state location was initialized. Retry after the state location is initialized.
+
+!ENTRY ch.qos.logback.classic 1 0 2024-07-23 17:21:49.429
+!MESSAGE Logback config file: C:\Users\asy91\OneDrive\바탕 화면\portfolio01_shoppingMall\03_SpringWorkspace\.metadata\.plugins\org.eclipse.m2e.logback\logback.2.6.0.20240217-1525.xml
+
+!ENTRY org.eclipse.ui 2 0 2024-07-23 17:21:50.416
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2024-07-23 17:21:50.416
+!MESSAGE Commands should really have a category: plug-in='org.springframework.tooling.boot.ls', id='spring.initializr.addStarters', categoryId='org.eclipse.lsp4e.commandCategory'
+
+!ENTRY org.eclipse.ui 2 0 2024-07-23 17:21:51.192
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2024-07-23 17:21:51.192
+!MESSAGE Commands should really have a category: plug-in='org.springframework.tooling.boot.ls', id='spring.initializr.addStarters', categoryId='org.eclipse.lsp4e.commandCategory'
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2024-07-23 17:21:58.427
+!MESSAGE Command list starting LS: org.springframework.tooling.boot.ls
+START:
+C:\Study\SW\spring-tool-suite-4-4.22.1\contents\sts-4.22.1.RELEASE\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.11.v20240426-1830\jre\bin\javaw.exe
+-cp
+C:\Study\SW\spring-tool-suite-4-4.22.1\contents\sts-4.22.1.RELEASE\plugins\org.springframework.tooling.boot.ls_1.54.0.202405011602\servers\spring-boot-language-server\BOOT-INF\classes;C:\Study\SW\spring-tool-suite-4-4.22.1\contents\sts-4.22.1.RELEASE\plugins\org.springframework.tooling.boot.ls_1.54.0.202405011602\servers\spring-boot-language-server\BOOT-INF\lib\*
+-Dsts.lsp.client=eclipse
+-Xmx1024m
+-XX:TieredStopAtLevel=1
+-Xlog:jni+resolve=off
+-Dspring.config.location=file:C:\Study\SW\spring-tool-suite-4-4.22.1\contents\sts-4.22.1.RELEASE\plugins\org.springframework.tooling.boot.ls_1.54.0.202405011602\servers\spring-boot-language-server\BOOT-INF\classes\application.properties
+-XX:ErrorFile=C:/Users/asy91/OneDrive/바탕 화면/portfolio01_shoppingMall/03_SpringWorkspace/.metadata/.plugins/org.springframework.tooling.boot.ls/fatal-error-spring-boot_1721722918426
+org.springframework.ide.vscode.boot.app.BootLanguageServerBootApp
+--languageserver.hover-timeout=225
+END
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2024-07-23 17:21:58.428
+!MESSAGE DelegatingStreamConnectionProvider - Starting Boot LS
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2024-07-23 17:21:58.443
+!MESSAGE Started org.springframework.tooling.boot.ls LS process 8128
+
+!ENTRY org.eclipse.egit.ui 2 0 2024-07-23 17:22:00.499
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\asy91'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2024-07-23 17:22:00.628
+!MESSAGE Boot project ADDED: smilemall
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2024-07-23 17:22:00.630
+!MESSAGE Starting Boot LS...
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2024-07-23 17:22:00.635
+!MESSAGE Started Boot LS process
+
+!ENTRY org.eclipse.wildwebdeveloper.xml 2 0 2024-07-24 00:05:54.327
+!MESSAGE The given URI https://jakarta.ee/xml/ns/jakartaee/application-client_9.xsd from org.eclipse.jst.standard.schemas could not be resolved for local access
+
+!ENTRY org.eclipse.wildwebdeveloper.xml 2 0 2024-07-24 00:05:54.330
+!MESSAGE The given URI https://jakarta.ee/xml/ns/jakartaee/jobXML_2_0.xsd from org.eclipse.jst.standard.schemas could not be resolved for local access
+
+!ENTRY org.eclipse.wildwebdeveloper.xml 2 0 2024-07-24 00:05:54.331
+!MESSAGE The given URI https://jakarta.ee/xml/ns/jakartaee/beans_3_0.xsd from org.eclipse.jst.standard.schemas could not be resolved for local access
+
+!ENTRY org.eclipse.wildwebdeveloper.xml 2 0 2024-07-24 00:05:54.332
+!MESSAGE The given URI https://jakarta.ee/xml/ns/jaxb/bindingschema_3_0.xsd from org.eclipse.jst.standard.schemas could not be resolved for local access
+
+!ENTRY org.eclipse.wildwebdeveloper.xml 2 0 2024-07-24 00:05:54.343
+!MESSAGE The given URI https://jakarta.ee/xml/ns/validation/validation-configuration-3.0.xsd from org.eclipse.jst.standard.schemas could not be resolved for local access
+
+!ENTRY org.eclipse.wildwebdeveloper.xml 2 0 2024-07-24 00:05:54.347
+!MESSAGE The given URI http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_1.xsd from org.eclipse.jst.standard.schemas could not be resolved for local access
+!SESSION 2024-07-24 14:00:47.953 -----------------------------------------------
+eclipse.buildId=4.22.1.202405011620
+java.version=17.0.11
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
+Framework arguments:  -product org.springframework.boot.ide.branding.sts4
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.springframework.boot.ide.branding.sts4
+
+!ENTRY org.eclipse.emf.ecore 2 0 2024-07-24 14:00:51.014
+!MESSAGE Both 'org.eclipse.jst.j2ee.core' and 'org.eclipse.jst.j2ee.core' register a package for 'application.xmi'
+
+!ENTRY ch.qos.logback.classic 1 0 2024-07-24 14:00:51.319
+!MESSAGE Activated before the state location was initialized. Retry after the state location is initialized.
+
+!ENTRY ch.qos.logback.classic 1 0 2024-07-24 14:00:57.676
+!MESSAGE Logback config file: C:\Users\asy91\OneDrive\바탕 화면\portfolio01_shoppingMall\03_SpringWorkspace\.metadata\.plugins\org.eclipse.m2e.logback\logback.2.6.0.20240217-1525.xml
+
+!ENTRY org.eclipse.ui 2 0 2024-07-24 14:00:58.616
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2024-07-24 14:00:58.616
+!MESSAGE Commands should really have a category: plug-in='org.springframework.tooling.boot.ls', id='spring.initializr.addStarters', categoryId='org.eclipse.lsp4e.commandCategory'
+
+!ENTRY org.eclipse.ui 2 0 2024-07-24 14:00:59.172
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2024-07-24 14:00:59.172
+!MESSAGE Commands should really have a category: plug-in='org.springframework.tooling.boot.ls', id='spring.initializr.addStarters', categoryId='org.eclipse.lsp4e.commandCategory'
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2024-07-24 14:01:05.865
+!MESSAGE Command list starting LS: org.springframework.tooling.boot.ls
+START:
+C:\Study\SW\spring-tool-suite-4-4.22.1\contents\sts-4.22.1.RELEASE\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.11.v20240426-1830\jre\bin\javaw.exe
+-cp
+C:\Study\SW\spring-tool-suite-4-4.22.1\contents\sts-4.22.1.RELEASE\plugins\org.springframework.tooling.boot.ls_1.54.0.202405011602\servers\spring-boot-language-server\BOOT-INF\classes;C:\Study\SW\spring-tool-suite-4-4.22.1\contents\sts-4.22.1.RELEASE\plugins\org.springframework.tooling.boot.ls_1.54.0.202405011602\servers\spring-boot-language-server\BOOT-INF\lib\*
+-Dsts.lsp.client=eclipse
+-Xmx1024m
+-XX:TieredStopAtLevel=1
+-Xlog:jni+resolve=off
+-Dspring.config.location=file:C:\Study\SW\spring-tool-suite-4-4.22.1\contents\sts-4.22.1.RELEASE\plugins\org.springframework.tooling.boot.ls_1.54.0.202405011602\servers\spring-boot-language-server\BOOT-INF\classes\application.properties
+-XX:ErrorFile=C:/Users/asy91/OneDrive/바탕 화면/portfolio01_shoppingMall/03_SpringWorkspace/.metadata/.plugins/org.springframework.tooling.boot.ls/fatal-error-spring-boot_1721797265864
+org.springframework.ide.vscode.boot.app.BootLanguageServerBootApp
+--languageserver.hover-timeout=225
+END
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2024-07-24 14:01:05.866
+!MESSAGE DelegatingStreamConnectionProvider - Starting Boot LS
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2024-07-24 14:01:05.883
+!MESSAGE Started org.springframework.tooling.boot.ls LS process 3464
+
+!ENTRY org.eclipse.wildwebdeveloper.xml 2 0 2024-07-24 14:01:05.909
+!MESSAGE The given URI https://jakarta.ee/xml/ns/jakartaee/application-client_9.xsd from org.eclipse.jst.standard.schemas could not be resolved for local access
+
+!ENTRY org.eclipse.wildwebdeveloper.xml 2 0 2024-07-24 14:01:05.911
+!MESSAGE The given URI https://jakarta.ee/xml/ns/jakartaee/jobXML_2_0.xsd from org.eclipse.jst.standard.schemas could not be resolved for local access
+
+!ENTRY org.eclipse.wildwebdeveloper.xml 2 0 2024-07-24 14:01:05.913
+!MESSAGE The given URI https://jakarta.ee/xml/ns/jakartaee/beans_3_0.xsd from org.eclipse.jst.standard.schemas could not be resolved for local access
+
+!ENTRY org.eclipse.wildwebdeveloper.xml 2 0 2024-07-24 14:01:05.915
+!MESSAGE The given URI https://jakarta.ee/xml/ns/jaxb/bindingschema_3_0.xsd from org.eclipse.jst.standard.schemas could not be resolved for local access
+
+!ENTRY org.eclipse.wildwebdeveloper.xml 2 0 2024-07-24 14:01:05.946
+!MESSAGE The given URI https://jakarta.ee/xml/ns/validation/validation-configuration-3.0.xsd from org.eclipse.jst.standard.schemas could not be resolved for local access
+
+!ENTRY org.eclipse.wildwebdeveloper.xml 2 0 2024-07-24 14:01:05.959
+!MESSAGE The given URI http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_1.xsd from org.eclipse.jst.standard.schemas could not be resolved for local access
+
+!ENTRY org.eclipse.egit.ui 2 0 2024-07-24 14:01:07.959
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\asy91'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2024-07-24 14:01:08.062
+!MESSAGE Boot project ADDED: smilemall
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2024-07-24 14:01:08.063
+!MESSAGE Starting Boot LS...
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2024-07-24 14:01:08.067
+!MESSAGE Started Boot LS process
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2024-07-24 14:09:15.269
+!MESSAGE Failed to fetch type data for element witn key: Ljava/lang/String;
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 4 0 2024-07-24 14:09:15.269
+!MESSAGE Resolve classpath: unable to resolve a Java project from : file:/C:/Users/asy91/OneDrive/%EB%B0%94%ED%83%95%20%ED%99%94%EB%A9%B4/portfolio01_shoppingMall/03_SpringWorkspace/smilemall
+!STACK 0
+java.lang.Exception: Resolve classpath: unable to resolve a Java project from : file:/C:/Users/asy91/OneDrive/%EB%B0%94%ED%83%95%20%ED%99%94%EB%A9%B4/portfolio01_shoppingMall/03_SpringWorkspace/smilemall
+	at org.springframework.tooling.jdt.ls.commons.resources.ResourceUtils.getJavaProject(ResourceUtils.java:60)
+	at org.springframework.tooling.jdt.ls.commons.java.JavaData.findElement(JavaData.java:79)
+	at org.springframework.tooling.jdt.ls.commons.java.JavaData.typeData(JavaData.java:67)
+	at org.springframework.tooling.ls.eclipse.commons.STS4LanguageClientImpl.lambda$16(STS4LanguageClientImpl.java:511)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165)
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2024-07-24 14:09:15.279
+!MESSAGE Failed to fetch type data for element witn key: Ljava/lang/String[];
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 4 0 2024-07-24 14:09:15.280
+!MESSAGE Resolve classpath: unable to resolve a Java project from : file:/C:/Users/asy91/OneDrive/%EB%B0%94%ED%83%95%20%ED%99%94%EB%A9%B4/portfolio01_shoppingMall/03_SpringWorkspace/smilemall
+!STACK 0
+java.lang.Exception: Resolve classpath: unable to resolve a Java project from : file:/C:/Users/asy91/OneDrive/%EB%B0%94%ED%83%95%20%ED%99%94%EB%A9%B4/portfolio01_shoppingMall/03_SpringWorkspace/smilemall
+	at org.springframework.tooling.jdt.ls.commons.resources.ResourceUtils.getJavaProject(ResourceUtils.java:60)
+	at org.springframework.tooling.jdt.ls.commons.java.JavaData.findElement(JavaData.java:79)
+	at org.springframework.tooling.jdt.ls.commons.java.JavaData.typeData(JavaData.java:67)
+	at org.springframework.tooling.ls.eclipse.commons.STS4LanguageClientImpl.lambda$16(STS4LanguageClientImpl.java:511)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165)
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2024-07-24 14:09:15.287
+!MESSAGE Failed to fetch type data for element witn key: Lorg/springframework/util/unit/DataSize;
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 4 0 2024-07-24 14:09:15.287
+!MESSAGE Resolve classpath: unable to resolve a Java project from : file:/C:/Users/asy91/OneDrive/%EB%B0%94%ED%83%95%20%ED%99%94%EB%A9%B4/portfolio01_shoppingMall/03_SpringWorkspace/smilemall
+!STACK 0
+java.lang.Exception: Resolve classpath: unable to resolve a Java project from : file:/C:/Users/asy91/OneDrive/%EB%B0%94%ED%83%95%20%ED%99%94%EB%A9%B4/portfolio01_shoppingMall/03_SpringWorkspace/smilemall
+	at org.springframework.tooling.jdt.ls.commons.resources.ResourceUtils.getJavaProject(ResourceUtils.java:60)
+	at org.springframework.tooling.jdt.ls.commons.java.JavaData.findElement(JavaData.java:79)
+	at org.springframework.tooling.jdt.ls.commons.java.JavaData.typeData(JavaData.java:67)
+	at org.springframework.tooling.ls.eclipse.commons.STS4LanguageClientImpl.lambda$16(STS4LanguageClientImpl.java:511)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165)
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2024-07-24 14:43:48.701
+!MESSAGE Failed to fetch type data for element witn key: Ljava/lang/String;
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 4 0 2024-07-24 14:43:48.701
+!MESSAGE Resolve classpath: unable to resolve a Java project from : file:/C:/Users/asy91/OneDrive/%EB%B0%94%ED%83%95%20%ED%99%94%EB%A9%B4/portfolio01_shoppingMall/03_SpringWorkspace/smilemall
+!STACK 0
+java.lang.Exception: Resolve classpath: unable to resolve a Java project from : file:/C:/Users/asy91/OneDrive/%EB%B0%94%ED%83%95%20%ED%99%94%EB%A9%B4/portfolio01_shoppingMall/03_SpringWorkspace/smilemall
+	at org.springframework.tooling.jdt.ls.commons.resources.ResourceUtils.getJavaProject(ResourceUtils.java:60)
+	at org.springframework.tooling.jdt.ls.commons.java.JavaData.findElement(JavaData.java:79)
+	at org.springframework.tooling.jdt.ls.commons.java.JavaData.typeData(JavaData.java:67)
+	at org.springframework.tooling.ls.eclipse.commons.STS4LanguageClientImpl.lambda$16(STS4LanguageClientImpl.java:511)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165)
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2024-07-24 14:43:48.706
+!MESSAGE Failed to fetch type data for element witn key: Ljava/lang/String[];
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 4 0 2024-07-24 14:43:48.707
+!MESSAGE Resolve classpath: unable to resolve a Java project from : file:/C:/Users/asy91/OneDrive/%EB%B0%94%ED%83%95%20%ED%99%94%EB%A9%B4/portfolio01_shoppingMall/03_SpringWorkspace/smilemall
+!STACK 0
+java.lang.Exception: Resolve classpath: unable to resolve a Java project from : file:/C:/Users/asy91/OneDrive/%EB%B0%94%ED%83%95%20%ED%99%94%EB%A9%B4/portfolio01_shoppingMall/03_SpringWorkspace/smilemall
+	at org.springframework.tooling.jdt.ls.commons.resources.ResourceUtils.getJavaProject(ResourceUtils.java:60)
+	at org.springframework.tooling.jdt.ls.commons.java.JavaData.findElement(JavaData.java:79)
+	at org.springframework.tooling.jdt.ls.commons.java.JavaData.typeData(JavaData.java:67)
+	at org.springframework.tooling.ls.eclipse.commons.STS4LanguageClientImpl.lambda$16(STS4LanguageClientImpl.java:511)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165)
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2024-07-24 14:43:48.709
+!MESSAGE Failed to fetch type data for element witn key: Lorg/springframework/util/unit/DataSize;
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 4 0 2024-07-24 14:43:48.710
+!MESSAGE Resolve classpath: unable to resolve a Java project from : file:/C:/Users/asy91/OneDrive/%EB%B0%94%ED%83%95%20%ED%99%94%EB%A9%B4/portfolio01_shoppingMall/03_SpringWorkspace/smilemall
+!STACK 0
+java.lang.Exception: Resolve classpath: unable to resolve a Java project from : file:/C:/Users/asy91/OneDrive/%EB%B0%94%ED%83%95%20%ED%99%94%EB%A9%B4/portfolio01_shoppingMall/03_SpringWorkspace/smilemall
+	at org.springframework.tooling.jdt.ls.commons.resources.ResourceUtils.getJavaProject(ResourceUtils.java:60)
+	at org.springframework.tooling.jdt.ls.commons.java.JavaData.findElement(JavaData.java:79)
+	at org.springframework.tooling.jdt.ls.commons.java.JavaData.typeData(JavaData.java:67)
+	at org.springframework.tooling.ls.eclipse.commons.STS4LanguageClientImpl.lambda$16(STS4LanguageClientImpl.java:511)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165)

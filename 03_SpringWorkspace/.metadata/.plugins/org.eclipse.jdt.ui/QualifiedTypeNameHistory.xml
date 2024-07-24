@@ -6,7 +6,6 @@
     <fullyQualifiedTypeName name="org.springframework.mail.javamail.JavaMailSenderImpl"/>
     <fullyQualifiedTypeName name="org.springframework.mail.javamail.JavaMailSender"/>
     <fullyQualifiedTypeName name="org.thymeleaf.spring6.SpringTemplateEngine"/>
-    <fullyQualifiedTypeName name="com.smilemall.basic.common.constants.Constants"/>
     <fullyQualifiedTypeName name="jakarta.mail.internet.MimeMessage"/>
     <fullyQualifiedTypeName name="org.springframework.mail.javamail.MimeMessageHelper"/>
     <fullyQualifiedTypeName name="jakarta.mail.internet.InternetAddress"/>
@@ -58,6 +57,7 @@
     <fullyQualifiedTypeName name="lombok.RequiredArgsConstructor"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.GetMapping"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.ModelAttribute"/>
-    <fullyQualifiedTypeName name="org.apache.ibatis.annotations.Param"/>
     <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Value"/>
+    <fullyQualifiedTypeName name="org.apache.ibatis.annotations.Param"/>
+    <fullyQualifiedTypeName name="com.smilemall.basic.common.constants.Constants"/>
 </qualifiedTypeNameHistroy>

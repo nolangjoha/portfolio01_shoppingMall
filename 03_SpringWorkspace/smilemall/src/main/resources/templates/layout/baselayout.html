@@ -67,7 +67,7 @@
 			e.preventDefault();
 
 			let cat_code = $(this).data("cat_code");
-			let cat_name = encodeURIComponent($(this).html());
+			let cat_name = encodeURIComponent($(this).html());  // html() : 선택한 태그 내 에 있는 내용을 가져옴 (만약에 <b>내용</b> 이런식으로 감싸고 있으면 <b>태그 까지 포함해서 가져옴)
 
 			console.log("2차 카테고리 코드:", cat_code);
 			console.log("2차 카테고리 이름:", cat_name);

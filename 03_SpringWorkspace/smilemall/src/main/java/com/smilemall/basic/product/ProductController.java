@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.smilemall.basic.admin.Product.ProductVo;
+import com.smilemall.basic.common.constants.Constants;
+import com.smilemall.basic.common.dto.Criteria;
+import com.smilemall.basic.common.dto.PageDTO;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,11 +26,16 @@ public class ProductController {
 	
 	
 	@GetMapping("/pro_list")
-	public void pro_list(int cat_code, @ModelAttribute("cat_name") String cat_name, Model model) throws Exception {
+	public void pro_list(@ModelAttribute("cat_code") int cat_code, @ModelAttribute("cat_name") String cat_name, Model model, Criteria cri) throws Exception {
 		
-		List<ProductVo> pro_list = productService.pro_list(cat_code);
+		cri.setAmount(Constants.PRODUCT_LIST_AMOUNT);
+		
+		List<ProductVo> pro_list = productService.pro_list(cat_code, cri);
+		
+		int totalCount = productService.getCountProductByCategory(cat_code);
 		
 		model.addAttribute("pro_list", pro_list);
+		model.addAttribute("pageMaker", new PageDTO(cri, totalCount));
 	}
 	
 	
