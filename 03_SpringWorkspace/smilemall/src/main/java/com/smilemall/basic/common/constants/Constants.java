@@ -7,6 +7,6 @@ public final class Constants {
 	
 	
 	// 사용자 페이지 상품 출력갯수
-	public static final int PRODUCT_LIST_AMOUNT = 1;
+	public static final int PRODUCT_LIST_AMOUNT = 3;
 	
 }
