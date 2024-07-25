@@ -31,10 +31,10 @@ public class ProductController {
 	@Value("${file.product.image.dir}")
 	private String uploadPath;
 	
-	// CKEditor파일 업로드 경로
-	@Value("${file.ckeditor}")
-	private String upliadCkpath;
-	
+//	// CKEditor파일 업로드 경로
+//	@Value("${file.ckeditor}")
+//	private String upliadCkpath;
+//	
 	
 	// [상품리스트]
 	@GetMapping("/pro_list")
@@ -64,6 +64,18 @@ public class ProductController {
 	public ResponseEntity<byte[]> image_display(String dateFolderName, String fileName) throws Exception {
 		return FileManagerUtils.getFile(uploadPath + dateFolderName, fileName);
 	}
+	
+	// [장바구니 담기 버튼 클릭시 상품정보 출력]
+	@GetMapping("/pro_info")
+	public void pro_info(int pro_num, Model model) throws Exception {
+		
+		ProductVo vo = productService.pro_info(pro_num); //db에서 가져온 상품 정보
+		vo.setPro_up_folder(vo.getPro_up_folder().replace("\\", "/")); // 이미지폴더 구분자 변경
+		
+		model.addAttribute("product", vo); 
+	}
+	
+	
 	
 	
 }

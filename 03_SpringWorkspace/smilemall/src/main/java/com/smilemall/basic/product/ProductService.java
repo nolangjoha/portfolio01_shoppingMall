@@ -20,10 +20,14 @@ public class ProductService {
 		return productMapper.pro_list(cat_code, cri);
 	}
 	
-	
 	//[카테고리마다 보이는 상품의 총갯수]
 	public int getCountProductByCategory(int cat_code) {
 		return productMapper.getCountProductByCategory(cat_code);
+	}
+	
+	//  [장바구니 담기 버튼 클릭시 상품정보 출력]
+	public ProductVo pro_info(int pro_num) {
+		return productMapper.pro_info(pro_num);
 	}
 	
 	

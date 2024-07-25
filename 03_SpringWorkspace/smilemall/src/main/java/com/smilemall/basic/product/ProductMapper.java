@@ -15,4 +15,8 @@ public interface ProductMapper {
 	//[카테고리마다 보이는 상품의 총갯수]
 	int getCountProductByCategory(int cat_code);
 	
+	//  [장바구니 담기 버튼 클릭시 상품정보 출력]
+	ProductVo pro_info(int pro_num);
+	
+	
 }

@@ -23,10 +23,7 @@
 					<div class="row">
 					<div class="col-md-4" th:each="product : ${pro_list}">  
 						<div class="card mb-4 shadow-sm">
-						<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
-							<image width="100%" height="100%" th:href="${'/product/image_display?dateFolderName=' + product.pro_up_folder + '&fileName=s_' + product.pro_img}" />       
-						</svg>
-					
+							<img th:src="${'/product/image_display?dateFolderName=' + product.pro_up_folder + '&fileName=s_' + product.pro_img}" style="width:100%; height:255px"  />       
 						<div class="card-body">
 							<p class="card-text">
 								<span th:text="${product.pro_name}"></span>
@@ -36,8 +33,7 @@
 							
 							<div class="d-flex justify-content-between align-items-center">
 							<div class="btn-group">
-								<button type="button" class="btn btn-sm btn-outline-secondary">바로구매</button>
-								<button type="button" class="btn btn-sm btn-outline-secondary">장바구니</button>
+								<button type="button" class="btn btn-sm btn-outline-secondary" name="btn_cart_add" th:data-pro_num="${product.pro_num}">장바구니 담기</button>
 							</div>
 							<small class="text-muted">(review : 0)</small>
 							</div>
@@ -47,27 +43,6 @@
 					</div>
 				
 					<!-- 페이징 -->
-					<!-- 원래코드
-					<div class="row">
-						<div class="col-md-12" >
-							<nav aria-label="...">
-							<ul class="pagination">
-								<li class="page-item disabled">
-								<a class="page-link">이전</a>
-								</li>
-								<li class="page-item"><a class="page-link" href="#">1</a></li>
-								<li class="page-item active" aria-current="page">
-								<a class="page-link" href="#">2</a>
-								</li>
-								<li class="page-item"><a class="page-link" href="#">3</a></li>
-								<li class="page-item">
-								<a class="page-link" href="#">다음</a>
-								</li>
-							</ul>
-							</nav>
-						</div>
-					</div> -->
-
 					<div class="row">
 						<div class="col-md-12" >
 							<nav aria-label="...">
@@ -114,6 +89,27 @@
 			</div> 
 			<!--상품 템플릿 끝 -->
 
+
+			<!-- 장바구니에 담기 Modal -->
+			<div class="modal fade" id="order_cart_popup" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">장바구니 담기</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					</div>
+					<div class="modal-body" id="popup_info">
+						<!--pro_info.html 내용 삽입--> 
+					</div>
+					
+				</div>
+				</div>
+			</div>
+			<!-- 장바구니에 담기 modal 끝-->
+
+
 		</th:block>
 	</main>
 	
@@ -125,17 +121,26 @@
 		<script>
 			$(document).ready(function(){
 				
+				// 액션폼 전역변수
 				let actionForm = $("#actionForm");
 
+				// 페이징 이동시 액션폼 동작
 				$(".movepage").on("click", function(e) {
-
 					e.preventDefault(); // a태그 href기능제거
-
 					actionForm.attr("action", "/product/pro_list"); // 액션폼 action의 속성 제어
-
 					actionForm.find("input[name='pageNum']").val($(this).attr("href")); // 액션폼의 input 태그중 name값이 pageNum인 태그의 값에 href 속성
-
 					actionForm.submit();
+				});
+
+
+				// 장바구니 담기 클릭시 상품정보 modal 출력    버튼 :name="btn_cart_add"  모달: id="order_cart_popup"   상품정보load위치: id="popup_info"
+				$("button[name='btn_cart_add']").on("click", function() {
+					$("#order_cart_popup").modal('show');   //버튼 클릭시 모달창 출력
+
+					let pro_num = $(this).data("pro_num");  // 상품번호
+					console.log("상품코드:", pro_num);
+
+					$("#popup_info").load("/product/pro_info?pro_num="+ pro_num);  // 상품정보 모달창 내부 출력
 				});
 
 
