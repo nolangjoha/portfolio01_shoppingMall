@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@ControllerAdvice(basePackages = "com.smilemall.basic.product")
+@ControllerAdvice(basePackages = {"com.smilemall.basic.product", "com.smilemall.basic.cart"})
 @RequiredArgsConstructor
 public class GlobalControllerAdvice {
 

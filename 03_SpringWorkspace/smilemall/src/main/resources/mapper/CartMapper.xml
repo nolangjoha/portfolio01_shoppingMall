@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smilemall.basic.cart.CartMapper">
+
+	<!-- [장바구니 추가] -->
+	<insert id="cart_add" parameterType="CartVo">
+		MERGE INTO
+			cart_tbl
+		USING dual
+			ON(mbsp_id = #{mbsp_id} AND pro_num = #{pro_num})
+		WHEN MATCHED THEN
+			UPDATE
+				SET cart_amount = cart_amount + #{cart_amount}
+		WHEN NOT MATCHED THEN
+			INSERT (cart_code, pro_num, mbsp_id, cart_amount)
+			VALUES (seq_cart_code.NEXTVAL, #{pro_num}, #{mbsp_id}, #{cart_amount})
+	</insert>
+
+	<!-- [장바구니 목록] -->
+	<select id="cart_list" parameterType="String" resultType="CartProductVo">
+		SELECT
+			c.mbsp_id, p.pro_up_folder, p.pro_img, p.pro_price, p.pro_name, c.cart_code, p.pro_num, c.cart_amount
+		FROM
+			cart_tbl c INNER JOIN product_tbl p
+		ON
+			c.pro_num = p.pro_num
+		WHERE
+			c.mbsp_id = #{mbsp_id}
+	</select>
+
+</mapper>

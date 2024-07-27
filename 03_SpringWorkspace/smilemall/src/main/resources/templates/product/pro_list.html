@@ -143,7 +143,32 @@
 					$("#popup_info").load("/product/pro_info?pro_num="+ pro_num);  // 상품정보 모달창 내부 출력
 				});
 
+				// 장바구니 담기  모달:id="order_cart_popup", 모달 내 장바구니 담기 버튼:id="btn_cart_add"
+				$("#order_cart_popup").on("click", "button#btn_cart_add", function() {
+					
+					let pro_num = $(this).data("pro_num");
+					let cart_amount = $("#btn_cart_amount").val();
 
+					console.log("pro_num확인: "+ pro_num);
+					console.log("cart_amount확인: "+ cart_amount);
+
+					$.ajax({
+						url:'/cart/cart_add' ,
+						type: 'get',
+						data: {pro_num:pro_num, cart_amount:cart_amount},
+						dataType: "text", 
+						success: function(result) {
+							if(result == 'success') {
+								alert("장바구니에 등록 되었습니다.");
+								if(confirm("장바구니로 이동하시겠습니까?")) {
+									location.href="/cart/cart_list";
+								}
+								$("#order_cart_popup").modal('hide');
+							}
+						}
+					});
+
+				});
 
 
 

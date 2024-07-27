@@ -131,4 +131,30 @@ INSERT INTO category_tbl (cat_code, cat_prtcode, cat_name)
 COMMIT;
 
 
+--5. 장바구니 테이블
+CREATE TABLE CART_TBL (
+    CART_CODE   NUMBER,
+    PRO_NUM     NUMBER  NOT NULL,
+    MBSP_ID     VARCHAR(15) NOT NULL,
+    CART_AMOUNT NUMBER  NOT NULL,
+    CART_DATE   DATE DEFAULT SYSDATE
+);
+/*
+cart_tbl
+cart_code, pro_num, mbsp_id, cart_amount, cart_date
+seq_cart_code
+pk_cart_code
+*/
+
+--시퀀스 생성
+CREATE SEQUENCE SEQ_CART_CODE;
+
+-- PRIMARY KEY 생성
+ALTER TABLE CART_TBL
+ADD CONSTRAINT PK_CART_CODE PRIMARY KEY(CART_CODE);
+
+
+COMMIT;
+
+
 
