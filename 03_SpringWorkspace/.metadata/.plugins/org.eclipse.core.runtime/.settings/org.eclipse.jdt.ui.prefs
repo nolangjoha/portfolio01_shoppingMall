@@ -1,8 +1,0 @@
-content_assist_lru_history=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><history maxLHS\="100" maxRHS\="10"><lhs name\="org.springframework.http.HttpStatusCode"><rhs name\="org.springframework.http.HttpStatus"/></lhs><lhs name\="java.lang.Cloneable"><rhs name\="jakarta.mail.internet.InternetAddress"/></lhs><lhs name\="jakarta.mail.Address"><rhs name\="jakarta.mail.internet.InternetAddress"/></lhs><lhs name\="jakarta.mail.internet.InternetAddress"><rhs name\="jakarta.mail.internet.InternetAddress"/></lhs><lhs name\="org.springframework.security.crypto.password.PasswordEncoder"><rhs name\="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/></lhs><lhs name\="org.springframework.mail.javamail.JavaMailSender"><rhs name\="org.springframework.mail.javamail.JavaMailSenderImpl"/></lhs><lhs name\="org.springframework.mail.MailSender"><rhs name\="org.springframework.mail.javamail.JavaMailSenderImpl"/></lhs><lhs name\="org.springframework.mail.javamail.JavaMailSenderImpl"><rhs name\="org.springframework.mail.javamail.JavaMailSenderImpl"/></lhs><lhs name\="com.smilemall.basic.mail.EmailDTO"><rhs name\="com.smilemall.basic.mail.EmailDTO"/></lhs><lhs name\="org.springframework.http.HttpEntity"><rhs name\="org.springframework.http.ResponseEntity"/></lhs><lhs name\="org.springframework.http.ResponseEntity"><rhs name\="org.springframework.http.ResponseEntity"/></lhs></history>
-content_assist_number_of_computers=15
-eclipse.preferences.version=1
-org.eclipse.jdt.ui.formatterprofiles.version=23
-spelling_locale_initialized=true
-typefilter_migrated_2=true
-useAnnotationsPrefPage=true
-useQuickDiffPrefPage=true
