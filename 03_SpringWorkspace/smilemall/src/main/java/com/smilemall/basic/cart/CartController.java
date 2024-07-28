@@ -73,6 +73,29 @@ public class CartController {
 		return FileManagerUtils.getFile(uploadPath + dateFolderName, fileName);
 	}
 	
+	// [장바구니 목록 삭제] 
+	@GetMapping("/cart_del")
+	public String cart_del(Long cart_code) throws Exception {
+		cartService.cart_del(cart_code);
+		return "redirect:/cart/cart_list";
+	}
 	
+	// [장바구니 수량변경]
+	@GetMapping("/cart_change")
+	public String cart_change(Long cart_code, int cart_amount) {
+		cartService.cart_change(cart_code, cart_amount);
+		return "redirect:/cart/cart_list";
+	}
+	
+	//  [장바구니 비우기]
+	@GetMapping("/cart_empty")
+	public String cart_empty(HttpSession session) {
+		
+		//로그인 아이디
+		String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
+		
+		cartService.cart_empty(mbsp_id);
+		return "redirect:/cart/cart_list";
+	}
 	
 }

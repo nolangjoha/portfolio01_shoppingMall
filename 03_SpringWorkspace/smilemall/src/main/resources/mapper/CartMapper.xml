@@ -28,4 +28,31 @@
 			c.mbsp_id = #{mbsp_id}
 	</select>
 
+	<!-- [장바구니 목록 삭제]  -->
+	<delete id="cart_del" parameterType="Long">
+		DELETE FROM
+			cart_tbl
+		WHERE
+			cart_code = #{cart_code}
+	</delete>
+
+	<!-- [장바구니 수량변경] -->
+	<update id="cart_change" parameterType="map">
+		UPDATE
+			cart_tbl
+		SET
+			cart_amount = #{cart_amount}
+		WHERE
+	 		cart_code = #{cart_code}
+	</update>
+
+	<!-- [장바구니 비우기] -->
+	<delete id="cart_empty" parameterType="String">
+		DELETE FROM
+			cart_tbl
+		WHERE
+			mbsp_id = #{mbsp_id}
+	</delete>
+	
+	
 </mapper>
