@@ -21,4 +21,7 @@ public interface CartMapper {
 	// [장바구니 비우기]
 	void cart_empty(String mbsp_id);
 	
+	// [장바구니 선택삭제]
+	void cart_checked_delete(List<Long> cart_code);
+	
 }

@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.smilemall.basic.common.util.FileManagerUtils;
 import com.smilemall.basic.member.MemberVO;
@@ -64,6 +66,13 @@ public class CartController {
 		//이미지 폴더 구분자 변환
 		cart_list.forEach(vo -> vo.setPro_up_folder(vo.getPro_up_folder().replace("\\", "/")));
 
+		//장바구니 상품가격 합계
+		int total_price = 0;
+		for(int i=0; i < cart_list.size(); i++) {
+			total_price += (cart_list.get(i).getPro_price() * cart_list.get(i).getCart_amount());
+		}
+		
+		model.addAttribute("total_price", total_price);
 		model.addAttribute("cart_list", cart_list);
 	}
 	
@@ -82,14 +91,14 @@ public class CartController {
 	
 	// [장바구니 수량변경]
 	@GetMapping("/cart_change")
-	public String cart_change(Long cart_code, int cart_amount) {
+	public String cart_change(Long cart_code, int cart_amount) throws Exception {
 		cartService.cart_change(cart_code, cart_amount);
 		return "redirect:/cart/cart_list";
 	}
 	
 	//  [장바구니 비우기]
 	@GetMapping("/cart_empty")
-	public String cart_empty(HttpSession session) {
+	public String cart_empty(HttpSession session) throws Exception {
 		
 		//로그인 아이디
 		String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
@@ -97,5 +106,19 @@ public class CartController {
 		cartService.cart_empty(mbsp_id);
 		return "redirect:/cart/cart_list";
 	}
+	
+	// [장바구니 선택삭제]
+	@PostMapping("/cart_checked_delete")
+	public ResponseEntity<String> cart_checked_delete(@RequestParam("cart_code") List<Long> cart_code) throws Exception {
+		
+		cartService.cart_checked_delete(cart_code);
+		
+		ResponseEntity<String> entity = null;
+		entity = new ResponseEntity<>("success", HttpStatus.OK);
+		
+		return entity;
+	}
+	
+	
 	
 }

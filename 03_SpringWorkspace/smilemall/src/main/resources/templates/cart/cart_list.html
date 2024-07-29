@@ -81,15 +81,17 @@
 									<div>
 										<div>
 											<strong>총 상품 금액</strong>
-											<span><span>27,300</span>원</span>
+											<span th:text="${#numbers.formatInteger(total_price, 3, 'COMMA') +'원'}"></span>
 										</div>
 										<div >
 											<strong>배송료</strong>
-											<span><span>2,500</span>원</span>
+											<span th:if="${total_price>=100000}" th:text="${0 +'원'}"></span>
+											<span th:if="${total_price<100000}" th:text="${#numbers.formatInteger(3000, 3, 'COMMA') +'원'}"></span>
 										</div>
 										<div>
 											<strong>결제 예정금액</strong>
-											<span><span>29,800</span>원</span>
+											<span th:if="${total_price>=100000}" th:text="${#numbers.formatInteger(total_price, 3, 'COMMA') +'원'}"></span>
+											<span th:if="${total_price<100000}" th:text="${#numbers.formatInteger(total_price + 3000, 3, 'COMMA') +'원'}"></span>
 										</div>
 									</div>
 								</td>								
@@ -101,7 +103,7 @@
 						<!-- 장바구니 비우기, 일괄삭제 -->
 						<div>
 							<span style="float:left;">
-								<button type="button" class="btn btn-secondary btn-sm" style="width:120px; height:31px;">선택상품삭제</button>
+								<button type="button" class="btn btn-secondary btn-sm" style="width:120px; height:31px;" id="btn_check_delete">선택상품삭제</button>
 								<button type="button" class="btn btn-secondary btn-sm" style="width:120px; height:31px;" id="btn_cart_empty">장바구니 비우기</button>								
 							</span>
 							<span style="float:right;">
@@ -147,6 +149,60 @@
 
 					location="/cart/cart_empty";
 				});
+
+				// [제목행 체크박스, 일괄 전체 선택]  id="checkAll"
+				let isCheck = true;
+				$("#checkAll").on("click", function() {
+					$("input[name='check']").prop("checked", this.checked);
+					isCheck = this.checked;
+				});
+
+				// [목록행 체크박스 선택]
+				$("input[name='check']").on("click", function() {
+					$("#checkAll").prop("checked", this.checked);
+
+					$("input[name='check']").each(function() {
+						if(!$(this).is(":checked")) {
+							$("#checkAll").prop("checked", false);
+						}
+					});
+				});
+
+				// [장바구니 목록 선택삭제] id="btn_check_delete" // th:value="${cartProduct.cart_code}"
+				$("button#btn_check_delete").on("click", function() {
+					if($("input[name='check']:checked").length == 0 ) {
+						alert("삭제 할 상품을 체크하세요");
+						return;
+					}
+
+					let cart_code = [];
+
+					$("input[name='check']:checked").each(function () {
+						cart_code.push($(this).val());
+					});
+					console.log("삭제목록:"+ cart_code);
+					
+
+					$.ajax({
+						url : "/cart/cart_checked_delete",
+						type: 'post',
+						data: {cart_code :cart_code},
+						dataType : 'text',
+						success: function(result) {
+							if(result == 'success') {
+								alert("체크상품이 삭제되었습니다.");
+								location.reload();
+							}
+						},
+						error: function(xhr,status, error) {
+							alert("에러가 발생했습니다.:" + error);
+						}
+
+
+					});
+
+				});
+
 
 
 			}); //ready 끝.

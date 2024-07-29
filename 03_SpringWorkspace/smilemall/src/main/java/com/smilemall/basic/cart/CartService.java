@@ -36,4 +36,11 @@ public class CartService {
 	public void cart_empty(String mbsp_id) {
 		cartMapper.cart_empty(mbsp_id);
 	}
+	
+	// [장바구니 선택삭제]
+	public void cart_checked_delete(List<Long> cart_code) {
+		cartMapper.cart_checked_delete(cart_code);
+	}
+	
+	
 }

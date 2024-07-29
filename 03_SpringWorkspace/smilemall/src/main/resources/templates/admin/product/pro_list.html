@@ -301,11 +301,12 @@
 				}
 
 				let pro_num = [];
-
+				
 				//체크된 체크박스 값을 pro_num배열에 추가
 				$("input[name = 'check']:checked").each(function() {
 					pro_num.push($(this).val());
 				});
+				console.log("삭제목록:"+ pro_num);
 
 				$.ajax({
 					url: "/admin/product/pro_checked_delete",

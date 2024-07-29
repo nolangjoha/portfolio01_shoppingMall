@@ -54,5 +54,17 @@
 			mbsp_id = #{mbsp_id}
 	</delete>
 	
+	<!-- [장바구니 선택삭제] -->
+	<delete id="cart_checked_delete" parameterType="list">
+		<foreach collection="list" item="item" open="declare begin" separator=";" close="; end;">
+			DELETE FROM
+				cart_tbl
+			WHERE
+				cart_code = #{item}
+		</foreach>
+	</delete>
+	
+	
+	
 	
 </mapper>

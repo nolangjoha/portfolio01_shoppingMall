@@ -155,6 +155,15 @@ ADD CONSTRAINT PK_CART_CODE PRIMARY KEY(CART_CODE);
 
 
 COMMIT;
+    
+    DELETE FROM
+        cart_tbl
+    WHERE
+        mbsp_id = 'user101'
+        AND
+        cart_code = 18;
 
-
-
+    DELETE FROM
+        cart_tbl
+    WHERE
+        cart_code = 22;

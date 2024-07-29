@@ -76,6 +76,13 @@ public class ProductController {
 	}
 	
 	
+	//[상품 상세페이지]
+	@GetMapping("/pro_detail")
+	public void pro_detail(int pro_num, Model model) throws Exception {
+		ProductVo vo = productService.pro_info(pro_num); //db에서 가져온 상품 정보
+		vo.setPro_up_folder(vo.getPro_up_folder().replace("\\", "/")); // 이미지폴더 구분자 변경
+		model.addAttribute("product", vo); 
+	}
 	
 	
 }
