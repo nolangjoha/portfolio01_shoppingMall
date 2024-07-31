@@ -156,14 +156,47 @@ ADD CONSTRAINT PK_CART_CODE PRIMARY KEY(CART_CODE);
 
 COMMIT;
     
-    DELETE FROM
-        cart_tbl
-    WHERE
-        mbsp_id = 'user101'
-        AND
-        cart_code = 18;
 
-    DELETE FROM
-        cart_tbl
-    WHERE
-        cart_code = 22;
+
+--6. 상품후기 테이블
+CREATE TABLE review_tbl (
+    re_code     NUMBER         NOT NULL,      -- 리뷰번호
+    mbsp_id     VARCHAR(50)    NOT NULL,      -- 리뷰작성자 아이디
+    pro_num     NUMBER         NOT NULL,      -- 상품번호
+    re_title    VARCHAR(50)    NOT NULL,      -- 리뷰제목
+    re_content  VARCHAR(50)    NOT NULL,      -- 리뷰내용
+    re_rate     NUMBER         NOT NULL,      -- 리뷰점수(별점)
+    re_date     DATE DEFAULT SYSDATE          -- 리뷰작성 날짜
+);
+-- review_tbl(re_code, mbsp_id, pro_num, re_title, re_content, re_rate, re_date)
+-- SEQ_REVIEW_CODE
+-- PK_RE_CODE
+
+-- SEQUENCE 생성
+CREATE SEQUENCE SEQ_REVIEW_CODE;
+
+-- PRIMARY KEY 생성
+ALTER TABLE review_tbl
+ADD CONSTRAINT PK_RE_CODE PRIMARY KEY (re_code);
+
+--리뷰 데이터 임시 삽입
+INSERT INTO 
+    review_tbl (
+        re_code, 
+        mbsp_id, 
+        pro_num, 
+        re_title, 
+        re_content, 
+        re_rate
+        )
+VALUES (
+    SEQ_REVIEW_CODE.NEXTVAL, 
+    'user100', 
+    81, 
+    '후기제목2', 
+    '후기내용2', 
+    3
+    );
+
+COMMIT;
+

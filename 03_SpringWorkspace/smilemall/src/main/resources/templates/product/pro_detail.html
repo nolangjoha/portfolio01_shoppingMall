@@ -1,7 +1,57 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 				layout:decorate="~{/layout/baselayout}">
-				
+
+		<!-- 각 페이지의 css 재정의-->		
+		<th:block layout:fragment="css">
+			<!-- jquery-ui 코드 -->
+			<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
+
+			<style>
+				#pro_detail img {
+					max-width: 100%;
+					max-height: 1050px;
+				}
+			</style>
+		</th:block>		
+
+		<!-- 각 페이지의 javascript 재정의-->
+		<th:block layout:fragment="javascript">
+			<!-- Include Handlebars from a CDN -->
+			<script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+			
+			<!-- 핸들바 템플릿-->
+			<script id="review-template" type="text/x-handlebars-template">
+				<table id="revtable" class="table">
+					<thead>
+					  <tr>
+						<th scope="col">번호</th>
+						<th scope="col">제목</th>
+						<th scope="col">내용</th>
+						<th scope="col">평점</th>
+						<th scope="col">작성자</th>
+						<th scope="col">등록일</th>
+						<th scope="col">비고</th>
+					  </tr>
+					</thead>
+					<tbody>
+					  {{#each .}}
+						<tr>
+							<th scope="row">{{re_code}}</th>
+							<td>{{re_title}}</td>
+							<td>{{re_content}}</td>
+							<td>{{re_rate}}</td>
+							<td>{{mbsp_id}}</td>
+							<td>{{re_date}}</td>
+							<td>기타</td>
+						</tr>
+					  {{/each}}
+					</tbody>
+				  </table>
+
+			 </script>
+			<!-- 핸들바 템플릿 끝-->
+		</th:block>
 
 <body>
 	<main role="main">
@@ -10,13 +60,14 @@
 
 
 			<!-- 상품 템플릿 시작 -->
+			<hr>
 			<div class="album py-5 bg-light">
 				<div class="container">
 				
 					<div class="row">
 						<!-- 상품이미지 -->
 						<div class="col-6">
-							<img th:src="${'/product/image_display?dateFolderName=' + product.pro_up_folder + '&fileName=s_' + product.pro_img}" style="width:100%; height:368px">
+							<img th:src="${'/product/image_display?dateFolderName=' + product.pro_up_folder + '&fileName=s_' + product.pro_img}" style="width:100%; height:540px">
 						</div>
 						<!-- 상품이미지 끝. -->
 					
@@ -24,7 +75,7 @@
 						<div class="col-6">
 							<form>
 								<div class="form-group">
-									<strong><span th:text="${product.pro_name}"></span></strong>
+									<strong><span th:text="${product.pro_name}" ></span></strong>
 								</div>
 								<div class="form-group">
 								  <label>판매가격 : </label>
@@ -43,28 +94,34 @@
 						<!-- 상품정보 끝. -->
 					</div>
 					
-					<br>
-					<br>
+					
+					<hr>
 					<!-- 상품탭 -->
 					<div class="row">
-						<div class="col-12">
-						
-							<ul class="nav justify-content-center">
-							  <li class="nav-item">
-							    <a class="nav-link active" href="#">상품상세정보</a>
-							  </li>
-							  <li class="nav-item">
-							    <a class="nav-link" href="#">상품후기</a>
-							  </li>
-							  <li class="nav-item">
-							    <a class="nav-link" href="#">상품문의</a>
-							  </li>
-							</ul>
-						
-						</div>
+						<div class="col">
 
+							<div id="pro_info">
+								<ul>
+								  <li><a href="#pro_detail">상품상세정보</a></li>
+								  <li><a href="#pro_review">상품리뷰</a></li>
+								  <li><a href="#tabs-3">상품문의</a></li>
+								</ul>
+								<div id="pro_detail">
+								  <p th:utext="${product.pro_content}"></p>
+								</div>
+								<div id="pro_review">
+									<!--상품후기 출력위치(핸들바)-->
+									<div id="review_list"></div>
+								</div>
+								<div id="tabs-3">
+								  <p>3</p>
+								  <p>4</p>
+								</div>
+							  </div>
+
+						</div>
 					</div>
-					
+					<!-- 상품탭 끝.-->
 					
 					
 				</div>
@@ -83,9 +140,73 @@
     <th:block layout:fragment = "script">
 		
 		<!-- 제이쿼리 사용 시작 -->
+
+		<!-- jquery-ui 코드 -->
+		<script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+
 		<script>
 			$(document).ready(function(){
 				
+				//jquery-ui, tabs
+				$( "#pro_info" ).tabs();
+
+
+				//[장바구니 추가] 장바구니버튼: id="btn_cart_add", 수량:id="btn_cart_amount"
+				$("button#btn_cart_add").on("click", function() {
+
+					let pro_num = $(this).data("pro_num");
+					let cart_amount = $("#btn_cart_amount").val();
+
+					$.ajax({
+						url:'/cart/cart_add' ,
+						type: 'get',
+						data: {pro_num:pro_num, cart_amount:cart_amount},
+						dataType: "text", 
+						success: function(result) {
+							if(result == 'success') {
+								alert("장바구니에 등록 되었습니다.");
+								if(confirm("장바구니로 이동하시겠습니까?")) {
+									location.href="/cart/cart_list";
+								}
+								$("#order_cart_popup").modal('hide');
+							}
+						}
+					});
+
+				});
+
+
+				// [상품후기 출력] 핸들바 사용, 출력위치 : id="review_list" , 핸들바 템플릿 스크립트 : id="review-template"
+				let url = "/review/revlist/" + [[${product.pro_num}]];  //선택한 상품의 상품후기주소
+				console.log("상품후기주소: ", url);
+
+				getReviewList(url); //리뷰주소요청 함수 호출
+
+				//[리뷰 주소요청 함수]
+				function getReviewList(url) {
+					$.getJSON(url, function(revlist) { 
+						console.log("reviewlist: ", revlist);
+
+						//함수호출
+						print_reviewlist(revlist, $("#review_list"), $("#review-template")); // (리뷰데이터, 출력위치, 사용템플릿)
+
+					});
+				}
+
+				// 상품 후기 ui작업
+				let print_reviewlist = function(reviewDate, target, template) {
+					let templateObj = Handlebars.compile(template.html());  //html형태로 입력된 경로의 템플릿 compile
+					let reviewHtml = templateObj(reviewDate); // db데이터(리뷰데이터)를 템플릿에 적용
+					target.children().remove(); // 출력위치에 불필요한 하위요소 제거
+					target.append(reviewHtml);	// 출력위치에 템플릿 적용한 데이터 출력
+				}
+
+
+
+
+
+
+
 
 			}); //ready 끝.
 		</script>
