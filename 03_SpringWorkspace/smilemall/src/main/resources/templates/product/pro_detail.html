@@ -12,6 +12,11 @@
 					max-width: 100%;
 					max-height: 1050px;
 				}
+
+				#revtable thead, tbody {
+					text-align: center;
+				}
+
 			</style>
 		</th:block>		
 
@@ -40,10 +45,10 @@
 							<th scope="row">{{re_code}}</th>
 							<td>{{re_title}}</td>
 							<td>{{re_content}}</td>
-							<td>{{re_rate}}</td>
+							<td>{{displayStar re_rate}}</td>
 							<td>{{mbsp_id}}</td>
-							<td>{{re_date}}</td>
-							<td>기타</td>
+							<td>{{converDate re_date}}</td>
+							<td>{{authControlView mbsp_id re_code}}</td>
 						</tr>
 					  {{/each}}
 					</tbody>
@@ -87,7 +92,7 @@
 								</div>
 								<div class="form-group">
 									<button type="button" class="btn btn-info" style="width: 100%;" th:data-pro_num="${product.pro_num}">바로구매</button>
-									<button type="button" class="btn btn-light" style="width: 100%;" th:data-pro_num="${product.pro_num}" id="btn_cart_add">장바구니 담기</button>
+									<button type="button" class="btn btn-secondary" style="width: 100%;" th:data-pro_num="${product.pro_num}" id="btn_cart_add">장바구니 담기</button>
 								</div>	
 							</form>		
 						</div>	
@@ -112,6 +117,8 @@
 								<div id="pro_review">
 									<!--상품후기 출력위치(핸들바)-->
 									<div id="review_list"></div>
+									<!--페이징 출력위치-->
+									<div id="review_paging"></div>
 								</div>
 								<div id="tabs-3">
 								  <p>3</p>
@@ -144,7 +151,8 @@
 		<!-- jquery-ui 코드 -->
 		<script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
 
-		<script>
+		
+		<script th:inline="javascript"> // 내부에서 타임리프 문법쓰기 위해 inline 작성
 			$(document).ready(function(){
 				
 				//jquery-ui, tabs
@@ -177,29 +185,143 @@
 
 
 				// [상품후기 출력] 핸들바 사용, 출력위치 : id="review_list" , 핸들바 템플릿 스크립트 : id="review-template"
-				let url = "/review/revlist/" + [[${product.pro_num}]];  //선택한 상품의 상품후기주소
+				let reviewPage = 1; // 후기 첫번째 페이지
+				let url = "/review/revlist/" + [[${product.pro_num}]] + "/" + reviewPage;  //선택한 상품의 상품후기주소
 				console.log("상품후기주소: ", url);
 
 				getReviewList(url); //리뷰주소요청 함수 호출
 
 				//[리뷰 주소요청 함수]
 				function getReviewList(url) {
-					$.getJSON(url, function(revlist) { 
-						console.log("reviewlist: ", revlist);
+					$.getJSON(url, function(reviewlist) { 
+						console.log("reviewlist.revlist: ", reviewlist.revlist);
+						console.log("reviewlist.pageMaker: ", reviewlist.pageMaker);
 
 						//함수호출
-						print_reviewlist(revlist, $("#review_list"), $("#review-template")); // (리뷰데이터, 출력위치, 사용템플릿)
+						print_reviewlist(reviewlist.revlist, $("#review_list"), $("#review-template")); // (리뷰데이터, 출력위치, 사용템플릿)
+						print_paging(reviewlist.pageMaker,$("#review_paging"));
 
 					});
 				}
 
-				// 상품 후기 ui작업
+				// [상품 후기 ui작업]
 				let print_reviewlist = function(reviewDate, target, template) {
 					let templateObj = Handlebars.compile(template.html());  //html형태로 입력된 경로의 템플릿 compile
 					let reviewHtml = templateObj(reviewDate); // db데이터(리뷰데이터)를 템플릿에 적용
 					target.children().remove(); // 출력위치에 불필요한 하위요소 제거
 					target.append(reviewHtml);	// 출력위치에 템플릿 적용한 데이터 출력
 				}
+
+				// [상품후기페이징ui]
+				let print_paging = function(pageData, target) {
+
+					let str = `<nav aria-label="Page navigation example">`;
+						str += `<ul class="pagination">`;
+
+							//이전페이지
+							if(pageData.prev) {
+								str += `<li class="page-item">`;
+								str += `<a class="page-link" href="${pageData.startPage - 1}" aria-label="Previous">`;
+								str += `<span aria-hidden="true">이전</span>`;
+								str += `</a>`;
+								str += `</li>`;
+							}
+
+							// 선택페이지
+							for(let i=pageData.startPage; i<=pageData.endPage; i++) {
+								let className = pageData.cri.pageNum == i ? 'active' : '';
+								str += `<li class="page-item ${className}"><a class="page-link" href="${i}">${i}</a></li>`;
+							}
+
+							// 다음페이지
+							if(pageData.next) {
+								str += `<li class="page-item">`;
+								str += `<a class="page-link" href="${pageData.endPage + 1}" aria-label="Next">`;
+								str += `<span aria-hidden="true">다음</span>`;
+								str += `</a>`;
+								str += `</li>`;
+							}
+						
+						str += `</ul>`;
+						str += `</nav>`;	
+
+					target.html(str); //target에 페이지html값 추가
+				}
+
+
+				// [페이징 클릭 이벤트]
+				$("#review_paging").on("click", "nav ul.pagination a", function(e) {
+					e.preventDefault();
+
+					reviewPage = $(this).attr("href");
+
+					url = "/review/revlist/" + [[${product.pro_num}]] + "/" + reviewPage;
+
+					getReviewList(url);
+
+				});
+
+
+				// [핸들바함수] 상품후기 평점 별모양표시
+				Handlebars.registerHelper("displayStar", function(rating) {
+					let star = "";
+					switch(rating) {
+						case 1 : 
+							star = "★☆☆☆☆";
+							break;
+						case 2 : 
+							star = "★★☆☆☆";
+							break;
+						case 3 : 
+							star = "★★★☆☆";
+							break;
+						case 4 : 
+							star = "★★★★☆";
+							break;
+						case 5 : 
+							star = "★★★★★";
+							break;
+					}
+					return star;
+				});
+ 
+
+				// [핸들바함수] 상품후기 날짜형식 
+				Handlebars.registerHelper("converDate", function(re_date) {
+					const d = new Date(re_date);
+
+					let year = d.getFullYear();
+					let month = d.getMonth() + 1;
+					let date = d.getDate();
+					let hour = d.getHours();
+					let minute = d.getMinutes();
+
+					return `${year}/${month}/${date}/ ${hour}:${minute}`;
+				});
+
+
+				// [핸들바함수] 로그인아이디와 리뷰작성자가 같을 때 수정, 삭제 버튼 출력
+				Handlebars.registerHelper("authControlView", function(mbsp_id, re_code) {
+
+					let loginVo = [[${session.login_status}]]; // 로그인 상태
+					
+					let loginId = ""; //로그인 아이디 초기화
+
+					if(loginVo !== null) { // 로그인상태가 없지 않다면 > 로그인 상태라면
+						loginId = [[${session.login_status == null ? '' : session.login_status.mbsp_id}]]; 
+					}
+
+					let str = "";
+
+					if(loginVo !== null && loginId == mbsp_id) {
+						str += `<button type="button" class="btn btn-primary" th:data-re_code="${re_code}">수정</button>`;
+						str += `<button type="button" class="btn btn-danger" th:data-re_code="${re_code}">삭제</button>`;
+						
+						return new Handlebars.SafeString(str);
+					}else {
+						return "";
+					}
+				});
 
 
 

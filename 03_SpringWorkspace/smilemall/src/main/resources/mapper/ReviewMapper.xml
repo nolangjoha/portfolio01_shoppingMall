@@ -3,7 +3,7 @@
 <mapper namespace="com.smilemall.basic.review.ReviewMapper">
 
 	<!-- [상품후기목록] -->
-	<select id="rev_list" parameterType="Integer" resultType="ReviewVo">
+	<select id="rev_list" parameterType="map" resultType="ReviewVo">
 		SELECT 
 		    re_code, 
 		    mbsp_id, 
@@ -12,11 +12,40 @@
 		    re_content,
 		    re_rate, 
 		    re_date
-		FROM
-		    review_tbl
+		FROM (
+			SELECT /*+ INDEX_DESC(review_tbl pk_re_code) */
+				ROWNUM AS RN, 
+				re_code, 
+			    mbsp_id, 
+			    pro_num, 
+			    re_title, 
+			    re_content,
+			    re_rate, 
+			    re_date
+			FROM
+				review_tbl
+			WHERE
+				pro_num = #{pro_num}
+			AND
+				<![CDATA[
+					ROWNUM <= (#{cri.pageNum} * #{cri.amount})
+				]]>
+			)
 		WHERE
-		    pro_num = #{pro_num}
+		    RN > (#{cri.pageNum} - 1) * #{cri.amount}
 	</select>
+
+	<!--  -->
+	<select id="getCountReviewByPro_num">
+		SELECT
+			COUNT(*)
+		FROM
+			review_tbl
+		WHERE
+			pro_num = #{pro_num}
+	</select>
+
+
 
 
 
