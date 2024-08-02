@@ -17,6 +17,16 @@
 					text-align: center;
 				}
 
+				p#star_re_rate a.re_rate {
+					font-size: 22px;
+					text-decoration: none;
+					color: lightgray;
+				}
+
+				p#star_re_rate a.re_rate.on {
+					color: red;
+				}
+
 			</style>
 		</th:block>		
 
@@ -115,6 +125,9 @@
 								  <p th:utext="${product.pro_content}"></p>
 								</div>
 								<div id="pro_review">
+									<!-- 상품후기 작성 버튼(모달)-->
+									<button type="button" class="btn btn-outline-primary" id="btn_review_modal" th:data-pro_num="${product.pro_num}">상품후기 작성</button>
+									<hr>
 									<!--상품후기 출력위치(핸들바)-->
 									<div id="review_list"></div>
 									<!--페이징 출력위치-->
@@ -136,6 +149,48 @@
 			<!--상품 템플릿 끝 -->
 
 
+			<!-- 상품후기 모달-->
+			<!-- Modal -->
+			<div class="modal fade" id="review_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">상품 후기 작성</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="card-body">
+								<div class="form-group row">
+									<label for="re_title" class="col-form-label"><strong>제목</strong></label>
+									<input type="text" class="form-control" id="re_title" placeholder="제목을 입력하세요.">
+								</div>
+								<div class="form-group row">
+									<label for="re_content" class="col-form-label"><strong>내용</strong></label>
+									<textarea class="form-control" id="re_content" placeholder="내용을 입력하세요."></textarea>
+								</div>
+								<div class="form-group row">
+									<label class="col-form-label"><strong>평점</strong></label>
+									<p id="star_re_rate">
+										<a class="re_rate" href="#">☆</a>
+										<a class="re_rate" href="#">☆</a>
+										<a class="re_rate" href="#">☆</a>
+										<a class="re_rate" href="#">☆</a>
+										<a class="re_rate" href="#">☆</a>
+									</p>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" id="btn_review_save" class="btn btn-primary" th:data-pro_num="${product.pro_num}">상품후기 저장</button>
+					</div>
+				</div>
+				</div>
+			</div>
+			<!-- 상품후기 모달 끝-->
 
 
 
@@ -314,14 +369,112 @@
 					let str = "";
 
 					if(loginVo !== null && loginId == mbsp_id) {
-						str += `<button type="button" class="btn btn-primary" th:data-re_code="${re_code}">수정</button>`;
-						str += `<button type="button" class="btn btn-danger" th:data-re_code="${re_code}">삭제</button>`;
+						str += `<button type="button" class="btn btn-primary" data-re_code="${re_code}">수정</button>`;
+						str += `<button type="button" name="btn_review_delete" class="btn btn-danger" data-re_code="${re_code}">삭제</button>`;
 						
 						return new Handlebars.SafeString(str);
 					}else {
 						return "";
 					}
 				});
+
+
+				// [상품후기작성 modal 출력] id="btn_review_modal"
+				$("#btn_review_modal").on("click", function() {
+					$("#review_modal").modal('show');
+				});
+
+
+				// [별평점 클릭시 이벤트 발생]
+				$("p#star_re_rate a.re_rate").on("click", function(e) {
+					e.preventDefault(); // 링크기능 제거
+
+					$(this).parent().children().removeClass("on");
+					$(this).addClass("on").prevAll("a").addClass("on");
+				});
+
+
+				// [상품후기 저장] id="btn_review_save"
+				$("button#btn_review_save").on("click", function() {
+					let pro_num = $(this).data("pro_num");
+					console.log("pro_num :", pro_num);
+
+					let re_title = $("#re_title").val();
+					console.log("re_title :", re_title);
+
+					let re_content = $("#re_content").val();
+					console.log("re_content :", re_content);
+
+					let re_rate = 0;
+
+					$("p#star_re_rate a.re_rate").each(function() {
+						if($(this).attr("class") == "re_rate on") {
+							re_rate += 1;
+						}
+					});
+					console.log("re_rate :", re_rate);
+
+					// (유효성검사)
+					if(re_title == "") {
+						alert("제목을 입력하세요");
+						return;
+					}
+
+					if(re_content == "") {
+						alert("내용을 입력하세요");
+						return;
+					}
+
+					if(re_rate == 0) {
+						alert("평점을 선택하세요");
+						return;
+					}
+
+					// 자바스크립트 object문법으로 데이터 전달
+					let review_data = {pro_num : pro_num, re_title : re_title, re_content : re_content}; 
+
+					$.ajax({
+						url: '/review/review_save',
+						headers: {"Content-Type" : "application/json"},
+						type: 'post',
+						data: JSON.stringify(review_data),  //자바스크립트  object문법을 json으로 변환하는 작업
+						dataType: 'text',
+						success: function(result) {
+							if(result == "success") {
+								alert("상품후기가 등록되었습니다.");
+								$("#review_modal").modal('hide');
+								getReviewList(url);
+							}
+						},
+						beforeSend : function(xhr) {
+							xhr.setRequestHeader("AJAX", "true");
+						},
+						error : function() {
+							location.href = "/member/login";
+						}
+					});
+				});
+
+
+				// [상품후기 삭제]
+				$("div#review_list").on("click", "button[name='btn_review_delete']", function() {
+					if(!confirm("상품후기를 삭제하시겠습니까?")) return;
+
+					let re_code = $(this).data("re_code");
+					$.ajax({
+						url: '/review/review_delete/' + re_code,
+						headers: {"Content-Type" : "application/json", "X-HTTP-Method-Override" : "DELETE" },
+						type: 'delete',
+						dataType: 'text',
+						success: function(result) {
+							if(result == "success") {
+								alert("상품후기가 삭제되었습니다.");
+								getReviewList(url);
+							}
+						}
+					});
+				});
+
 
 
 

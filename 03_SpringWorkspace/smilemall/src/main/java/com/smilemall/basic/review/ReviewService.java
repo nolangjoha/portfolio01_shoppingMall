@@ -26,4 +26,17 @@ public class ReviewService {
 		return reviewMapper.getCountReviewByPro_num(pro_num);
 	}
 	
+	// [상품후기 저장] 
+	public void review_save(ReviewVo vo) {
+		reviewMapper.review_save(vo);
+	}
+
+	// [상품후기 삭제]
+	void review_delete (Long re_code) {
+		reviewMapper.review_delete(re_code);
+	}
+
+
+
+
 }

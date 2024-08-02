@@ -35,7 +35,7 @@
 		    RN > (#{cri.pageNum} - 1) * #{cri.amount}
 	</select>
 
-	<!--  -->
+	<!-- 후기데이터 총 개수 -->
 	<select id="getCountReviewByPro_num">
 		SELECT
 			COUNT(*)
@@ -44,6 +44,33 @@
 		WHERE
 			pro_num = #{pro_num}
 	</select>
+
+	<!-- 상품후기 저장 -->
+	<insert id="review_save" parameterType="ReviewVo">
+		INSERT INTO 
+			review_tbl(
+				re_code, 
+			    mbsp_id, 
+			    pro_num, 
+			    re_title, 
+			    re_content,
+			    re_rate)
+		VALUES (
+			SEQ_REVIEW_CODE.NEXTVAL,
+			#{mbsp_id},
+			#{pro_num},
+			#{re_title},
+			#{re_content},
+			#{re_rate})
+	</insert>
+	
+	<!-- [상품후기 삭제] -->
+	<delete id="review_delete" parameterType="Long">
+		DELETE FROM
+			review_tbl
+		WHERE
+			re_code = #{re_code,}
+	</delete>
 
 
 
