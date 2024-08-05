@@ -20,6 +20,11 @@ public interface ReviewMapper {
 	// [상품후기 삭제]
 	void review_delete (Long re_code);
 	
+	// [리뷰수정 페이지]
+	ReviewVo review_modify(Long re_code);
+	
+	// [리뷰수정]
+	void review_update(ReviewVo vo);
 	
 	
 }

@@ -69,11 +69,39 @@
 		DELETE FROM
 			review_tbl
 		WHERE
-			re_code = #{re_code,}
+			re_code = #{re_code}
 	</delete>
 
+	<!-- [리뷰수정 페이지] -->
+	<select id="review_modify" parameterType="Long" resultType="ReviewVo">
+		SELECT 
+			re_code,
+	     	mbsp_id,
+	     	pro_num, 
+			re_title, 
+			re_content,
+			re_rate,
+			re_date
+		FROM
+			review_tbl
+		WHERE
+			re_code = #{re_code}
+	</select>
 
+	<!-- [리뷰수정] -->
+	<update id="review_update" parameterType="ReviewVo">
+		UPDATE
+			review_tbl
+				
+		SET
+			re_title = #{re_title}, 
+		    re_content = #{re_content},
+		    re_rate = #{re_rate},
+		    re_date = SYSDATE
+		WHERE
+			re_code = #{re_code}
+	</update>
 
-
+	
 
 </mapper>

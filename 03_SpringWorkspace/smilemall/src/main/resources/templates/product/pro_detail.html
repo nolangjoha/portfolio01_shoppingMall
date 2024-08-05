@@ -166,6 +166,7 @@
 								<div class="form-group row">
 									<label for="re_title" class="col-form-label"><strong>제목</strong></label>
 									<input type="text" class="form-control" id="re_title" placeholder="제목을 입력하세요.">
+									<input type="hidden" class="form-control" id="re_code">
 								</div>
 								<div class="form-group row">
 									<label for="re_content" class="col-form-label"><strong>내용</strong></label>
@@ -186,6 +187,7 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" id="btn_review_save" class="btn btn-primary" th:data-pro_num="${product.pro_num}">상품후기 저장</button>
+						<button type="button" id="btn_review_modify" class="btn btn-primary" th:data-pro_num="${product.pro_num}">상품후기 수정</button>
 					</div>
 				</div>
 				</div>
@@ -369,7 +371,7 @@
 					let str = "";
 
 					if(loginVo !== null && loginId == mbsp_id) {
-						str += `<button type="button" class="btn btn-primary" data-re_code="${re_code}">수정</button>`;
+						str += `<button type="button" name="btn_review_edit" class="btn btn-primary" data-re_code="${re_code}">수정</button>`;
 						str += `<button type="button" name="btn_review_delete" class="btn btn-danger" data-re_code="${re_code}">삭제</button>`;
 						
 						return new Handlebars.SafeString(str);
@@ -381,7 +383,16 @@
 
 				// [상품후기작성 modal 출력] id="btn_review_modal"
 				$("#btn_review_modal").on("click", function() {
+
+					$("#re_title").val("");
+					$("#re_content").val("");
+					$("#re_code").val("");
+					$("p#star_re_rate a.re_rate").removeClass("on");
+
+					$("#btn_review_save").show();
+					$("#btn_review_modify").hide();
 					$("#review_modal").modal('show');
+
 				});
 
 
@@ -431,7 +442,7 @@
 					}
 
 					// 자바스크립트 object문법으로 데이터 전달
-					let review_data = {pro_num : pro_num, re_title : re_title, re_content : re_content}; 
+					let review_data = {pro_num : pro_num, re_title : re_title, re_content : re_content, re_rate: re_rate}; 
 
 					$.ajax({
 						url: '/review/review_save',
@@ -475,6 +486,96 @@
 					});
 				});
 
+
+				// [상품후기 수정폼]  id="review_list"  //name="btn_review_edit"
+				$("div#review_list").on("click", "button[name='btn_review_edit']", function() {
+					let re_code = $(this).data("re_code");
+
+					$.ajax({
+						url: '/review/review_modify/' + re_code,
+						headers: {"Content-Type" : "application/json"},
+						type: 'get',
+						dataType: 'json',
+						success: function(result) {
+							console.log("수정할데이터:" + result);
+
+							//수정내용출력 / id="re_title", id="re_content", id="re_code"
+							$("#re_title").val(result.re_title);
+							$("#re_content").val(result.re_content);
+							$("#re_code").val(result.re_code);
+							
+							let re_rate =result.re_rate;
+							$("p#star_re_rate a.re_rate").each(function(index, item) {
+
+								if(index < re_rate){
+									$(this).addClass("on");
+								}
+							});
+							
+							$("#btn_review_save").hide();
+							$("#btn_review_modify").show();
+							$("#review_modal").modal('show');
+						}
+					});
+				});
+
+
+				// [상품후기 수정하기]  id="btn_review_modify"
+				$("button#btn_review_modify").on("click", function() {
+					let pro_num = $(this).data("pro_num");
+					console.log(pro_num);
+
+					let re_code = $("#re_code").val();
+					let re_title = $("#re_title").val();
+					let re_content = $("#re_content").val();
+					let re_rate = 0;
+
+					$("p#star_re_rate a.re_rate").each(function() {
+						if($(this).attr("class") == "re_rate on") {
+							re_rate += 1;
+						}
+					});
+					
+					// (유효성검사)
+					if(re_title == "") {
+						alert("제목을 입력하세요");
+						return;
+					}
+
+					if(re_content == "") {
+						alert("내용을 입력하세요");
+						return;
+					}
+
+					if(re_rate == 0) {
+						alert("평점을 선택하세요");
+						return;
+					}
+
+					// 자바스크립트 object문법으로 데이터 전달
+					let review_data = {pro_num : pro_num, re_title : re_title, re_content : re_content, re_rate: re_rate, re_code : re_code}; 
+
+					$.ajax({
+						url: '/review/review_modify',
+						headers: {"Content-Type" : "application/json", "X-HTTP-Method-Override" : "PUT"},
+						type: 'put',
+						data: JSON.stringify(review_data),  //자바스크립트  object문법을 json으로 변환하는 작업
+						dataType: 'text',
+						success: function(result) {
+							if(result == "success") {
+								alert("상품후기가 수정되었습니다.");
+								$("#review_modal").modal('hide');
+								getReviewList(url);
+							}
+						},
+						beforeSend : function(xhr) {
+							xhr.setRequestHeader("AJAX", "true");
+						},
+						error : function() {
+							location.href = "/member/login";
+						}
+					});
+				});
 
 
 

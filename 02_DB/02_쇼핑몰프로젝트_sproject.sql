@@ -200,3 +200,55 @@ VALUES (
 
 COMMIT;
 
+
+-- 7. 주문테이블
+DROP TABLE ORDER_TBL;
+CREATE TABLE ORDER_TBL(
+    ord_code        NUMBER,                             --주문코드
+    mbsp_id         VARCHAR2(50)    NOT NULL,           -- 주문자 아이디
+    ord_name        VARCHAR2(30)    NOT NULL,           -- 주문자 이름
+    ord_tel         VARCHAR2(20)    NOT NULL,           -- 주문자 연락처
+    ord_regdate     DATE DEFAULT SYSDATE    NOT NULL,   -- 주문날짜
+    ord_addr_zipcode  CHAR(5)         NOT NULL,         -- 배송지 우편번호
+    ord_addr_basic    VARCHAR2(50)    NOT NULL,         -- 배송지 기본주소
+    ord_addr_detail   VARCHAR2(50)    NOT NULL,         -- 배송지 상세주소
+    ord_price       NUMBER          NOT NULL,           -- 주문금액
+    ord_desc        VARCHAR2(500)   NOT NULL,           -- 주문시 요청사항
+    ord_admin_meno    VARCHAR2(500)                     -- 관리자 메모
+);
+/*
+order_tbl, seq_ord_code, pk_ord_code
+ord_code, mbsp_id, ord_name, ord_tel, ord_regdate, ord_addr_zipcode, ord_addr_basic, ord_addr_detail, 
+ord_price, ord_desc, ord_admin_meno
+*/
+
+--SEQUENCE 생성
+drop SEQUENCE SEQ_ORD_CODE;
+CREATE SEQUENCE SEQ_ORD_CODE;
+
+--PRIMARY KEY 생성
+ALTER TABLE order_tbl
+ADD CONSTRAINT PK_ORD_CODE PRIMARY KEY (ord_code);
+
+COMMIT;
+
+
+-- 8. 주문상세테이블(상품정보)
+CREATE TABLE ORDETAIL_TBL(
+    ord_code    NUMBER,                 -- 주문번호
+    pro_num     NUMBER,                 -- 상품번호
+    dt_amount   NUMBER     NOT NULL,    -- 주문수량
+    dt_price    NUMBER     NOT NULL     -- 주문가격
+);
+/*
+ordetail_tbl, pk_ordetail_code
+ord_code, pro_num, dt_amount, dt_price
+*/
+
+
+--PRIMARY KEY 생성
+ALTER TABLE ordetail_tbl
+ADD CONSTRAINT PK_ORDETAIL_CODE PRIMARY KEY (ord_code, pro_num);
+
+COMMIT;
+
