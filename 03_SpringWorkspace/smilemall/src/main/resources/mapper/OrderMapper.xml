@@ -2,8 +2,68 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.smilemall.basic.order.OrderMapper">
 
+	<!-- [주문정보입력] -->
+	<insert id="order_insert" parameterType="OrderVo"> 
+		
+		<selectKey keyProperty="ord_code" resultType="Long" order="BEFORE">
+			SELECT
+				seq_ord_code.NEXTVAL
+			FROM
+				dual
+		</selectKey>
+		
+		INSERT INTO
+			order_tbl (
+				ord_code, 
+				mbsp_id, 
+				ord_name, 
+				ord_tel, 
+				ord_addr_zipcode, 
+				ord_addr_basic, 
+				ord_addr_detail, 
+				ord_price, 
+				ord_desc
+			)
+		VALUES (
+			#{ord_code},
+			#{mbsp_id},
+			#{ord_name},
+			#{ord_tel},
+			#{ord_addr_zipcode},
+			#{ord_addr_basic},
+			#{ord_addr_detail},
+			#{ord_price},
+			#{ord_desc}
+		)
+	</insert>
 
 
-
+	<!-- [주문상세테이블] select insert : select한 결과를 insert-->
+	<insert id="orderDetail_insert" parameterType="map">
+		INSERT INTO 
+			ordetail_tbl (
+				ord_code, 
+				pro_num, 
+				dt_amount, 
+				dt_price
+			)
+		SELECT
+			#{ord_code}, 
+			p.pro_num, 
+			c.cart_amount, 
+			p.pro_price
+		FROM
+			cart_tbl c
+		INNER JOIN
+			product_tbl p		
+		ON
+			c.pro_num = p.pro_num
+		WHERE
+			c.mbsp_id =  #{mbsp_id}
+	</insert>
+	
+	
+	
+	
 
 </mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smilemall.basic.payinfo.PayInfoMapper">
+
+	<!-- 결제정보 입력 -->
+	<insert id="payInfo_insert" parameterType="PayInfoVo">
+		INSERT INTO
+			payinfo(
+				p_id, 
+				ord_code, 
+				mbsp_id,
+				paymethod, 
+				payinfo, 
+				p_price, 
+				p_status
+			)
+		VALUES(
+			seq_payinfo_id.NEXTVAL,
+			#{ord_code},
+			#{mbsp_id},
+			#{paymethod},
+			#{payinfo},
+			#{p_price},
+			#{p_status}
+		)
+	</insert>
+
+
+
+</mapper>

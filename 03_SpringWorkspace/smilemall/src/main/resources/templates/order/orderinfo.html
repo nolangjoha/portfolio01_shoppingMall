@@ -87,7 +87,7 @@
 						
 
 						<div class="card card-info">
-							<form class="form-horizontal" id="" action="" method="post">
+							<form class="form-horizontal" id="orderForm" action="" method="post">
 
 								<!-- 배송정보 -->
 								<div class="card-header">
@@ -136,8 +136,15 @@
 										<label for="ord_tel" class="col-sm-2 col-form-label">연락처</label>
 										<div class="col-sm-10">
 											<input type="text" class="form-control" id="ord_tel" name="ord_tel" placeholder="연락처" >
+											<input type="hidden" id="ord_price" name="ord_price" th:value="${total_price}">
 										</div>
-									</div>								
+									</div>
+									<div class="form-group row">
+										<label for="ord_desc" class="col-sm-2 col-form-label">특이사항</label>
+										<div class="col-sm-10">
+											<textarea type="text" class="form-control" id="ord_desc" name="ord_desc" placeholder="특이사항" ></textarea>
+										</div>
+									</div>									
 								</div>
 								<!-- 배송정보 끝 -->
 
@@ -150,7 +157,7 @@
 
 								<div class="card-body">
 									<div class="form-group row">
-										<label for="mbsp_receive" class="col-sm-2 col-form-label">결제방법</label>
+										<label class="col-sm-2 col-form-label">결제방법</label>
 										<div class="form-check">
 											<input type="radio"  id="pay_nobank" name="paymethod" value = "nobank">
 											<label class="form-check-label" for="pay_nobank">무통장입금</label>
@@ -186,7 +193,7 @@
 								
 
 								<div class="card-footer">
-									<button type="submit" class="btn btn-info" id=" ">주문하기</button>
+									<button type="button" class="btn btn-info" id="btn_order_payment">주문하기</button>
 								</div>
 							</form>
 						</div>					
@@ -347,6 +354,44 @@
 				});
 
 
+				//[주문하기]  id="btn_order_payment"// name="paymethod"
+				$("button#btn_order_payment").on("click", function() {
+					let paymethod = $("input[name='paymethod']:checked").val();
+
+					console.log("결제방법"+ paymethod);
+
+					if(paymethod == "nobank") {
+						let orderForm = $("#orderForm");
+						orderForm.submit();
+
+					}else if(paymethod == "kakaopay") {
+
+						$.ajax({
+							url : '/kakao/kakaoPay',
+							type: 'get',
+							data: {
+								ord_name:$("#ord_name").val(), 
+								ord_addr_zipcode:$("#sample2_postcode").val(), 
+								ord_addr_basic:$("#sample2_address").val(), 
+								ord_addr_detail:$("#sample2_detailAddress").val(), 
+								ord_tel:$("#ord_tel").val(), 
+								ord_desc:$("#ord_desc").val(),
+								ord_price:$("#ord_price").val()
+							},
+							dataType:'json',
+							success: function(response) {
+								console.log("응답" + response);
+
+								alert(response.next_redirect_pc_url);
+								location.href = response.next_redirect_pc_url;
+							}
+						});
+
+
+
+					}
+
+				});
 
 
 

@@ -252,3 +252,29 @@ ADD CONSTRAINT PK_ORDETAIL_CODE PRIMARY KEY (ord_code, pro_num);
 
 COMMIT;
 
+
+-- 9. 결제테이블
+CREATE TABLE payinfo(
+    p_id        NUMBER,                     -- 결제번호
+    ord_code    NUMBER          NOT NULL,   -- 주문번호
+    mbsp_id     VARCHAR2(50)    NOT NULL,   -- 주문자 아이디
+    paymethod   VARCHAR2(50)    NOT NULL,   -- 결제방법
+    payinfo     VARCHAR2(100)   NOT NULL,   -- 결제정보
+    p_price     NUMBER          NOT NULL,   --총금액
+    p_status    VARCHAR2(10)    NOT NULL,   --완납/미납
+    p_date      DATE DEFAULT    SYSDATE     --결제일
+);
+
+/*
+payinfo, seq_payinfo_id, pk_payinfo_id
+p_id, ord_code, mbsp_id, paymethod, payinfo, p_price, p_status, p_date
+*/
+
+-- SEQUENCE 생성
+CREATE SEQUENCE SEQ_PAYINFO_ID;
+
+-- PRIMARY KEY 생성
+ALTER TABLE payinfo
+ADD CONSTRAINT PK_PAYINFO_ID PRIMARY KEY (p_id);
+
+COMMIT;
