@@ -90,18 +90,21 @@
 						<div class="col-6">
 							<form>
 								<div class="form-group">
-									<strong><span th:text="${product.pro_name}" ></span></strong>
+									<strong><span id="info_pro_name" th:text="${product.pro_name}" ></span></strong>
 								</div>
 								<div class="form-group">
 								  <label>판매가격 : </label>
 								  <span th:text="${#numbers.formatInteger(product.pro_price, '3', 'COMMA') +'원'}"></span>
+								  <input type="hidden" id="pro_price" th:value="${product.pro_price}">
+
 								</div>
 								<div class="form-group">
 								  <label>수량</label>
 								  <input type="number" class="form-control" id="btn_cart_amount" value="1">
 								</div>
 								<div class="form-group">
-									<button type="button" class="btn btn-info" style="width: 100%;" th:data-pro_num="${product.pro_num}">바로구매</button>
+									<button type="button" class="btn btn-info" style="width: 100%;" id="btn_direct_buy" 
+									th:data-pro_num="${product.pro_num}" th:data-pro_img="${product.pro_img}" th:data-pro_up_folder="${product.pro_up_folder}">바로구매</button>
 									<button type="button" class="btn btn-secondary" style="width: 100%;" th:data-pro_num="${product.pro_num}" id="btn_cart_add">장바구니 담기</button>
 								</div>	
 							</form>		
@@ -578,8 +581,40 @@
 				});
 
 
+				//[바로구매하기] id="btn_direct_buy"
+				$("#btn_direct_buy").on("click", function() {
+					let pro_num = $(this).data("pro_num");
+					let cart_amount = $("#btn_cart_amount").val();
+					let pro_name = $("#info_pro_name").html();
+					let pro_up_folder = $(this).data("pro_up_folder");
+					let pro_img = $(this).data("pro_img");
+					let pro_price = $("#pro_price").val();
 
+					console.log("이미지 경로", pro_up_folder);
+					console.log("이미지파일", pro_img);
+					
 
+					if(cart_amount == 0 || cart_amount < 0) {
+						alert("최소 주문수량은 1개 입니다.");
+						retrun;
+					}
+
+					
+					let queryParams = $.param({
+						pro_num : pro_num,
+						cart_amount : cart_amount,
+						pro_name: pro_name,
+						pro_up_folder: pro_up_folder,
+						pro_img: pro_img,
+						pro_price: pro_price,
+						type:'direct'
+					});
+
+					console.log("즉시구매시 상품정보" + queryParams);
+
+					location.href = "/order/orderinfo?" + queryParams;
+
+				});
 
 
 

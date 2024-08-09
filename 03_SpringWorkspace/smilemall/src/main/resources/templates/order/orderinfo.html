@@ -49,9 +49,11 @@
 									<img th:src="${'/cart/image_display?dateFolderName=' + cartProduct.pro_up_folder + '&fileName=s_' + cartProduct.pro_img}" style="width:70px; height:70px;"  />
 								</a>
 							  </td>
-						      <td th:text="${cartProduct.pro_name}" style="text-align: left;"></td>
-							  <td th:text="${cartProduct.cart_amount}"></td>
-						      <td>0원</td>
+						      <td th:text="${cartProduct.pro_name}" name="pro_name" style="text-align: left;"></td>
+							  <td th:text="${cartProduct.cart_amount}" name="cart_amount"></td>
+						      <td>0원
+								<input type="hidden" name="pro_num" th:value="${cartProduct.pro_num}">
+							  </td>
 						      <td th:text="${#numbers.formatInteger(cartProduct.pro_price * cartProduct.cart_amount, 3, 'COMMA') + '원'}"></td>
 						    </tr>
 						  </tbody>
@@ -82,6 +84,7 @@
 								</td>								
 						  	</tr>
 						  </tfoot>
+						  
 						</table>
 						<!--구매상품목록 끝-->
 						
@@ -134,10 +137,12 @@
 									</div>
 									<div class="form-group row">
 										<label for="ord_tel" class="col-sm-2 col-form-label">연락처</label>
-										<div class="col-sm-10">
-											<input type="text" class="form-control" id="ord_tel" name="ord_tel" placeholder="연락처" >
-											<input type="hidden" id="ord_price" name="ord_price" th:value="${total_price}">
-										</div>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="ord_tel" name="ord_tel" placeholder="연락처" >
+										<input th:if="${total_price>=100000}" type="hidden" id="ord_price" name="ord_price" th:value="${total_price}">
+										<input th:if="${total_price<100000}" type="hidden" id="ord_price" name="ord_price" th:value="${total_price} +3000">
+										
+									</div>
 									</div>
 									<div class="form-group row">
 										<label for="ord_desc" class="col-sm-2 col-form-label">특이사항</label>
@@ -193,6 +198,7 @@
 								
 
 								<div class="card-footer">
+									<input type="hidden" name="type" id="type" th:value="${type}">
 									<button type="button" class="btn btn-info" id="btn_order_payment">주문하기</button>
 								</div>
 							</form>
@@ -360,6 +366,9 @@
 
 					console.log("결제방법"+ paymethod);
 
+					console.log("상품번호",$("input[name='pro_num']").val());
+					
+
 					if(paymethod == "nobank") {
 						let orderForm = $("#orderForm");
 						orderForm.submit();
@@ -376,7 +385,10 @@
 								ord_addr_detail:$("#sample2_detailAddress").val(), 
 								ord_tel:$("#ord_tel").val(), 
 								ord_desc:$("#ord_desc").val(),
-								ord_price:$("#ord_price").val()
+								ord_price:$("#ord_price").val(),
+								pro_num:$("input[name='pro_num']").val(),
+								cart_amount:$("td[name='cart_amount']").html(),
+								type:$("#type").val()
 							},
 							dataType:'json',
 							success: function(response) {
@@ -386,10 +398,9 @@
 								location.href = response.next_redirect_pc_url;
 							}
 						});
-
-
-
 					}
+
+					console.log("상품번호2",$("input[name='pro_num']").val());
 
 				});
 

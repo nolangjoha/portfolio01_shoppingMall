@@ -10,12 +10,12 @@ import lombok.ToString;
 public class CartProductVo {
 	// 장바구니에 담긴 상품목록 클래스
 	
-	private Long cart_code;
-	private int pro_num;
-	private String pro_name;
-	private String pro_up_folder;
-	private String pro_img;
-	private int pro_price;
-	private int cart_amount;
+	private Long cart_code;			// 장바구니 코드
+	private int pro_num;			// 상품번호
+	private String pro_name;		// 상품명
+	private String pro_up_folder;	// 상품이미지 폴더
+	private String pro_img;			// 상품이미지파일
+	private int pro_price;			// 상품가격
+	private int cart_amount;		// 장바구니에 담은 양
 	
 }

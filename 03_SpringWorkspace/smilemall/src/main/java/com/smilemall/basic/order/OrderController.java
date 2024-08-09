@@ -1,12 +1,16 @@
 package com.smilemall.basic.order;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.smilemall.basic.cart.CartProductVo;
@@ -29,33 +33,71 @@ public class OrderController {
 	private final CartService cartService;
 	private final MemberService memberService;
 	
+	
 	// [장바구니 > 주문서작성 페이지]
 	@GetMapping("/orderinfo")
-	public String orderinfo(CartVo vo, Model model, HttpSession session) throws Exception {
-		
-		// 아이디 확보
-		String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
-		vo.setMbsp_id(mbsp_id);
-		
-		//장바구니 상품목록
-		List<CartProductVo> cart_list = cartService.cart_list(mbsp_id);
-		
-		//이미지 폴더 구분자 변환
-		cart_list.forEach(d_vo -> d_vo.setPro_up_folder(d_vo.getPro_up_folder().replace("\\", "/")));
-
-		//상품가격 합계
-		int total_price = 0;
-		for(int i=0; i < cart_list.size(); i++) {
-			total_price += (cart_list.get(i).getPro_price() * cart_list.get(i).getCart_amount());
+	public String orderinfo(CartProductVo vo, Model model, HttpSession session,@ModelAttribute("type") String type) throws Exception {
+			log.info("주문하기 상품정보:" + vo);
+			log.info("결제타입:" + type);
+			
+		// <상품리스트(pro_list.html), 상품상세(pro_detail.html)에서 구매하기 버튼 클릭시>
+		// 만약 상품번호가 0이 아니고, 장바구니 상품의 양이 0이 아니면	
+		if(type.equals("direct")) {
+			//장바구니담은 상품 객체 생성
+			CartProductVo cp_vo = new CartProductVo();
+			
+			log.info("cp_vo값 1" + cp_vo);
+			
+			// 담은상품의 정보를 장바구니 담은 상품에 지정
+			cp_vo.setPro_num(vo.getPro_num());
+			cp_vo.setPro_name(vo.getPro_name());
+			cp_vo.setPro_up_folder(vo.getPro_up_folder()); 
+			cp_vo.setPro_img(vo.getPro_img());
+			cp_vo.setPro_price(vo.getPro_price());
+			cp_vo.setCart_amount(vo.getCart_amount());
+			
+			log.info("cp_vo값 2" + cp_vo);
+			
+			
+			//상품목록 리스트객체 생성
+			List<CartProductVo> cart_list = new ArrayList<>();
+			cart_list.add(cp_vo);
+			model.addAttribute("cart_list", cart_list);
+			
+			log.info("cart_list값" + cart_list);
+			
+			int total_price = 0;
+			for(int i=0; i<cart_list.size(); i++) {
+				total_price += cart_list.get(i).getPro_price()*cart_list.get(i).getCart_amount();
+			}
+			model.addAttribute("total_price", total_price);
+			log.info("total_price값: "+total_price);
+			
+		} else if(type.equals("cart")) {
+			// <장바구니(cart_list.html)에서 구매하기 버튼 클릭시>
+			// 아이디 확보
+			String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
+			
+			
+			//장바구니 상품목록
+			List<CartProductVo> cart_list = cartService.cart_list(mbsp_id);
+			 
+			//이미지 폴더 구분자 변환
+			cart_list.forEach(d_vo -> d_vo.setPro_up_folder(d_vo.getPro_up_folder().replace("\\", "/")));
+			model.addAttribute("cart_list", cart_list);
+			
+			
+			//상품가격 합계
+			int total_price = 0;
+			for(int i=0; i < cart_list.size(); i++) {
+				total_price += (cart_list.get(i).getPro_price() * cart_list.get(i).getCart_amount());
+			}
+			model.addAttribute("total_price", total_price);
 		}
-		
-		model.addAttribute("total_price", total_price);
-		model.addAttribute("cart_list", cart_list);
-		
-		
+
 		return "/order/orderinfo";
 	}
-	
+
 	
 	// [주문자 회원정보와 동일]
 	@GetMapping("/ordersame")

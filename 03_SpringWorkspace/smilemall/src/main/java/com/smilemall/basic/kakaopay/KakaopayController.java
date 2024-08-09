@@ -34,46 +34,104 @@ public class KakaopayController {
 	// [결제준비 요청]
 	@ResponseBody
 	@GetMapping("/kakaoPay")
-	public ReadyResponse kakaoPay(OrderVo vo, HttpSession session) {
+	public ReadyResponse kakaoPay(CartProductVo cp_vo, OrderVo vo, HttpSession session, String type) {
 		
-		log.info("주문자정보:" + vo);
+		log.info("type값:"+ type);
 		
-		//아이디확보
-		String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
-		this.mbsp_id = mbsp_id;
+		// 1) 바로구매 했을 경우
+		if(type.equals("direct")) {
 		
+			// 아이디확보 
+			String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
+			this.mbsp_id = mbsp_id;
 			
-		//1) 장바구니 전체물품 구매시 // 장바구니 상품목록
-		List<CartProductVo> cart_list = cartService.cart_list(mbsp_id);
-		
-		//상품정보
-		String itemName = "";
-		int quantity = 0;
-		int totalAmount = 0;
-		int taxFreeAmount = 0;
-		int vatAmount = 0;
-		
-		for(int i=0; i<cart_list.size(); i++) {
-			itemName += cart_list.get(i).getPro_name() + "/";
-			quantity += cart_list.get(i).getCart_amount();
-			totalAmount += cart_list.get(i).getPro_price() * cart_list.get(i).getCart_amount();			
+			log.info("주문자정보:" + vo);
+			log.info("상품정보:" + cp_vo);
+			
+			// 구매상품 번호
+			int pro_num = cp_vo.getPro_num();  // pro_num
+			
+			//구매할 상품 정보
+			CartProductVo pro_vo = orderService.directOrderProduct(pro_num);  // pro_name, pro_price
+			pro_vo.setCart_amount(cp_vo.getCart_amount());  // 구매상품 수량 cart_amount
+			
+			log.info("상품정보2:" + pro_vo);
+			
+			// 상품 가격(배송비 제외)
+			int order_price = pro_vo.getCart_amount() * pro_vo.getPro_price();
+			
+			log.info("상품가격:" + order_price);
+			
+			String partnerOrderId = mbsp_id;
+			String partnerUserId = mbsp_id;
+			String itemName = pro_vo.getPro_name();
+			int quantity = 0;
+			// 결제가격 
+			int totalAmount;
+				// 결제가격 배송비 포함여부
+				if(order_price < 100000) {
+					totalAmount = order_price + 3000;
+				} else {
+					totalAmount = order_price;
+				}
+			log.info("배송비 포함 상품가격:" + totalAmount);
+				
+			int taxFreeAmount = 0;
+			int vatAmount = 0;
+			
+			// 결제 준비 요청
+			ReadyResponse readyResponse = kakaopayService.ready(partnerOrderId, partnerUserId, itemName, quantity, totalAmount, taxFreeAmount, vatAmount);
+			
+			log.info("응답데이터:" + readyResponse);
+			
+			//주문정보
+			this.vo = vo;
+			
+			log.info("바로구매vo"+ vo);
+			
+			return readyResponse; // 결제 준비 응답
+			
+		} else { 
+			//2) 장바구니에서 전체 구매를 했을 경우
+			//아이디확보
+			String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
+			this.mbsp_id = mbsp_id;
+					
+			log.info("장바구니 구매");
+			
+			//1) 장바구니 전체물품 구매시 // 장바구니 상품목록
+			List<CartProductVo> cart_list = cartService.cart_list(mbsp_id);
+			
+			//상품정보
+			String partnerOrderId = mbsp_id;
+			String partnerUserId = mbsp_id;
+			String itemName = "";
+			int quantity = 0;
+			int totalAmount = 0;
+			int taxFreeAmount = 0;
+			int vatAmount = 0;
+			
+			for(int i=0; i<cart_list.size(); i++) {
+				itemName += cart_list.get(i).getPro_name() + "/";
+				quantity += cart_list.get(i).getCart_amount();
+				totalAmount += cart_list.get(i).getPro_price() * cart_list.get(i).getCart_amount();			
+			}
+			
+			// 결제 준비 요청
+			ReadyResponse readyResponse = kakaopayService.ready(partnerOrderId, partnerUserId, itemName, quantity, totalAmount, taxFreeAmount, vatAmount);
+			
+			log.info("응답데이터:" + readyResponse);
+			
+			//주문정보
+			this.vo = vo;
+			
+			log.info("장바구니 구매vo"+ vo);
+			
+			return readyResponse; // 결제 준비 응답
 		}
 		
-		
-		
-		String partnerOrderId = mbsp_id;
-		String partnerUserId = mbsp_id;
-
-		// 결제 준비 요청
-		ReadyResponse readyResponse = kakaopayService.ready(partnerOrderId, partnerUserId, itemName, quantity, totalAmount, taxFreeAmount, vatAmount);
-		
-		log.info("응답데이터:" + readyResponse);
-		
-		//주문정보
-		this.vo = vo;
-		
-		return readyResponse; // 결제 준비 응답
 	}
+	
 	
 	
 	//[결제승인]

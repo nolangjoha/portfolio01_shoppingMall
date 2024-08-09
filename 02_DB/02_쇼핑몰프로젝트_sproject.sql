@@ -213,7 +213,7 @@ CREATE TABLE ORDER_TBL(
     ord_addr_basic    VARCHAR2(50)    NOT NULL,         -- 배송지 기본주소
     ord_addr_detail   VARCHAR2(50)    NOT NULL,         -- 배송지 상세주소
     ord_price       NUMBER          NOT NULL,           -- 주문금액
-    ord_desc        VARCHAR2(500)   NOT NULL,           -- 주문시 요청사항
+    ord_desc        VARCHAR2(500),                      -- 주문시 요청사항
     ord_admin_meno    VARCHAR2(500)                     -- 관리자 메모
 );
 /*

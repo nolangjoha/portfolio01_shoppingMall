@@ -62,8 +62,15 @@
 			c.mbsp_id =  #{mbsp_id}
 	</insert>
 	
-	
-	
+	<!-- [바로구매 상품정보 가져오기] -->
+	<select id="directOrderProduct" parameterType="int" resultType="CartProductVo">
+		SELECT
+			pro_name, pro_price
+		FROM
+			product_tbl
+		WHERE
+			pro_num = #{pro_num}
+	</select>
 	
 
 </mapper>

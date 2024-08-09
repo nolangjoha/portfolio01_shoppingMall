@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.smilemall.basic.cart.CartMapper;
+import com.smilemall.basic.cart.CartProductVo;
 import com.smilemall.basic.payinfo.PayInfoMapper;
 import com.smilemall.basic.payinfo.PayInfoVo;
 
@@ -43,24 +44,18 @@ public class OrderService {
 		payInfoMapper.payInfo_insert(p_vo);
 		
 		
-		
-		
-		
-		// 4. 장바구니 테이블 delete
-		// 결제방식에 따라 if문 추가?
-		
-		// 1) 장바구니 전체물품 구매시
+		// 4. 장바구니 테이블 deleten // 결제방식에 따라 if문 추가?
+		// 1) 장바구니 전체물품 구매시 
 		cartMapper.cart_empty(mbsp_id);
 		
-		// 2) 장바구니에서 선택상품 구매시 > 선택상품만 장바구니에서 삭제
 		
-
-		// 3) 장바구니에서 단일상품 구매시 > 구매한 상품만 장바구니에서 삭제
-		
-		// 4) 상품목록, 상품상세에서 단일상품 구매시 > 장바구니에 작업된거 없음.
 		
 	}
 	
 	
-	
+	//[바로구매 상품정보 가져오기]
+	public CartProductVo directOrderProduct(int pro_num) {
+		return orderMapper.directOrderProduct(pro_num);
+	}
+
 }
