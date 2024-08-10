@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.smilemall.basic.cart.CartProductVo;
@@ -112,11 +113,59 @@ public class OrderController {
 		return entity;
 	}
 	
+//	// [무통장입금]
+//	@PostMapping("/ordersasve")
+//	public String ordersave(OrderVo vo, String pay_nobank, String pay_nobank_user, HttpSession session) throws Exception {
+//		
+//		log.info("무통자입금 주문정보:" + vo);
+//		log.info("입금은행:" + pay_nobank);
+//		log.info("예금주:" + pay_nobank_user);
+//		
+//		
+//		// 아이디 확보
+//		String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
+//		vo.setMbsp_id(mbsp_id);
+//		
+//		// 결제정보 : 은행주 + 예금주
+//		String payinfo = pay_nobank + "/" + pay_nobank_user;
+//		
+//		//결제정보 :DB insert
+//		orderService.order_process(vo, mbsp_id, "무통장입금", "미납", payinfo);
+//		
+//		return "redirect:/order/ordercomplete";		
+//		
+//	}
 	
+	// [무통장입금] 수정중
+	@PostMapping("/ordersasve")
+	public String ordersave(OrderVo vo, String pay_nobank, String pay_nobank_user, HttpSession session, 
+			CartProductVo cp_vo, @ModelAttribute("type") String type) throws Exception {
+		
+		log.info("무통장입금 주문정보:" + vo);
+		log.info("입금은행:" + pay_nobank);
+		log.info("예금주:" + pay_nobank_user);
+		log.info("무통장 입금 주문정보:" + cp_vo);
+		log.info("바로구매/장바구니구매:" + type);
+		
+		// 아이디 확보
+		String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
+		vo.setMbsp_id(mbsp_id);
+		
+		// 결제정보 : 은행주 + 예금주
+		String payinfo = pay_nobank + "/" + pay_nobank_user;
+		
+		//결제정보 :DB insert
+		orderService.order_process_direct(vo, mbsp_id, "무통장입금", "미납", payinfo, cp_vo, type);
+		
+		return "redirect:/order/ordercomplete";		
+		
+	}
 	
-	
-	
-	
+	// [무통장입금 주문완료 페이지]
+	@GetMapping("/ordercomplete")
+	public void ordercomplete() {
+		
+	}
 	
 	
 	

@@ -175,6 +175,39 @@
 				});
 
 
+				// [상품바로구매시]  id="btn_direct_buy"
+				$("#order_cart_popup").on("click", "button#btn_direct_buy", function() {
+					let pro_num = $(this).data("pro_num");
+					let cart_amount = $("#btn_cart_amount").val();
+					let pro_name = $("#info_pro_name").html();
+					let pro_up_folder = $(this).data("pro_up_folder");
+					let pro_img = $(this).data("pro_img");
+					let pro_price = $("#pro_price").val();
+
+					if(cart_amount == 0 || cart_amount < 0) {
+						alert("최소 주문수량은 1개 입니다.");
+						retrun;
+					}
+
+					let queryParams = $.param({
+						pro_num : pro_num,
+						cart_amount : cart_amount,
+						pro_name: pro_name,
+						pro_up_folder: pro_up_folder,
+						pro_img: pro_img,
+						pro_price: pro_price,
+						type:'direct'
+					});
+
+					location.href = "/order/orderinfo?" + queryParams;
+				});
+
+
+
+
+
+
+
 
 			}); //ready 끝.
 		</script>

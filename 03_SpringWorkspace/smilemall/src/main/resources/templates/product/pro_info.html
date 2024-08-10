@@ -11,18 +11,21 @@
 	<div class="col-6">
 		<form>
 			<div class="form-group">
-				<strong><span th:text="${product.pro_name}"></span></strong>
+				<strong><span th:text="${product.pro_name}" id="info_pro_name"></span></strong>
 			</div>
 			<div class="form-group">
 			  <label>판매가격 : </label>
 			  <span th:text="${#numbers.formatInteger(product.pro_price, '3', 'COMMA') +'원'}"></span>
+			  <input type="hidden" id="pro_price" th:value="${product.pro_price}">
 			</div>
 			<div class="form-group">
 			  <label>수량</label>
 			  <input type="number" class="form-control" id="btn_cart_amount" value="1">
 			</div>
 			<div class="form-group">
-				<button type="button" class="btn btn-info" style="width: 100%;" th:data-pro_num="${product.pro_num}">바로구매</button>
+				<button type="button" class="btn btn-info" style="width: 100%;" th:data-pro_num="${product.pro_num}" id="btn_direct_buy"
+				th:data-pro_img="${product.pro_img}" th:data-pro_up_folder="${product.pro_up_folder}">
+				바로구매</button>
 				<button type="button" class="btn btn-light" style="width: 100%;" th:data-pro_num="${product.pro_num}" id="btn_cart_add">장바구니 담기</button>
 			</div>	
 		</form>		

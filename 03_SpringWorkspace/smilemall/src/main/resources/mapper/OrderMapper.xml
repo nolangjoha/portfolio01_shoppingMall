@@ -38,7 +38,7 @@
 	</insert>
 
 
-	<!-- [주문상세테이블] select insert : select한 결과를 insert-->
+	<!-- [주문상세테이블] select insert : select한 결과를 insert
 	<insert id="orderDetail_insert" parameterType="map">
 		INSERT INTO 
 			ordetail_tbl (
@@ -60,7 +60,7 @@
 			c.pro_num = p.pro_num
 		WHERE
 			c.mbsp_id =  #{mbsp_id}
-	</insert>
+	</insert>-->
 	
 	<!-- [바로구매 상품정보 가져오기] -->
 	<select id="directOrderProduct" parameterType="int" resultType="CartProductVo">
@@ -72,5 +72,29 @@
 			pro_num = #{pro_num}
 	</select>
 	
+	<!-- [주문상세테이블 정보입력 : 바로구매시] -->
+	<insert id="orderDetail_direct_insert" parameterType="map">
+		INSERT INTO 
+			ordetail_tbl (
+				ord_code,
+				pro_num,
+				dt_amount,
+				dt_price
+			)
+		SELECT
+			#{ord_code},
+			p.pro_num,
+			#{dt_amount},
+			p.pro_price
+		FROM
+			product_tbl p
+				
+		WHERE
+			p.pro_num = #{pro_num}
+	</insert>
+
+
+
+
 
 </mapper>

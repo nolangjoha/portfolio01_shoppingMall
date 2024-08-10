@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{admin/layout/adminlayout}">
+
+    <th:block layout:fragment = "content">
+	<script src="/plugins/ckeditor/ckeditor.js"></script>
+	  \<!-- Content Wrapper. Contains page content -->
+	  <div class="content-wrapper">
+	    <!-- Content Header (Page header) -->
+	    <section th:replace="~{admin/product/pro_top_menu}"></section>
+	
+	    <!-- Main content -->
+	    <section class="content container-fluid">
+	
+	      <div class="row">
+	    		<div class="col-md-12">
+	    			<div class="box box-primary">
+						<div class="box-header with-border">
+							<h3 class="box-title mt-5" style="font-weight:bold;">전체주문관리</h3>
+						</div>
+						
+						  <div class="box-body">
+							<!-- 검색옵션 -->
+							<div>
+								<form action="/admin/order/ord_list" method="get">
+									<div style="display: inline-block">
+									  <select class="form-control" name="type">
+				                        <option selected th:selected="${pageMaker.cri.type} == ${''}">검색종류 선택</option>
+				                        <option value="N" th:selected="${pageMaker.cri.type} == ${'N'}">주문자</option>
+				                        <option value="C" th:selected="${pageMaker.cri.type} == ${'C'}">주문코드</option>
+				                        <option value="I" th:selected="${pageMaker.cri.type} == ${'I'}">아이디</option>
+				                      </select>
+				     				</div>
+									<div style="display: inline-block">
+										<input type="text" class="form-control" name="keyword" th:value="${pageMaker.cri.keyword}" style="width:150px;" />
+										<input type="hidden" name="pageNum" th:value="${pageMaker.cri.pageNum}"/>
+										<input type="hidden" name="amount" th:value="${pageMaker.cri.amount}"/>
+									</div>
+									<div style="display: inline-block">
+										<button type="submit" class="btn btn-primary">검색</button>
+									</div>	
+									
+								</form>
+							</div>
+							
+							<hr>
+							<!-- 주문목록 테이블 -->
+							<table class="table table-bordered">
+			                    <tbody>
+				                    <tr>
+				                      <th style="width: 7%; text-align: center;">주문코드</th>
+				                      <th style="width: 30%; text-align: center;">주문자(아이디)</th>
+				                      <th style="width: 15%; text-align: center;">주문가격</th>
+				                      <th style="width: 15%; text-align: center;">등록일</th>
+				                      <th style="width: 10%; text-align: center;">수정</th>
+				                      <th style="width: 10%; text-align: center;">삭제</th>
+				                      <th style="width: 10%; text-align: center;">주문상세보기</th>
+				                    </tr>
+				                    <tr th:each="order : ${order_list}">
+										<td style="text-align: center; vertical-align: middle;">
+											<span th:text="${order.ord_code}"></span>
+										</td>
+										<td vertical-align: middle;>[[${order.ord_name}]] / [[${order.mbsp_id}]]</td>
+										<td style="text-align: center; vertical-align: middle;">
+											<span th:text="${#numbers.formatInteger(order.ord_price, '3', 'COMMA') + '원'}"></span>
+										</td>
+										<td th:text="${#dates.format(order.ord_regdate, 'yyyy-MM-dd HH:mm:ss')}" style="text-align: center; vertical-align: middle;"></td>
+										<td style="text-align: center; vertical-align: middle;">
+											<button type="button" class="btn btn-primary" name="btn_order_edit" th:data-ord_code="${order.ord_code}">수정</button>
+										</td>
+										<td style="text-align: center; vertical-align: middle;">
+											<button type="button" class="btn btn-danger" name="btn_order_del" th:data-ord_code="${order.ord_code}">삭제</button>
+										</td>
+										<td style="text-align: center; vertical-align: middle;">
+											<button type="button" class="btn btn-primary" name="btn_order_info" th:data-ord_code="${order.ord_code}">주문상세보기</button>
+										</td>
+				                    </tr>
+			                 	</tbody>
+			                 </table>								
+						
+						  </div>
+                          <div class="box-footer clearfix">
+							
+							<div class="row">
+
+								<div class="col-md-3">
+									<!--actionForm-->	
+									<form id="actionForm" action="" method="get">
+										<input type="hidden" name="pageNum" id="pageNum" th:value="${pageMaker.cri.pageNum}" />
+										<input type="hidden" name="amount" id="amount" th:value="${pageMaker.cri.amount}" />
+										<input type="hidden" name="type" id="type" th:value="${pageMaker.cri.type}" />
+										<input type="hidden" name="keyword" id="keyword" th:value="${pageMaker.cri.keyword}" />
+									</form>
+								</div>
+								<!--페이징-->
+								<div class="col-md-8 text-center">
+									
+									  <nav aria-label="...">
+										<ul class="pagination">
+											<!-- 이전 표시여부 -->
+											
+											<th:block th:if="${pageMaker.prev }">
+												<li class="page-item">
+													<a th:href="${pageMaker.startPage - 1 }" class="page-link movepage">Previous</a>
+												</li>
+											</th:block>
+		
+											<th:block th:with="pageMaker = ${pageMaker}">
+												<th:block th:each="num : *{#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+												<li class='page-item' th:classappend="${pageMaker.cri.pageNum ==  num ? 'active': '' }" aria-current="page">
+													<a class="page-link movepage" th:href="${num }" th:text="${num }"></a>
+												</li>
+												</th:block>
+											</th:block>
+		
+											<!--  다음 표시여부 -->
+											<th:block th:if="${pageMaker.next }">
+												<li class="page-item">
+													<a th:href="${pageMaker.endPage + 1 }" class="page-link movepage">Next</a>
+												</li>
+											</th:block>
+											
+										</ul>
+										</nav>
+								</div>
+							
+							</div>
+        
+                         </div>
+						
+					</div>
+	    		</div>
+	    	</div>
+	
+	    </section>
+	    <!-- /.content -->
+	  </div>
+	  <!-- /.content-wrapper -->
+    </th:block>
+
+
+    <th:block layout:fragment = "script">
+      <script>
+		$(document).ready(function(){
+
+			// 액션폼 전역변수
+			let actionForm = $("#actionForm"); 
+
+			// [페이징]
+			$(".movepage").on("click", function(e) {
+				e.preventDefault();
+
+				actionForm.attr("action", "/admin/order/ord_list");
+				actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+				
+				
+				
+				actionForm.submit();
+			});
+
+			
+			
+
+		});  //ready end
+      
+      
+      </script>
+    </th:block>
+
+
+</html>

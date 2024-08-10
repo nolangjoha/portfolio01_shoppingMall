@@ -31,6 +31,8 @@
 				<div class="row">
 					<div class="col-md-12">
 
+						<form class="form-horizontal" id="orderForm" action="/order/ordersasve" method="post">
+
 						<!--구매상품목록 -->
 						<table class="table" id="cart_info">
 						  <thead>
@@ -53,6 +55,7 @@
 							  <td th:text="${cartProduct.cart_amount}" name="cart_amount"></td>
 						      <td>0원
 								<input type="hidden" name="pro_num" th:value="${cartProduct.pro_num}">
+								<input type="hidden" name="cart_amount" th:value="${cartProduct.cart_amount}">
 							  </td>
 						      <td th:text="${#numbers.formatInteger(cartProduct.pro_price * cartProduct.cart_amount, 3, 'COMMA') + '원'}"></td>
 						    </tr>
@@ -90,7 +93,7 @@
 						
 
 						<div class="card card-info">
-							<form class="form-horizontal" id="orderForm" action="" method="post">
+							
 
 								<!-- 배송정보 -->
 								<div class="card-header">
@@ -175,7 +178,7 @@
 										<label for="mbsp_name" class="col-sm-2 col-form-label" >무통장입금 정보</label>
 
 										<div class="col-sm-3">
-											<select>
+											<select name="pay_nobank" id="pay_nobank">
 												<option value="">은행을 선택해주세요</option>
 												<option value="농협은행/100-100-1000">농협은행/100-100-1000</option>
 												<option value="국민은행/200-200-2000">국민은행/200-200-2000</option>
@@ -188,7 +191,7 @@
 											예금주
 										</div>
 										<div class="col-sm-4">
-											<input type="text" class="form-control" id="mbsp_name" name="mbsp_name" placeholder="이름">									
+											<input type="text" class="form-control" id="pay_nobank_user" name="pay_nobank_user" placeholder="이름">									
 										</div>	
 			
 									</div>

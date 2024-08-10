@@ -22,14 +22,27 @@ public class OrderService {
 	
 	
 	@Transactional
-	public void order_process(OrderVo vo, String mbsp_id, String paymethod, String p_status, String payinfo) {
+	public void order_process_direct(OrderVo vo, String mbsp_id, String paymethod, String p_status, String payinfo, CartProductVo cp_vo, String type) {
 		
 		// 1. 주문테이블 insert
 		vo.setMbsp_id(mbsp_id);
 		orderMapper.order_insert(vo);
 		
 		// 2. 주문상세테이블 insert
-		orderMapper.orderDetail_insert(vo.getOrd_code(), mbsp_id);
+		int pro_num = cp_vo.getPro_num();
+		int dt_amount =cp_vo.getCart_amount();
+		
+		
+		if(type.equals("cart")) {
+			
+			// 장바구니에서 구매시
+			orderMapper.orderDetail_insert(vo.getOrd_code(), mbsp_id);
+			
+		}else {
+			//바로구매시
+			orderMapper.orderDetail_direct_insert(vo.getOrd_code(), pro_num, dt_amount);
+		}
+		
 		
 		// 3. 결제테이블 insert
 		PayInfoVo p_vo = PayInfoVo.builder()
@@ -46,10 +59,9 @@ public class OrderService {
 		
 		// 4. 장바구니 테이블 deleten // 결제방식에 따라 if문 추가?
 		// 1) 장바구니 전체물품 구매시 
-		cartMapper.cart_empty(mbsp_id);
-		
-		
-		
+		if(type.equals("cart")) {
+			cartMapper.cart_empty(mbsp_id);
+		}
 	}
 	
 	

@@ -29,6 +29,8 @@ public class KakaopayController {
 	
 	private OrderVo vo;
 	private String mbsp_id;
+	private CartProductVo cp_vo;
+	private String type;
 	
 	
 	// [결제준비 요청]
@@ -88,6 +90,13 @@ public class KakaopayController {
 			this.vo = vo;
 			
 			log.info("바로구매vo"+ vo);
+			//바로구매, 장바구니구매
+			this.type = type;
+			
+			this.cp_vo = cp_vo;
+			
+			log.info("장바구니 구매vo"+ vo);
+			log.info("요청전 마지막type 확인:" + type);
 			
 			return readyResponse; // 결제 준비 응답
 			
@@ -124,8 +133,15 @@ public class KakaopayController {
 			
 			//주문정보
 			this.vo = vo;
+	
+			
+			//바로구매, 장바구니구매
+			this.type = type;
+			
+			this.cp_vo = cp_vo;
 			
 			log.info("장바구니 구매vo"+ vo);
+			log.info("요청전 마지막type 확인:" + type);
 			
 			return readyResponse; // 결제 준비 응답
 		}
@@ -140,6 +156,9 @@ public class KakaopayController {
 		
 		log.info("pg_token값: "+ pg_token);
 		
+		log.info("승인시 type: " + type);
+		log.info("승인시 cp_vo:" + cp_vo);
+		
 		//결제 승인요청
 		String approveResponse = kakaopayService.approve(pg_token); 
 		log.info("최종결과:" + approveResponse);
@@ -147,7 +166,8 @@ public class KakaopayController {
 		//승인요청응답에 aid(요청고유번호)가 포함되어 있다면
 		if(approveResponse.contains("aid")) {
 			//주문정보, 아이디, 결제방법, 상태, 결제정보를 저장하겠다.
-			orderService.order_process(vo, mbsp_id, "kakaopay", "완료", " kakaopay");
+			//orderService.order_process(vo, mbsp_id, "kakaopay", "완료", " kakaopay");
+			orderService.order_process_direct(vo, mbsp_id, "kakaopay", "완료" ,"kakaopay", cp_vo, type);				
 		}
 		
 	}
