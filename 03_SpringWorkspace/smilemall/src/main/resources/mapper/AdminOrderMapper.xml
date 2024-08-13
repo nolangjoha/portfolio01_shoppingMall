@@ -77,4 +77,53 @@
 									 해당 조건 사용시 include문이 생성되지 않아도 에러가 발생하지 않음. -->
 	</select>
 
+
+	<!-- [주문자정보(수령인:order_tbl) 가져오기 -->
+	<select id="order_info" resultType="OrderVo" parameterType="Long">
+		SELECT
+			ord_code, 
+			mbsp_id, 
+			ord_name, 
+			ord_tel, 
+			ord_regdate, 
+			ord_addr_zipcode, 
+			ord_addr_basic, 
+			ord_addr_detail, 
+			ord_price, 
+			ord_desc, 
+			ord_admin_meno
+		FROM
+			order_tbl
+		WHERE
+			ord_code = #{ord_code}
+	</select>
+	
+
+	<!-- [주문자상세정보(상품:ordetail_tbl) 가져오기] --> 
+	<select id="order_detail_info" resultType="OrderDetailInfoVo" parameterType="Long">
+		SELECT
+			ot.ord_code, 
+			ot.pro_num, 
+			ot.dt_amount, 
+			ot.dt_price, 
+			p.pro_name, 
+			p.pro_up_folder,
+			p.pro_img
+		FROM
+			ordetail_tbl ot 
+		INNER JOIN 
+			product_tbl p
+		ON
+			ot.pro_num = p.pro_num
+		WHERE
+			ot.ord_code = #{ord_code}
+	</select>
+
+
+
+
+
+
+
+
 </mapper>

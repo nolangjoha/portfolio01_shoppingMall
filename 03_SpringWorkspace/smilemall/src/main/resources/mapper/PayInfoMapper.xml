@@ -26,5 +26,24 @@
 	</insert>
 
 
+	<!-- [결제정보 가져오기] -->
+	<select id="ord_pay_info" parameterType="Long" resultType="PayInfoVo">
+		SELECT
+			p_id, 
+			ord_code, 
+			mbsp_id, 
+			paymethod, 
+			payinfo, 
+			p_price,
+			p_status, 
+			p_date
+		FROM
+			payinfo
+		WHERE
+			ord_code = #{ord_code}
+	</select>
+	
+	
+	
 
 </mapper>

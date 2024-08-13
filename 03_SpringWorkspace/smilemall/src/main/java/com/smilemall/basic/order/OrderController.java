@@ -152,7 +152,7 @@ public class OrderController {
 		vo.setMbsp_id(mbsp_id);
 		
 		// 결제정보 : 은행주 + 예금주
-		String payinfo = pay_nobank + "/" + pay_nobank_user;
+		String payinfo = pay_nobank_user + "/" + pay_nobank;
 		
 		//결제정보 :DB insert
 		orderService.order_process_direct(vo, mbsp_id, "무통장입금", "미납", payinfo, cp_vo, type);

@@ -18,6 +18,9 @@ public class PayInfoService {
 		payInfoMapper.payInfo_insert(vo);
 	}
 	
-	
+	// [결제정보 가져오기]
+	public PayInfoVo ord_pay_info(Long ord_code) {
+		return payInfoMapper.ord_pay_info(ord_code);
+	}
 	
 }

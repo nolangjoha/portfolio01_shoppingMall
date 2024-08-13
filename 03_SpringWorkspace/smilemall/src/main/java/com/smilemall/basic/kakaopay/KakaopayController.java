@@ -111,6 +111,8 @@ public class KakaopayController {
 			//1) 장바구니 전체물품 구매시 // 장바구니 상품목록
 			List<CartProductVo> cart_list = cartService.cart_list(mbsp_id);
 			
+			log.info("장바구니 카카오구매" + cart_list); //pro_price=60000
+			
 			//상품정보
 			String partnerOrderId = mbsp_id;
 			String partnerUserId = mbsp_id;
@@ -125,6 +127,14 @@ public class KakaopayController {
 				quantity += cart_list.get(i).getCart_amount();
 				totalAmount += cart_list.get(i).getPro_price() * cart_list.get(i).getCart_amount();			
 			}
+			
+			log.info("카카오페이 장바구니 상품각격 총액 if문 전:" + totalAmount);
+			
+			if(totalAmount < 100000 ) {
+				totalAmount += 3000;
+			} 
+				
+			log.info("카카오페이 장바구니 상품각격 총액 if문 후:" + totalAmount);
 			
 			// 결제 준비 요청
 			ReadyResponse readyResponse = kakaopayService.ready(partnerOrderId, partnerUserId, itemName, quantity, totalAmount, taxFreeAmount, vatAmount);

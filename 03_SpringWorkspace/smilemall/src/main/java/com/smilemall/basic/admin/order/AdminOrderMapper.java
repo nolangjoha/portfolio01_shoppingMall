@@ -13,11 +13,13 @@ public interface AdminOrderMapper {
 	// [전체 데이터 갯수]
 	int getTotalCount(Criteria cri);
 
+	// [주문자정보(수령인:order_tbl) 가져오기]
+	OrderVo order_info(Long ord_code);
+	
+	// [주문자상세정보(상품:ordetail_tbl) 가져오기]
+	List<OrderDetailInfoVo> order_detail_info(Long ord_code);
 
-
-
-
-
+	
 
 
 

@@ -234,6 +234,7 @@ COMMIT;
 
 
 -- 8. 주문상세테이블(상품정보)
+DROP TABLE ORDETAIL_TBL;
 CREATE TABLE ORDETAIL_TBL(
     ord_code    NUMBER,                 -- 주문번호
     pro_num     NUMBER,                 -- 상품번호
@@ -254,6 +255,7 @@ COMMIT;
 
 
 -- 9. 결제테이블
+DROP TABLE payinfo;
 CREATE TABLE payinfo(
     p_id        NUMBER,                     -- 결제번호
     ord_code    NUMBER          NOT NULL,   -- 주문번호
@@ -271,6 +273,7 @@ p_id, ord_code, mbsp_id, paymethod, payinfo, p_price, p_status, p_date
 */
 
 -- SEQUENCE 생성
+DROP SEQUENCE SEQ_PAYINFO_ID;
 CREATE SEQUENCE SEQ_PAYINFO_ID;
 
 -- PRIMARY KEY 생성
@@ -278,3 +281,12 @@ ALTER TABLE payinfo
 ADD CONSTRAINT PK_PAYINFO_ID PRIMARY KEY (p_id);
 
 COMMIT;
+
+
+
+--관리자 주문관리
+-- 주문정보
+SELECT ot.ord_code, ot.pro_num, ot.dt_amount, ot.dt_price, p.pro_name, p.pro_up_folder, p.pro_img
+FROM ordetail_tbl ot INNER JOIN product_tbl p
+ON ot.pro_num = p.pro_num
+WHERE  ot.ord_code = 40;

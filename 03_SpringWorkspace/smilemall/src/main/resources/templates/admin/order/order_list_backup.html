@@ -27,19 +27,19 @@
 				   <tbody>
 				   {{#each .}}
 					   <tr>
-							<td>{{incrementedIndex @index}}</td>
-							<td>
-								<a class="move" href="#">
-									<img src="/admin/product/image_display?dateFolderName={{pro_up_folder}}&fileName=s_{{pro_img}}" style="width: 30px; height: 30px;">
-								</a>    
-								<a class="move pro_name" href="#">{{pro_name}}</a>
-							</td>
-							<td>{{formatNumber dt_price}}</td>
-							<td>{{formatNumber dt_amount}}</td>
-							<td>{{formatNumber (unit_order_tot_price dt_price dt_amount)}}</td>   <!--핸들바합수 매개변수1 매개변수2-->
-							<th scope="col">
-								<button type="button" name="order_product_detail" class="btn btn-danger" data-pro_num="{{pro_num}}">삭제</button>
-							</th>
+						   <td>{{incrementedIndex @index}}</td>
+						   <td>
+							   <a class="move" href="#">
+								   <img src="/admin/product/image_display?dateFolderName={{pro_up_folder}}&fileName=s_{{pro_img}}" style="width: 30px; height: 30px;">
+							   </a>    
+							   <a class="move pro_name" href="#">{{pro_name}}</a>
+						   </td>
+						   <td>{{dt_price}}</td>
+						   <td>{{dt_amount}}</td>
+						   <td>{{unit_order_tot_price dt_price dt_amount}}</td>   <!--핸들바합수 매개변수1 매개변수2-->
+						   <th scope="col">
+							   <button type="button" name="order_product_detail" class="btn btn-danger" data-pro_num="{{pro_num}}">삭제</button>
+						   </th>
 					   </tr>
 				   {{/each}}
 				   </tbody>
@@ -194,52 +194,45 @@
 							<div id="order_product_info">
 
 							</div>
-							<div style="text-align:right">
-								<span><strong>상품금액합계 : </strong></span> 
-								<span name="totalProductPriceByOrder"></span>
-							</div>
-
+							
 							<!-- 결제정보 -->
 							<h3>[결제정보]</h3>
-							<table class="table table-bordered">
+							<table class="table">
 								<thead class="thead-dark">
 									<tr>
-										<th scope="col">주문자</th>
-										<td scope="col" colspan="3">
-											<span id="mbsp_id"></span>
+										<th scope="col">결제방식</th>
+										<td scope="col">
+											<!-- <input type="text" id="paymethod" readonly> -->
+											<span id="paymethod"></span>
+										</td>
+										<th scope="col">결제금액</th>
+										<td scope="col">
+											<!-- <input type="text" id="p_price" readonly> -->
+											<span id="p_price"></span>
 										</td>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
-										<th scope="col">결제방식</th>
-										<td scope="col">
-											<span id="paymethod"></span>
-										</td>
-										<th scope="col">상품금액</th>
-										<td scope="col" style="text-align: right;">
-											<span name="totalProductPriceByOrder"></span>
-										</td>
-									</tr>
-									<tr>
-										<th scope="row">결제상태</th>
+										<th scope="row">입금자명</th>
 										<td>
-											<span id="p_status"></span>
+											<!-- <input type="text" id="mbsp_id" readonly> -->
+											<span id="mbsp_id"></span>
 										</td>
-										<th scope="row">배송비</th>
-										<td style="text-align: right;">
-											<span id="delivery_price"></span> <!--배송비-->
-										</td>
-									</tr>
-									<tr>
-										<th scope="row" id="deposit">입금자명<br>입금계좌</th>
+										<th scope="row">임금계좌</th>
 										<td>
+											<!-- <input type="text" id="payinfo" readonly> -->
 											<span id="payinfo"></span>
 										</td>
-										<th>총결제금액</th>
-										<td style="text-align: right;">
-											<span id="p_price"></span>
+									</tr>
+									<tr>
+										<th scope="row">입금상태</th>
+										<td>
+											<!-- <input type="text" id="p_status" readonly> -->
+											<span id="p_status"></span>
 										</td>
+										<th>기타</th>
+										<td>기타</td>
 									</tr>
 								</tbody>
 							</table>
@@ -256,7 +249,7 @@
 										<input type="text" id="ord_name" name="ord_name">    
 										<input type="hidden" id="mbsp_id" name="mbsp_id"> 
 									</td>
-									<th scope="col">전화번호</th>
+									<td scope="col">전화번호</td>
 									<td scope="col">
 										<input type="text" id="ord_tel" name="ord_tel"> 
 									</td>
@@ -412,11 +405,7 @@
 
     <th:block layout:fragment = "script">
       <script>
-		
-
 		$(document).ready(function(){
-
-
 
 			// [페이징]
 			let actionForm = $("#actionForm"); // 액션폼 전역변수
@@ -437,8 +426,7 @@
 				order_detail_info();
 			});
 
-
-			//주문상세정보 함수    //th:text="${#numbers.formatInteger(order.ord_price, '3', 'COMMA') + '원'}"
+			//주문상세정보 함수
 			function order_detail_info() {
 				$("#order_detail_info_popup").modal('show');	
 
@@ -450,33 +438,12 @@
 					success : function(result){
 						console.log(result);
 
-
-						// 상품가격
-						let formatPrice_totalProductPriceByOrder = result.totalProductPriceByOrder.toLocaleString();
-						$("span[name='totalProductPriceByOrder']").text(formatPrice_totalProductPriceByOrder);
-
-						// 배송비 id="delivery_price"
-						if(result.totalProductPriceByOrder >= 100000) {
-							$("#delivery_price").text(0);
-						}else{
-							$("#delivery_price").text('3,000');
-						}
-
-						// 결제정보 
-						// ajax : 일부의 데이터만 가져와서 처리할때 사용/  load는 타임리프 결과가 아예 나오고 나서 가져올때 사용. 
+						// 결제정보
 						$("#paymethod").text(result.payinfo.paymethod);
-
-						let formatPrice_p_price = result.payinfo.p_price.toLocaleString();
-						$("#p_price").text(formatPrice_p_price);
-
+						$("#p_price").text(result.payinfo.p_price);
 						$("#mbsp_id").text(result.payinfo.mbsp_id);
 						$("#payinfo").text(result.payinfo.payinfo);
 						$("#p_status").text(result.payinfo.p_status);
-
-						if(result.payinfo.payinfo=='kakaopay') {
-							$("#deposit").text("");
-							$("#payinfo").text("");
-						}
 
 						// 주문자(수령인)정보
 						$("#ord_name").val(result.ord_basic.ord_name);
@@ -497,11 +464,8 @@
 			}
 			
 
-
 		});  //ready end
       
-		
-
 
 	  	//[핸듶바 함수]
 			// <주문상품 정보>				
@@ -524,13 +488,6 @@
 			
 				return dt_price * dt_amount;
 			});
-
-
-			// <주문가격 포맷>
-			Handlebars.registerHelper('formatNumber', function(number) {
-				return number.toLocaleString();
-			});
-
 		// 핸들바 함수 끝
 
       </script>
