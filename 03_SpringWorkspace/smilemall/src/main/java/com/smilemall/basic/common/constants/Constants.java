@@ -13,6 +13,6 @@ public final class Constants {
 	public static final int REVIEW_LIST_AMOUNT = 1;
 	
 	// 관리자 주문목록 출력개수
-	public static final int AMIN_ORDER_LIST_AMOUNT = 1;
+	public static final int AMIN_ORDER_LIST_AMOUNT = 3;
 	
 }

@@ -17,16 +17,16 @@ public class OrderVo {
 	ord_price, ord_desc, ord_admin_meno
 	*/
 	
-	private Long ord_code;
-	private String mbsp_id;
-	private String ord_name;
-	private String ord_tel;
-	private Date ord_regdate;
-	private String ord_addr_zipcode;
-	private String ord_addr_basic;
-	private String ord_addr_detail;
-	private int ord_price;
-	private String ord_desc;
-	private String ord_admin_meno;
+	private Long ord_code;				// 주문코드
+	private String mbsp_id;				// 주문아이디
+	private String ord_name;			// 주문자(수령자) 이름
+	private String ord_tel;				// 주문자(수령자) 연락처
+	private Date ord_regdate;			// 주문날짜
+	private String ord_addr_zipcode;	// 우편번호
+	private String ord_addr_basic;		// 기본주소
+	private String ord_addr_detail;		// 상셎주소	
+	private int ord_price;				// 결제 금액
+	private String ord_desc;			// 배송요청
+	private String ord_admin_meno;		// 관리자 메모
 
 }

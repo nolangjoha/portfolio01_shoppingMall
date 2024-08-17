@@ -177,7 +177,7 @@ public class KakaopayController {
 		if(approveResponse.contains("aid")) {
 			//주문정보, 아이디, 결제방법, 상태, 결제정보를 저장하겠다.
 			//orderService.order_process(vo, mbsp_id, "kakaopay", "완료", " kakaopay");
-			orderService.order_process_direct(vo, mbsp_id, "kakaopay", "완료" ,"kakaopay", cp_vo, type);				
+			orderService.order_process_direct(vo, mbsp_id, "kakaopay", "결제완료" ,"kakaopay", cp_vo, type);				
 		}
 		
 	}

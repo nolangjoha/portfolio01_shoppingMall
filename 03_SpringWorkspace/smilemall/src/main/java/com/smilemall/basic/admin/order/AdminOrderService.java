@@ -3,6 +3,7 @@ package com.smilemall.basic.admin.order;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.smilemall.basic.common.dto.Criteria;
 import com.smilemall.basic.order.OrderDetailVo;
@@ -18,13 +19,13 @@ public class AdminOrderService {
 	
 	
 	// [주문리스트]
-	public List<OrderVo> ord_list(Criteria cri) {
-		return adminOrderMapper.ord_list(cri);
+	public List<OrderVo> ord_list(Criteria cri, String start_date, String end_date) {
+		return adminOrderMapper.ord_list(cri, start_date, end_date);
 	}
 	
 	// [전체 데이터 갯수]
-	public int getTotalCount(Criteria cri) {
-		return adminOrderMapper.getTotalCount(cri);
+	public int getTotalCount(Criteria cri, String start_date, String end_date) {
+		return adminOrderMapper.getTotalCount(cri, start_date, end_date);
 	}
 	
 	
@@ -46,9 +47,21 @@ public class AdminOrderService {
         for(OrderDetailInfoVo orderDetail : orderDetailPrice) {
         	totalAmount += orderDetail.getDt_price();
         }
-        
         return totalAmount;
     }
+	
+	// [주문자(수령인)정보 수정]
+	public void order_receiver_modify(OrderVo vo) {
+		adminOrderMapper.order_receiver_modify(vo);
+	}
+	
+	// [[주문목록 삭제]]
+	@Transactional
+	public void order_delete_all(Long ord_code) {
+		adminOrderMapper.order_delete(ord_code);
+		adminOrderMapper.ordetail_delete(ord_code);
+		adminOrderMapper.payinfo_delete(ord_code);
+	}
 	
 	
 }

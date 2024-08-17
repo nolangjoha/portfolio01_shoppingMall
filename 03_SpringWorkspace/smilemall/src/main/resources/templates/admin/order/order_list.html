@@ -21,7 +21,6 @@
 					   <th scope="col">판매가</th>
 					   <th scope="col">수량</th>
 					   <th scope="col">주문금액</th>
-					   <th scope="col">비고</th>
 				   </tr>
 				   </thead>
 				   <tbody>
@@ -37,9 +36,7 @@
 							<td>{{formatNumber dt_price}}</td>
 							<td>{{formatNumber dt_amount}}</td>
 							<td>{{formatNumber (unit_order_tot_price dt_price dt_amount)}}</td>   <!--핸들바합수 매개변수1 매개변수2-->
-							<th scope="col">
-								<button type="button" name="order_product_detail" class="btn btn-danger" data-pro_num="{{pro_num}}">삭제</button>
-							</th>
+
 					   </tr>
 				   {{/each}}
 				   </tbody>
@@ -68,23 +65,27 @@
 							<div class="box-body">
 								<!-- 검색옵션 -->
 								<div>
-									<form action="/admin/order/ord_list" method="get">
-										<div style="display: inline-block">
-										<select class="form-control" name="type">
+									<form action="/admin/order/order_list" method="get">
+										
+										<select name="type">
 											<option selected th:selected="${pageMaker.cri.type} == ${''}">검색종류 선택</option>
 											<option value="N" th:selected="${pageMaker.cri.type} == ${'N'}">주문자</option>
 											<option value="C" th:selected="${pageMaker.cri.type} == ${'C'}">주문코드</option>
 											<option value="I" th:selected="${pageMaker.cri.type} == ${'I'}">아이디</option>
 										</select>
-										</div>
-										<div style="display: inline-block">
-											<input type="text" class="form-control" name="keyword" th:value="${pageMaker.cri.keyword}" style="width:150px;" />
+										
+										
+											<input type="text" name="keyword" th:value="${pageMaker.cri.keyword}" style="width:150px;" />
 											<input type="hidden" name="pageNum" th:value="${pageMaker.cri.pageNum}"/>
 											<input type="hidden" name="amount" th:value="${pageMaker.cri.amount}"/>
-										</div>
-										<div style="display: inline-block">
+											주문날짜
+											<input type="date" name="start_date" th:value="${start_date}" />
+											~
+											<input type="date" name="end_date" th:value="${end_date}" />
+										
+										
 											<button type="submit" class="btn btn-primary">검색</button>
-										</div>	
+											
 										
 									</form>
 								</div>
@@ -98,11 +99,10 @@
 										<th style="width: 22%; text-align: center;">주문자(아이디)</th>
 										<th style="width: 22%; text-align: center;">결제금액</th>
 										<th style="width: 15%; text-align: center;">주문일</th>
-										<th style="width: 10%; text-align: center;">수정</th>
-										<th style="width: 10%; text-align: center;">삭제</th>
 										<th style="width: 10%; text-align: center;">주문상세보기</th>
+										<th style="width: 10%; text-align: center;">삭제</th>
 										</tr>
-										<tr th:each="order : ${order_list}">
+										<tr th:each="order : ${order_list}" th:if="${!#lists.isEmpty(order_list)}">
 											<td style="text-align: center; vertical-align: middle;">
 												<span th:text="${order.ord_code}"></span>
 											</td>
@@ -112,24 +112,24 @@
 											</td>
 											<td th:text="${#dates.format(order.ord_regdate, 'yyyy-MM-dd HH:mm:ss')}" style="text-align: center; vertical-align: middle;"></td>
 											<td style="text-align: center; vertical-align: middle;">
-												<button type="button" class="btn btn-primary" name="btn_order_edit" th:data-ord_code="${order.ord_code}">수정</button>
+												<button type="button" class="btn btn-primary" name="btn_order_info" th:data-ord_code="${order.ord_code}">주문상세보기</button>
 											</td>
 											<td style="text-align: center; vertical-align: middle;">
 												<button type="button" class="btn btn-danger" name="btn_order_del" th:data-ord_code="${order.ord_code}">삭제</button>
 											</td>
-											<td style="text-align: center; vertical-align: middle;">
-												<button type="button" class="btn btn-primary" name="btn_order_info" th:data-ord_code="${order.ord_code}">주문상세보기</button>
-											</td>
+											
 										</tr>
 									</tbody>
-								</table>								
+								</table>	
+								<div th:if="${#lists.isEmpty(order_list)}" style="text-align: center;">
+								   <span><strong>표시할 내역이 없습니다.</strong></span>
+								</div>							
 							</div>
 							<!--box-body 끝-->
 
 							<!--box-footer 시작-->
 							<div class="box-footer clearfix">
 								<div class="row">
-
 									<div class="col-md-3">
 										<!--actionForm-->	
 										<form id="actionForm" action="" method="get">
@@ -137,21 +137,25 @@
 											<input type="hidden" name="amount" id="amount" th:value="${pageMaker.cri.amount}" />
 											<input type="hidden" name="type" id="type" th:value="${pageMaker.cri.type}" />
 											<input type="hidden" name="keyword" id="keyword" th:value="${pageMaker.cri.keyword}" />
+											<!-- <input type="hidden" name="start_date" id="start_date" th:value="${pageMaker.cri.start_date}" /> -->
+											<!-- <input type="hidden" name="end_date" id="end_date" th:value="${pageMaker.cri.end_date}" /> -->
 										</form>
 									</div>
+								</div>
+								<div class="row">
 									<!--페이징-->
-									<div class="col-md-8 text-center">
-										
+									<div class="col-md text-center" th:if="${!#lists.isEmpty(order_list)}">
+																			
 										<nav aria-label="...">
 											<ul class="pagination">
 												<!-- 이전 표시여부 -->
 												
 												<th:block th:if="${pageMaker.prev }">
 													<li class="page-item">
-														<a th:href="${pageMaker.startPage - 1 }" class="page-link movepage">Previous</a>
+														<a th:href="${pageMaker.startPage - 1 }" class="page-link movepage">이전</a>
 													</li>
 												</th:block>
-			
+
 												<th:block th:with="pageMaker = ${pageMaker}">
 													<th:block th:each="num : *{#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
 													<li class='page-item' th:classappend="${pageMaker.cri.pageNum ==  num ? 'active': '' }" aria-current="page">
@@ -159,11 +163,11 @@
 													</li>
 													</th:block>
 												</th:block>
-			
+
 												<!--  다음 표시여부 -->
 												<th:block th:if="${pageMaker.next }">
 													<li class="page-item">
-														<a th:href="${pageMaker.endPage + 1 }" class="page-link movepage">Next</a>
+														<a th:href="${pageMaker.endPage + 1 }" class="page-link movepage">다음</a>
 													</li>
 												</th:block>
 												
@@ -172,6 +176,7 @@
 									</div>
 									<!-- 페이징 끝-->
 								</div>
+
 							</div>
 							<!--box-footer 끝-->
 
@@ -288,7 +293,7 @@
 							<h3>[관리자 메모]</h3>
 							<textarea rows="" cols="80" id="ord_admin_meno" name="ord_admin_meno"></textarea>
 							
-							<button type="button" class="btn btn-primary" id="btn_order_basic_save" name="btn_order_basic_save">수정하기</button>
+							<button type="button" class="btn btn-primary" id="btn_order_receiver_save" name="btn_order_receiver_save">수정하기</button>
 						
 
 
@@ -497,13 +502,65 @@
 			}
 			
 
+			// [주문자(수령인)정보 수정] 
+			$("button#btn_order_receiver_save").on("click", function() {
+				
+				//수정할 정보
+				let order_receiver_data = {
+					ord_code : ord_code,
+					ord_name : $("#ord_name").val(),
+					ord_tel : $("#ord_tel").val() ,
+					ord_addr_zipcode : $("#sample2_postcode").val(),
+					ord_addr_basic : $("#sample2_address").val(),
+					ord_addr_detail : $("#sample2_detailAddress").val(),
+					ord_desc : $("#ord_desc").val(),
+					ord_admin_meno : $("#ord_admin_meno").val()
+				}
+
+				$.ajax ({
+					url : '/admin/order/order_receiver_modify',
+					type : 'post',
+					data : order_receiver_data,
+					dataType : 'text',
+					success : function(result) {
+						if(result == "success") {
+							alert("주문자 정보가 수정되었습니다.");
+							order_detail_info();
+						}
+					}
+				});
+
+			});
+
+
+			// [삭제버튼 클릭시] name="btn_order_del"
+			$("button[name='btn_order_del']").on("click", function () {
+
+				if(!confirm("주문목록을 삭제하시겠습니까?")) return;
+
+				let ord_code = $(this).data("ord_code");
+				console.log("삭제주문코드:" + ord_code);
+
+				// <input type="hidden" name="pageNum" id="pageNum" th:value="${pageMaker.cri.pageNum}" />
+				actionForm.find("input[name='ord_code']").remove();
+
+				let str = `<input type="hidden" name="ord_code" id="ord_code" value="${ord_code}" />`;
+
+				actionForm.append(str);
+				actionForm.attr("method", "post");
+				actionForm.attr("action", "/admin/order/order_delete");
+				actionForm.submit();
+			});
+
+
+
 
 		});  //ready end
       
 		
 
 
-	  	//[핸듶바 함수]
+	  	//[핸들바 함수]
 			// <주문상품 정보>				
 			let print_order_product_info = function(order_product_data, target, template) {
 				let templateObj = Handlebars.compile(template.html()); 

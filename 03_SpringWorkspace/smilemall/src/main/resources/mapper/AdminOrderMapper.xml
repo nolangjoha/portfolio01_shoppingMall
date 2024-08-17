@@ -5,17 +5,17 @@
 	<!-- 검색조건 : 상품명, 제조사, 내용-->
 	<sql id="criteria">
 		<trim prefix="(" suffix=")AND" prefixOverrides="OR">
-			<foreach collection="typeArr" item="type">
+			<foreach collection="cri.typeArr" item="type">
 				<trim prefix="OR">
 					<choose>
 						<when test="type == 'N'.toString()">
-							ord_name like '%' || #{keyword} || '%'
+							ord_name = #{cri.keyword}
 						</when>
 						<when test="type == 'C'.toString()">
-							ord_code like '%' || #{keyword} || '%'
+							ord_code = #{cri.keyword}
 						</when>
 						<when test="type == 'I'.toString()">
-							mbsp_id like '%' || #{keyword} || '%'
+							mbsp_id = #{cri.keyword}
 						</when>
 					</choose>
 				</trim>
@@ -23,9 +23,21 @@
 		</trim>
 	</sql>
 
+	<!-- 날짜검색 -->
+	<sql id="period">
+		<if test="start_date != null and !start_date.equals('') and end_date != null and !end_date.equals('')">
+			<![CDATA[
+			
+				ord_regdate >= to_date(#{start_date}) AND ord_regdate < to_date(#{end_date}) + 1 AND
+			]]>
+		
+		</if>
+	</sql>
+
+
 
 	<!-- [상품리스트] -->
-	<select id="ord_list" parameterType="Criteria" resultType="OrderVo">
+	<select id="ord_list" parameterType="map" resultType="OrderVo">
 		SELECT
 			ord_code, 
 			mbsp_id, 
@@ -57,12 +69,13 @@
 				order_tbl
 			WHERE
 				<include refid="criteria"></include>
+				<include refid="period"></include>
 				<![CDATA[
-					ROWNUM <= (#{pageNum} * #{amount})
+					ROWNUM <= (#{cri.pageNum} * #{cri.amount})
 				]]>
 			)
 		WHERE
-			RN > (#{pageNum} - 1) * #{amount}
+			RN > (#{cri.pageNum} - 1) * #{cri.amount}
 	</select>	
 
 	<!-- [전체 데이터 갯수]  -->
@@ -120,10 +133,45 @@
 	</select>
 
 
+	<!-- [주문자(수령인)정보 수정] -->
+	<update id="order_receiver_modify" parameterType="OrderVo">
+		UPDATE
+			order_tbl
+		SET
+			ord_name = #{ord_name},
+			ord_tel = #{ord_tel},
+			ord_addr_zipcode = #{ord_addr_zipcode},
+			ord_addr_basic = #{ord_addr_basic},
+			ord_addr_detail = #{ord_addr_detail},
+			ord_desc = #{ord_desc},
+			ord_admin_meno = #{ord_admin_meno}
+		WHERE
+			ord_code = #{ord_code}
+	</update>
 
-
-
-
-
+	
+	<!-- [주문목록 삭제]주문자정보 삭제-->
+	<delete id="order_delete" parameterType="Long">
+		DELETE FROM
+			order_tbl
+		WHERE
+			ord_code = #{ord_code}
+	</delete>
+	
+	<!-- [주문목록 삭제]주문상세(상품)정보-->
+	<delete id="ordetail_delete" parameterType="Long">
+		DELETE FROM
+			ordetail_tbl
+		WHERE
+			ord_code = #{ord_code}
+	</delete>
+	
+	<!-- [주문목록 삭제]주문결제정보-->
+	<delete id="payinfo_delete" parameterType="Long">
+		DELETE FROM
+			payinfo
+		WHERE
+			ord_code = #{ord_code}
+	</delete>
 
 </mapper>
