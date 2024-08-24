@@ -18,7 +18,7 @@ import com.smilemall.basic.cart.CartProductVo;
 import com.smilemall.basic.cart.CartService;
 import com.smilemall.basic.cart.CartVo;
 import com.smilemall.basic.member.MemberService;
-import com.smilemall.basic.member.MemberVO;
+import com.smilemall.basic.member.MemberVo;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -77,7 +77,7 @@ public class OrderController {
 		} else if(type.equals("cart")) {
 			// <장바구니(cart_list.html)에서 구매하기 버튼 클릭시>
 			// 아이디 확보
-			String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
+			String mbsp_id = ((MemberVo) session.getAttribute("login_status")).getMbsp_id();
 			
 			
 			//장바구니 상품목록
@@ -102,13 +102,13 @@ public class OrderController {
 	
 	// [주문자 회원정보와 동일]
 	@GetMapping("/ordersame")
-	public ResponseEntity<MemberVO> ordersame(HttpSession session) throws Exception {
+	public ResponseEntity<MemberVo> ordersame(HttpSession session) throws Exception {
 		
-		ResponseEntity<MemberVO> entity = null;
+		ResponseEntity<MemberVo> entity = null;
 		// 아이디 확보
-		String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
+		String mbsp_id = ((MemberVo) session.getAttribute("login_status")).getMbsp_id();
 		
-		entity = new ResponseEntity<MemberVO> (memberService.login(mbsp_id), HttpStatus.OK);
+		entity = new ResponseEntity<MemberVo> (memberService.login(mbsp_id), HttpStatus.OK);
 		
 		return entity;
 	}
@@ -148,7 +148,7 @@ public class OrderController {
 		log.info("바로구매/장바구니구매:" + type);
 		
 		// 아이디 확보
-		String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
+		String mbsp_id = ((MemberVo) session.getAttribute("login_status")).getMbsp_id();
 		vo.setMbsp_id(mbsp_id);
 		
 		// 결제정보 : 은행주 + 예금주

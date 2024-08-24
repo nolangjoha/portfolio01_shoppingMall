@@ -82,7 +82,7 @@ public class MemberController {
 	
 	// [회원가입 저장]
 	@PostMapping("/join")
-	public String joinOk(MemberVO vo, HttpServletRequest request) throws Exception {
+	public String joinOk(MemberVo vo, HttpServletRequest request) throws Exception {
 		log.info("회원정보(joinOk) :" + vo); 
 		
 		
@@ -109,18 +109,19 @@ public class MemberController {
 	public String loginOk(LoginDTO dto, HttpSession session, RedirectAttributes rttr) throws Exception {
 		
 		// 사용자가 입력한아이디 값을 vo에 대입한다.
-		MemberVO vo = memberService.login(dto.getMbsp_id());
+		MemberVo vo = memberService.login(dto.getMbsp_id());
 		
 		String msg = "";   //상태
  		String url = "/";  //메인주소
 		
- 		
  		if(vo != null) { //아이디가 존재하면?(비밀번호도 존재함) > 비밀번호 비교작업
 		
  			//dto.getMbsp_password() : 사용자가 입력한 비번, vo.getMbsp_password() : db암호화된 비번
  			if(passwordEncoder.matches(dto.getMbsp_password(), vo.getMbsp_password())) {
  				vo.setMbsp_password(""); //사용자가 입력한 비번을 비워줌. 암호화 되어있지만 그래도 비밀번호니까 보안.
  				session.setAttribute("login_status", vo); //로그인 상태
+ 				
+ 				memberService.last_login(vo.getMbsp_id()); // 최근 로그인 시간 update
  			}else {
  				msg = "failPW";  //비밀번호 틀리면
  				url = "/member/login";  //로그인 페이지로 다시 이동
@@ -136,6 +137,8 @@ public class MemberController {
 		log.info("msg확인 : " + msg);
  		log.info("session확인" + session);
 		
+ 		
+ 		
  		return "redirect:" + url; // 로그인 성공시 메인으로 이동
 	}
 
@@ -266,9 +269,9 @@ public class MemberController {
 		//만약 로그인 상태라면
 		if(session.getAttribute("login_status") != null) {
 			//로그인상태로 지정된 세션의 아이디를 mbsp_id에 대입한다.
-			String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
+			String mbsp_id = ((MemberVo) session.getAttribute("login_status")).getMbsp_id();
 			//사용자가 넣은 아이디로 로그인한 정보들을 vo에 대입한다.
-			MemberVO vo = memberService.login(mbsp_id);
+			MemberVo vo = memberService.login(mbsp_id);
 			log.info("수정할 아이디 정보" + mbsp_id);
 			model.addAttribute("member", vo);
 		}
@@ -276,14 +279,14 @@ public class MemberController {
 	
 	// [마이페이지 수정하기]
 	@PostMapping("/modify")
-	public String modifyOk(MemberVO vo, HttpSession session, RedirectAttributes rttr, Model model) throws Exception {
+	public String modifyOk(MemberVo vo, HttpSession session, RedirectAttributes rttr, Model model) throws Exception {
 		log.info("수정된 아이디 정보 : " + vo);
 		
 		// 만약 로그인 상태가 아니라면 로그인 폼으로 이동
 		if(session.getAttribute("login_status") == null) return "redirect:/member/login";
 		
 		// 로그인 상태의 아이디를 대입한다.
-		String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
+		String mbsp_id = ((MemberVo) session.getAttribute("login_status")).getMbsp_id();
 		//vo에 로그인한 아이디의 정보들을 담는다.
 		vo.setMbsp_id(mbsp_id);
 		
@@ -310,10 +313,10 @@ public class MemberController {
 	public String changepwOk(String cur_mbsp_password, String new_mbsp_password, HttpSession session, RedirectAttributes rttr) {
 		
 		//사용자가 입력한 아이디를 대입한다.
-		String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
+		String mbsp_id = ((MemberVo) session.getAttribute("login_status")).getMbsp_id();
 		
 		//로그인 기능으로 받아온 데이터를 대입한다.
-		MemberVO vo = memberService.login(mbsp_id);
+		MemberVo vo = memberService.login(mbsp_id);
 		
 		//if문 실행 후 대입될 메세지
 		String msg = "";
@@ -351,10 +354,10 @@ public class MemberController {
 	public String deleteOk(String mbsp_password, HttpSession session, RedirectAttributes rttr) throws Exception {
 		
 		//사용자가 입력한 아이디를 대입한다.
-		String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
+		String mbsp_id = ((MemberVo) session.getAttribute("login_status")).getMbsp_id();
 		
 		//로그인 기능으로 받아온 데이터를 대입한다.
-		MemberVO vo = memberService.login(mbsp_id);
+		MemberVo vo = memberService.login(mbsp_id);
 		
 		
 		String msg = "";

@@ -12,10 +12,10 @@ public interface MemberMapper {
 	String nickCheck(String mbsp_nick);	
 	
 	// [회원가입 저장]
-	public void join(MemberVO vo);
+	void join(MemberVo vo);
 	
 	//[로그인 작업] 
-	MemberVO login(String mbsp_id);
+	MemberVo login(String mbsp_id);
 	
 	// [아이디 찾기]
 	String idfind(@Param("mbsp_name") String mbsp_name, @Param("mbsp_email") String mbsp_email);
@@ -26,7 +26,7 @@ public interface MemberMapper {
 	void tempPwUpdate(@Param("mbsp_id") String mbsp_id, @Param("temp_enc_pw") String temp_enc_pw);
 	
 	//[마이페이지 수정하기]
-	void modify(MemberVO vo);
+	void modify(MemberVo vo);
 	
 	// [비밀번호 변경 작업]
 	void changePw(@Param("mbsp_id") String mbsp_id, @Param("new_mbsp_password") String new_mbsp_password);
@@ -34,6 +34,6 @@ public interface MemberMapper {
 	// [회원탈퇴]
 	void delete(String mbsp_id);
 	
-	
-	
+	// [최근로그인]
+	void last_login(String mbsp_id);
 }

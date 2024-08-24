@@ -15,4 +15,7 @@ public final class Constants {
 	// 관리자 주문목록 출력개수
 	public static final int AMIN_ORDER_LIST_AMOUNT = 3;
 	
+	// 관리자 주문목록 출력개수
+	public static final int AMIN_MEMBER_LIST_AMOUNT = 5;
+	
 }

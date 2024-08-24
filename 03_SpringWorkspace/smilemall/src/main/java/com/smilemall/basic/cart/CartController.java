@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.smilemall.basic.common.util.FileManagerUtils;
-import com.smilemall.basic.member.MemberVO;
+import com.smilemall.basic.member.MemberVo;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +39,7 @@ public class CartController {
 		log.info("장바구니 데이터:" + vo);
 		
 		//로그인 아이디
-		String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
+		String mbsp_id = ((MemberVo) session.getAttribute("login_status")).getMbsp_id();
 		vo.setMbsp_id(mbsp_id);
 		
 		ResponseEntity<String> entity = null;
@@ -58,7 +58,7 @@ public class CartController {
 	public void cart_list(HttpSession session, Model model) throws Exception {
 		
 		//로그인 아이디
-		String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
+		String mbsp_id = ((MemberVo) session.getAttribute("login_status")).getMbsp_id();
 		
 		//db작업
 		List<CartProductVo> cart_list = cartService.cart_list(mbsp_id);
@@ -101,7 +101,7 @@ public class CartController {
 	public String cart_empty(HttpSession session) throws Exception {
 		
 		//로그인 아이디
-		String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
+		String mbsp_id = ((MemberVo) session.getAttribute("login_status")).getMbsp_id();
 		
 		cartService.cart_empty(mbsp_id);
 		return "redirect:/cart/cart_list";

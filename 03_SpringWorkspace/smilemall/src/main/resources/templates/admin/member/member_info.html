@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+				layout:decorate="~{/layout/baselayout}">
+				
+
+			
+<div class="container">
+<h1 class="mt-5 text-center" >마이페이지</h1>
+	<div class="row">		
+		<div class="col">
+			
+			<form class="form-horizontal" id="modifyForm" th:action="@{admin/member/modify}" method="post">
+				<div class="card-body">
+					<div class="form-group row">
+						<label for="mbsp_datesub" class="col-sm-2 col-form-label">가입일</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" th:value="${#dates.format(member.mbsp_datesub, 'yyyy-MM-dd HH:mm:ss')}" readonly>
+						</div>																
+					</div>								
+					<div class="form-group row">
+						<label for="mbsp_id" class="col-sm-2 col-form-label">아이디</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" id="mbsp_id" name="mbsp_id" th:value="${member.mbsp_id}" readonly>
+						</div>
+						<label for="mbsp_name" class="col-sm-1 col-form-label">이름</label>
+						<div class="col-sm-5">
+							<input type="text" class="form-control" id="mbsp_name" name="mbsp_name" th:value=${member.mbsp_name} readonly>
+						</div>																
+					</div>
+					<div class="form-group row">
+						<label for="mbsp_nick" class="col-sm-2 col-form-label">닉네임</label>
+						<div class="col-sm-7">
+							<input type="text" class="form-control" id="mbsp_nick" name="mbsp_nick" th:value=${member.mbsp_nick} readonly>
+						</div>
+						<div class="col-sm-3">
+							<button type="button" class="btn btn-outline-primary" id="btnNickCheck">닉네임변경</button>									
+						</div>	
+					</div>								
+					<div class="form-group row">
+						<label for="mbsp_zipcode" class="col-sm-2 col-form-label">우편번호</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" id="sample2_postcode" name="mbsp_zipcode" th:value=${member.mbsp_zipcode}>
+						</div>
+						<div class="col-sm-2">
+							<button type="button" class="btn btn-outline-primary" onclick="sample2_execDaumPostcode()">우편번호</button>									
+						</div>											
+					</div>
+					<div class="form-group row">
+						<label for="mbsp_addr" class="col-sm-2 col-form-label">주소</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="sample2_address" name="mbsp_addr" th:value=${member.mbsp_addr}>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="mbsp_deaddr" class="col-sm-2 col-form-label">상세주소</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="sample2_detailAddress" name="mbsp_deaddr" th:value=${member.mbsp_deaddr}>
+							<input type="hidden" id="sample2_extraAddress" placeholder="참고항목">
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="mbsp_phone" class="col-sm-2 col-form-label">연락처</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="mbsp_phone" name="mbsp_phone" th:value=${member.mbsp_phone}>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="mbsp_email" class="col-sm-2 col-form-label">이메일</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" id="mbsp_email" name="mbsp_email" th:value=${member.mbsp_email} readonly>
+						</div>
+						<div class="col-sm-2">
+							<button type="button" class="btn btn-outline-primary" id="btnMailAuthcode">메일변경</button>									
+						</div>																					
+					</div>									
+	
+					<div class="form-group row">
+						<label for="mbsp_receive1" class="col-sm-2 col-form-label">마케팅수신</label>
+						<div class="form-check">
+							<input type="radio" id=mbsp_receive1 name=mbsp_receive value="Y" th:checked="${member.mbsp_receive == 'Y'}">
+							<label class="form-check-label" for="mbsp_receive1">Y</label>
+							<input type="radio" id=mbsp_receive2 name=mbsp_receive value="N" th:checked="${member.mbsp_receive == 'N'}">
+							<label class="form-check-label" for="mbsp_receive2">N</label>
+						</div>
+					</div>
+				</div>
+				
+				<div class="card-footer">
+					<button type="submit" class="btn btn-info" id="btnModify">수정하기</button>
+				</div>
+			
+			</form>
+		</div>					
+		<!-- 메인 Content 끝 -->
+		
+		
+	</div>
+</div>
+
+
+	
+</body>
+</html> 

@@ -144,5 +144,15 @@
 			mbsp_id = #{mbsp_id}
 	</delete>
 
-
+	<!-- [최근로그인] -->
+	<update id="last_login" parameterType="String">
+		UPDATE 
+			mbsp_tbl
+		SET
+			mbsp_lastlogin = SYSDATE
+		WHERE
+			mbsp_id = #{mbsp_id}
+	</update>
+	
+	
 </mapper>

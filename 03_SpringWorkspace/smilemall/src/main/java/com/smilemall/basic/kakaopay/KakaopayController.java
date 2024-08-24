@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.smilemall.basic.cart.CartProductVo;
 import com.smilemall.basic.cart.CartService;
-import com.smilemall.basic.member.MemberVO;
+import com.smilemall.basic.member.MemberVo;
 import com.smilemall.basic.order.OrderService;
 import com.smilemall.basic.order.OrderVo;
 
@@ -44,7 +44,7 @@ public class KakaopayController {
 		if(type.equals("direct")) {
 		
 			// 아이디확보 
-			String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
+			String mbsp_id = ((MemberVo) session.getAttribute("login_status")).getMbsp_id();
 			this.mbsp_id = mbsp_id;
 			
 			log.info("주문자정보:" + vo);
@@ -103,7 +103,7 @@ public class KakaopayController {
 		} else { 
 			//2) 장바구니에서 전체 구매를 했을 경우
 			//아이디확보
-			String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
+			String mbsp_id = ((MemberVo) session.getAttribute("login_status")).getMbsp_id();
 			this.mbsp_id = mbsp_id;
 					
 			log.info("장바구니 구매");

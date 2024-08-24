@@ -23,12 +23,12 @@ public class MemberService {
 	}
 	
 	//[회원가입 저장]
-	public void join(MemberVO vo) {
+	public void join(MemberVo vo) {
 		memberMapper.join(vo);
 	}
 		
 	//[로그인 작업]
-	public MemberVO login(String mbsp_id) {
+	public MemberVo login(String mbsp_id) {
 		return memberMapper.login(mbsp_id);
 	}
 	
@@ -52,7 +52,7 @@ public class MemberService {
 	}
 
 	//[수정하기]
-	public void modify(MemberVO vo) {
+	public void modify(MemberVo vo) {
 		memberMapper.modify(vo);
 	}	
 
@@ -68,6 +68,11 @@ public class MemberService {
 		memberMapper.delete(mbsp_id);
 	}
 	
+	
+	// [최근로그인]
+	public void last_login(String mbsp_id) {
+		memberMapper.last_login(mbsp_id);
+	}
 	
 	
 	

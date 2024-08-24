@@ -16,6 +16,14 @@ CREATE TABLE MBSP_TBL(
         MBSP_UPDATEDATE     DATE DEFAULT SYSDATE    NOT NULL    -- 회원정보 갱신일
 );
 
+/*
+mbsp_tbl
+mbsp_id, mbsp_name, mbsp_email, mbsp_password, mbsp_zipcode, mbsp_addr, mbsp_deaddr, mbsp_phone,
+mbsp_nick, mbsp_receive, mbsp_point, mbsp_lastlogin, mbsp_datesub, mbsp_updatedate
+pk_mbsp_id
+*/
+
+
 --소소관리 차원에서 pk생성구문 따로 작성(테이블 생성 후 바로 실행)
 ALTER TABLE MBSP_TBL
 ADD CONSTRAINT PK_MBSP_ID PRIMARY KEY (MBSP_ID);
@@ -232,6 +240,8 @@ ADD CONSTRAINT PK_ORD_CODE PRIMARY KEY (ord_code);
 
 COMMIT;
 
+-- 컬럼 길이 변경
+ALTER TABLE ORDER_TBL MODIFY ord_addr_basic VARCHAR2(100);
 
 -- 8. 주문상세테이블(상품정보)
 DROP TABLE ORDETAIL_TBL;

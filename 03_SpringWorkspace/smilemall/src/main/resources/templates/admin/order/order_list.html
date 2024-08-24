@@ -137,8 +137,8 @@
 											<input type="hidden" name="amount" id="amount" th:value="${pageMaker.cri.amount}" />
 											<input type="hidden" name="type" id="type" th:value="${pageMaker.cri.type}" />
 											<input type="hidden" name="keyword" id="keyword" th:value="${pageMaker.cri.keyword}" />
-											<!-- <input type="hidden" name="start_date" id="start_date" th:value="${pageMaker.cri.start_date}" /> -->
-											<!-- <input type="hidden" name="end_date" id="end_date" th:value="${pageMaker.cri.end_date}" /> -->
+											<input type="hidden" name="start_date" id="start_date" th:value="${start_date}" />
+											<input type="hidden" name="end_date" id="end_date" th:value="${end_date}" />
 										</form>
 									</div>
 								</div>
@@ -189,10 +189,10 @@
 					<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">주문상세보기</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
+						<h4 class="modal-title" id="exampleModalLabel"><strong>주문상세보기</strong></h4>
 						</div>
 						<div class="modal-body" id="popup_info">
 							<!--주문상품정보(핸들바)-->
@@ -430,6 +430,9 @@
 
 				actionForm.attr("action", "/admin/order/order_list");
 				actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+
+
+
 				actionForm.submit();
 			});
 

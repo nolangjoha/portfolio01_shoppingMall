@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smilemall.basic.admin.member.AdminMemberMapper">
+
+	<sql id="criteria">
+		<trim prefix= "(" suffix=") AND" prefixOverrides="OR" >
+			<foreach collection="typeArr" item="type">
+				<trim prefix="OR">
+					<choose>
+						<when test="type == 'N'.toString()">
+							mbsp_name like '%' || #{keyword} || '%'					
+						</when>
+						<when test="type == 'I'.toString()">
+							mbsp_id like '%' || #{keyword} || '%'
+						</when>
+						<when test="type == 'E'.toString()">
+							mbsp_email like '%' || #{keyword} || '%'
+						</when>
+						<when test="type == 'P'.toString()">
+							mbsp_phone like '%' || #{keyword} || '%'
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	</sql>
+	
+	<!-- [회원목록] -->
+	<select id="member_list" resultType="MemberVo" parameterType="Criteria">
+		SELECT  
+			mbsp_id, 
+			mbsp_name, 
+			mbsp_email, 
+			mbsp_password, 
+			mbsp_zipcode, 
+			mbsp_addr, 
+			mbsp_deaddr, 
+			mbsp_phone,
+			mbsp_nick, 
+			mbsp_receive, 
+			mbsp_point, 
+			mbsp_lastlogin, 
+			mbsp_datesub, 
+			mbsp_updatedate
+		FROM (
+	    	SELECT /*+ INDEX_DESC(mbsp_tbl PK_MBSP_ID) */
+	        	ROWNUM AS RN, 
+	        	mbsp_id, 
+				mbsp_name, 
+				mbsp_email, 
+				mbsp_password, 
+				mbsp_zipcode, 
+				mbsp_addr, 
+				mbsp_deaddr, 
+				mbsp_phone,
+				mbsp_nick, 
+				mbsp_receive, 
+				mbsp_point, 
+				mbsp_lastlogin, 
+				mbsp_datesub, 
+				mbsp_updatedate
+	    	FROM 
+	        	mbsp_tbl
+	    	WHERE 
+	    	<include refid="criteria"></include>
+	    <![CDATA[
+	    	ROWNUM <= (#{pageNum} * #{amount}) 
+	    ]]>
+	    	)
+		WHERE 
+			RN > (#{pageNum} - 1) * #{amount} 
+			
+	</select> 		
+
+	<!-- [전체회원 데이터 수] -->
+	<select id="getTotalCount" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			mbsp_tbl
+		WHERE
+			<include refid="criteria"></include> 
+	    	mbsp_id IS NOT NULL
+	</select>
+
+	<!--  [회원상세정보] -->
+	<select id="member_info" parameterType="String" resultType="MemberVo">
+		SELECT
+        	mbsp_id, 
+			mbsp_name, 
+			mbsp_email, 
+			mbsp_password, 
+			mbsp_zipcode, 
+			mbsp_addr, 
+			mbsp_deaddr, 
+			mbsp_phone,
+			mbsp_nick, 
+			mbsp_receive, 
+			mbsp_point, 
+			mbsp_lastlogin, 
+			mbsp_datesub, 
+			mbsp_updatedate
+		FROM
+			mbsp_tbl
+		WHERE
+			mbsp_id = #{mbsp_id}
+	</select>
+	
+	
+	<!-- [회원상세정보 수정하기] --> 
+	<update id="member_modify" parameterType="MemberVo">
+		UPDATE
+			mbsp_tbl
+		SET
+			mbsp_email = #{mbsp_email}, 
+			mbsp_zipcode = #{mbsp_zipcode}, 
+			mbsp_addr = #{mbsp_addr}, 
+			mbsp_deaddr = #{mbsp_deaddr}, 
+			mbsp_phone = #{mbsp_phone},
+			mbsp_receive = #{mbsp_receive}, 
+			mbsp_updatedate = SYSDATE
+		WHERE
+			mbsp_id = #{mbsp_id}
+	</update>
+	
+	<!-- [회원정보 삭제하기]--> 
+	<delete id="member_delete" parameterType="String">
+		DELETE FROM
+			mbsp_tbl
+		WHERE
+			mbsp_id = #{mbsp_id}
+	</delete>
+	
+	<!-- [회원정보 일괄삭제] -->
+	<delete id="member_checked_delete" parameterType="List">
+		<foreach collection="list" item="item" open="declare begin" separator=";" close="; end;">
+			DELETE FROM
+				mbsp_tbl
+			WHERE
+				mbsp_id = #{item}
+		</foreach>
+	</delete>
+
+</mapper>

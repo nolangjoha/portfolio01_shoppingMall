@@ -69,8 +69,6 @@ public class AdminProductService {
 
 	// [상품 일괄삭제]
 	public void pro_checked_delete(List<Integer>pro_num) {
-		
-		// 체크박스한 목록들을 수정한다.
 		adminProductMapper.pro_checked_delete(pro_num);
 	}
 	

@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{admin/layout/adminlayout}">
+
+    <th:block layout:fragment = "content">
+	<script src="/plugins/ckeditor/ckeditor.js"></script>
+	  <!-- Content Wrapper. Contains page content -->
+	  <div class="content-wrapper">
+	    <!-- Content Header (Page header) -->
+	    <section th:replace="~{admin/member/member_top_menu}"></section>
+	
+	    <!-- Main content -->
+	    <section class="content container-fluid">
+	
+	      <div class="row">
+	    		<div class="col-md-12">
+	    			<div class="box box-primary">
+						<div class="box-header with-border">
+							<h3 class="box-title mt-5" style="font-weight:bold;">회원관리</h3>
+						</div>
+						
+						  <div class="box-body">
+							<!-- 검색옵션 -->
+							<div>
+								<form id="search_form" action="/admin/member/member_list" method="get">
+									<div style="display: inline-block">
+									  <select class="form-control" name="type" id="search_type">
+				                        <option th:selected="${pageMaker.cri.type == null}">검색종류 선택</option>
+				                        <option value="N" th:selected="${pageMaker.cri.type =='N'}">이름</option>
+				                        <option value="I" th:selected="${pageMaker.cri.type =='I'}">아이디</option>
+				                        <option value="E" th:selected="${pageMaker.cri.type =='E'}">이메일</option>
+				                        <option value="P" th:selected="${pageMaker.cri.type =='P'}">연락처</option>
+				                      </select>
+				     				</div>
+									<div style="display: inline-block">
+										<input type="text" class="form-control" id="serarch_keyword" name="keyword" th:value="${pageMaker.cri.keyword}" style="width:150px;" />
+										<input type="hidden" name="pageNum" th:value="${pageMaker.cri.pageNum}"/>
+										<input type="hidden" name="amount" th:value="${pageMaker.cri.amount}"/>
+									</div>
+									<div style="display: inline-block">
+										<button type="submit" class="btn btn-primary">검색</button>
+										<button type="submit" class="btn btn-danger" id="btn_reset_search">검색초기화</button>
+									</div>	
+									
+								</form>
+							</div>
+							
+							<hr>
+							<!-- 회원 테이블 -->
+							<table class="table table-bordered">
+			                    <tbody>
+				                    <tr>
+				                      <th style="width: 3%; text-align: center;"><input type="checkbox" id="checkAll"></th>
+				                      <th style="width: 7%; text-align: center;">No</th>
+				                      <th style="width: 10%; text-align: center;">이름/아이디</th>
+				                      <th style="width: 10%; text-align: center;">이메일</th>
+				                      <th style="width: 10%; text-align: center;">연락처</th>
+				                      <th style="width: 10%; text-align: center;">가입일</th>
+				                      <th style="width: 10%; text-align: center;">최근 접속일</th>
+									  <th style="width: 10%; text-align: center;">주문정보</th>
+									  <th style="width: 10%; text-align: center;">관리</th>
+				                    </tr>
+									<tr th:each="member : ${member_list}">
+										<td style="text-align: center; vertical-align: middle;"><input type="checkbox" name="check" th:value="${member.mbsp_id}"></td>
+										<td style="text-align: center; vertical-align: middle;" th:text="${memberStat.count}"></td>
+										<td style="text-align: center; vertical-align: middle;">[[${member.mbsp_name}]] / [[${member.mbsp_id}]]</td>
+										<td style="text-align: center; vertical-align: middle;">[[${member.mbsp_email}]]</td>
+										<td style="text-align: center; vertical-align: middle;">[[${member.mbsp_phone}]]</td>
+										<td th:text="${#dates.format(member.mbsp_datesub, 'yyyy-MM-dd HH:mm:ss')}" style="text-align: center; vertical-align: middle;"></td>
+										<td th:text="${#dates.format(member.mbsp_lastlogin, 'yyyy-MM-dd HH:mm:ss')}" style="text-align: center; vertical-align: middle;"></td>
+										<td style="text-align: center; vertical-align: middle;">
+											<button type="button" class="btn btn-primary" name="btn_member_order_list" th:data-mbsp_id="${member.mbsp_id}">주문정보</button>
+										</td>
+				                     	<td style="text-align: center; vertical-align: middle;">
+											<button type="button" class="btn btn-primary" name="btn_member_edit" th:data-mbsp_id="${member.mbsp_id}">수정</button>
+											<button type="button" class="btn btn-danger" name="btn_member_del" th:data-mbsp_id="${member.mbsp_id}">삭제</button>
+										</td>
+
+				                    </tr>
+			                 	</tbody>
+			                 </table>								
+							 <div th:if="${#lists.isEmpty(member_list)}" style="text-align: center;">
+								<span><strong>표시할 내역이 없습니다.</strong></span>
+							 </div>						
+						  </div>
+                          <div class="box-footer clearfix">
+							
+							<div class="row">
+
+								<div class="col-md-3">
+									<button type="button" class="btn btn-danger" id="btn_check_delete">일괄삭제</button>
+								<!--actionForm-->	
+								<form id="actionForm" action="" method="get">
+									<input type="hidden" name="pageNum" id="pageNum" th:value="${pageMaker.cri.pageNum}" />
+									<input type="hidden" name="amount" id="amount" th:value="${pageMaker.cri.amount}" />
+									<input type="hidden" name="type" id="type" th:value="${pageMaker.cri.type}" />
+									<input type="hidden" name="keyword" id="keyword" th:value="${pageMaker.cri.keyword}" />
+								</form>
+
+								</div>
+								<!--페이징-->
+								<div class="col-md-8 text-center" th:if="${!#lists.isEmpty(member_list)}">
+									
+									  <nav aria-label="...">
+										<ul class="pagination">
+											<!-- 이전 표시여부 -->
+											
+											<th:block th:if="${pageMaker.prev }">
+												<li class="page-item">
+													<a th:href="${pageMaker.startPage - 1 }" class="page-link movepage">Previous</a>
+												</li>
+											</th:block>
+		
+											<th:block th:with="pageMaker = ${pageMaker}">
+												<th:block th:each="num : *{#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+												<li class='page-item' th:classappend="${pageMaker.cri.pageNum ==  num ? 'active': '' }" aria-current="page">
+													<a class="page-link movepage" th:href="${num }" th:text="${num }"></a>
+												</li>
+												</th:block>
+											</th:block>
+		
+											<!--  다음 표시여부 -->
+											<th:block th:if="${pageMaker.next }">
+												<li class="page-item">
+													<a th:href="${pageMaker.endPage + 1 }" class="page-link movepage">Next</a>
+												</li>
+											</th:block>
+											
+										</ul>
+										</nav>
+								</div>
+							</div>
+        
+                         </div>
+						
+					</div>
+	    		</div>
+	    	</div>
+	
+	    </section>
+	    <!-- /.content -->
+
+		<!-- 회원정보 Modal-->
+		<div class="modal fade" id="member_info_popup" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+			  <div class="modal-content">
+				<div class="modal-header">
+				  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				  </button>
+				  <h4 class="modal-title" id="exampleModalLabel"><strong>회원정보</strong></h4>
+				</div>	
+				<div class="modal-body">		
+					<!--회원정보-->
+					<table class="table">
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col">가입일</th>
+								<td scope="col">
+									<input type="text" id="mbsp_datesub" name="mbsp_datesub" readonly> 
+								</td>
+								<th scope="col">최근접속일</th>
+								<td scope="col">
+									<input type="text" id="mbsp_lastlogin" name="mbsp_lastlogin" readonly> 
+								</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th scope="col">아이디</th>
+								<td scope="col">
+									<input type="text" id="mbsp_id" name="mbsp_id" readonly>    
+								</td>
+								<th scope="col">이름</th>
+								<td scope="col">
+									<input type="text" id="mbsp_name" name="mbsp_name" readonly> 
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">주소</th>
+								<td colspan="3">
+									<button type="button" class="btn btn-outline-primary" onclick="sample2_execDaumPostcode()">우편번호</button>
+									<input type="text" class="form-control" id="sample2_postcode" name="mbsp_zipcode">
+									<input type="text" class="form-control" id="sample2_address" name="mbsp_addr">
+									<input type="text" class="form-control" id="sample2_detailAddress" name="mbsp_deaddr">
+									<input type="hidden" id="sample2_extraAddress" placeholder="참고항목">
+								</td>
+							</tr>
+							<tr>
+								<th scope="col">연락처</th>
+								<td scope="col">
+									<input type="text" id="mbsp_phone" name="mbsp_phone">    
+								</td>
+								<th scope="col">이메일</th>
+								<td scope="col">
+									<input type="text" id="mbsp_email" name="mbsp_email"> 
+								</td>
+							</tr>	
+							<tr>
+								<th scope="col">마케팅수신</th>
+								<td scope="col">
+									<input type="radio" id=mbsp_receive1 name=mbsp_receive value="Y">
+									<label class="form-check-label" for="mbsp_receive1">Y</label>
+									<input type="radio" id=mbsp_receive2 name=mbsp_receive value="N">
+									<label class="form-check-label" for="mbsp_receive2">N</label>
+								</td>
+							</tr>						
+						</tbody>
+					</table>
+
+					<button type="button" class="btn btn-primary" id="btn_member_modify_save" name="btn_member_modify_save">수정하기</button>
+					<!-- 회원정보 끝  -->
+				</div>	
+			</div>
+			</div>
+		</div>
+		<!-- 회원정보 Modal 끝-->
+		
+
+	  </div>
+	  <!-- /.content-wrapper -->
+
+
+
+
+<!-- 카카오 주소 api시작 -->
+		<!-- iOS에서는 position:fixed 버그가 있음, 적용하는 사이트에 맞게 position:absolute 등을 이용하여 top,left값 조정 필요 -->
+		<div id="layer" style="display:none;position:fixed;overflow:hidden;z-index:1600;-webkit-overflow-scrolling:touch;">
+			<img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnCloseLayer" style="cursor:pointer;position:absolute;right:-3px;top:-3px;z-index:1600" onclick="closeDaumPostcode()" alt="닫기 버튼">
+			</div>
+			
+			<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+			<script>
+				// 우편번호 찾기 화면을 넣을 element
+				var element_layer = document.getElementById('layer');
+			
+				function closeDaumPostcode() {
+					// iframe을 넣은 element를 안보이게 한다.
+					element_layer.style.display = 'none';
+				}
+			
+				function sample2_execDaumPostcode() {
+					new daum.Postcode({
+						oncomplete: function(data) {
+							// 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+			
+							// 각 주소의 노출 규칙에 따라 주소를 조합한다.
+							// 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+							var addr = ''; // 주소 변수
+							var extraAddr = ''; // 참고항목 변수
+			
+							//사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+							if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+								addr = data.roadAddress;
+							} else { // 사용자가 지번 주소를 선택했을 경우(J)
+								addr = data.jibunAddress;
+							}
+			
+							// 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+							if(data.userSelectedType === 'R'){
+								// 법정동명이 있을 경우 추가한다. (법정리는 제외)
+								// 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+								if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+									extraAddr += data.bname;
+								}
+								// 건물명이 있고, 공동주택일 경우 추가한다.
+								if(data.buildingName !== '' && data.apartment === 'Y'){
+									extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+								}
+								// 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+								if(extraAddr !== ''){
+									extraAddr = ' (' + extraAddr + ')';
+								}
+								// 조합된 참고항목을 해당 필드에 넣는다.
+								document.getElementById("sample2_extraAddress").value = extraAddr;
+							
+							} else {
+								document.getElementById("sample2_extraAddress").value = '';
+							}
+			
+							// 우편번호와 주소 정보를 해당 필드에 넣는다.
+							document.getElementById('sample2_postcode').value = data.zonecode;
+							document.getElementById("sample2_address").value = addr;
+							// 커서를 상세주소 필드로 이동한다.
+							document.getElementById("sample2_detailAddress").focus();
+			
+							// iframe을 넣은 element를 안보이게 한다.
+							// (autoClose:false 기능을 이용한다면, 아래 코드를 제거해야 화면에서 사라지지 않는다.)
+							element_layer.style.display = 'none';
+						},
+						width : '100%',
+						height : '100%',
+						maxSuggestItems : 5
+					}).embed(element_layer);
+			
+					// iframe을 넣은 element를 보이게 한다.
+					element_layer.style.display = 'block';
+			
+					// iframe을 넣은 element의 위치를 화면의 가운데로 이동시킨다.
+					initLayerPosition();
+				}
+			
+				// 브라우저의 크기 변경에 따라 레이어를 가운데로 이동시키고자 하실때에는
+				// resize이벤트나, orientationchange이벤트를 이용하여 값이 변경될때마다 아래 함수를 실행 시켜 주시거나,
+				// 직접 element_layer의 top,left값을 수정해 주시면 됩니다.
+				function initLayerPosition(){
+					var width = 300; //우편번호서비스가 들어갈 element의 width
+					var height = 400; //우편번호서비스가 들어갈 element의 height
+					var borderWidth = 5; //샘플에서 사용하는 border의 두께
+			
+					// 위에서 선언한 값들을 실제 element에 넣는다.
+					element_layer.style.width = width + 'px';
+					element_layer.style.height = height + 'px';
+					element_layer.style.border = borderWidth + 'px solid';
+					// 실행되는 순간의 화면 너비와 높이 값을 가져와서 중앙에 뜰 수 있도록 위치를 계산한다.
+					element_layer.style.left = (((window.innerWidth || document.documentElement.clientWidth) - width)/2 - borderWidth) + 'px';
+					element_layer.style.top = (((window.innerHeight || document.documentElement.clientHeight) - height)/2 - borderWidth) + 'px';
+				}
+			</script>
+			<!-- 카카오 주소 api끝 -->
+
+    </th:block>
+
+
+    <th:block layout:fragment = "script">
+      <script>
+		$(document).ready(function(){
+
+			// 액션폼 전역변수
+			let actionForm = $("#actionForm"); 
+
+			// [페이징]
+			$(".movepage").on("click", function(e) {
+				e.preventDefault();
+
+				actionForm.attr("action", "/admin/member/member_list");
+				actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+				
+				actionForm.submit();
+			});
+
+			// [제목행 checkBox 체크시 일괄체크하기] // id="checkAll
+			let ischeck = true;   
+			$("#checkAll").on("click", function() {
+			//id값이 checkAll인 요소를 클릭하면 아래 구문 실행
+
+				$("input[name='check']").prop("checked", this.checked);
+				// name값이 check인 input태그들에 checked속성을 this.checked속성으로 설정
+				// this.checked는 #checkAll의 체크상태를 의미.
+
+				isCheck = this.checked;
+				// 전체 체크박스의 상태를 대입.
+			});
+
+
+			// [목록 데이터행 체크하기]
+			$("input[name='check']").on("click", function() {
+				//name값이 check인 input태그들을 클릭했을 때 아래 구문 실행
+
+				$("#checkAll").prop("checked", this.checked);
+				// id값이 checkAll인 태그의 checked상태를 현재 클릭된 체크박스 상태로 설정.
+
+				$("input[name='check']").each(function() {
+					if(!$(this).is(":checked")) {
+						//name이 check인 input태그들의 상태가 checked가 아닐경우 아래 구문 실행
+						$("#checkAll").prop("checked", false);
+						// id값이 checkAll인 요소의 checked 상태는 거짓. 즉 전체체크 상태 해제
+					}
+				});
+			});
+
+			// [검색초기화] id="btn_reset_search", id="search_form", id="search_type", id="serarch_keyword" 
+			$("#btn_reset_search").on("click",function() {
+				$("#search_type").val('');         
+				$("#serarch_keyword").val('');		
+				$("input[name='pageNum']").val(1);  
+				$("#search_form").submit();			
+			});
+
+			// [회원상세정보(btn_member_edit) modal 출력]   
+			// 버튼 :name="btn_member_edit"  모달: id="member_info_popup"   상품정보load위치: id="popup_info"  아이디 th:data-mbsp_id="${member.mbsp_id}"
+			let mbsp_id;  //전역으로 뺌.
+			$("button[name='btn_member_edit']").on("click", function() {
+				mbsp_id = $(this).data("mbsp_id");
+				$("#member_info_popup").modal('show');	
+
+				member_detail_info();
+			});
+
+			function member_detail_info() {
+				$("#member_info_popup").modal('show');
+
+				$.ajax({
+					url : '/admin/member/member_info',
+					type: 'get',
+					data : {mbsp_id: mbsp_id},
+					dataType: 'json',
+					success: function(result) {
+						console.log("result값: "+ result);
+
+						//회원정보
+						$("#mbsp_id").val(result.member.mbsp_id);
+						$("#mbsp_name").val(result.member.mbsp_name);
+						$("#mbsp_email").val(result.member.mbsp_email);
+						$("#sample2_postcode").val(result.member.mbsp_zipcode);
+						$("#sample2_address").val(result.member.mbsp_addr);
+						$("#sample2_detailAddress").val(result.member.mbsp_deaddr);
+						$("#mbsp_phone").val(result.member.mbsp_phone);
+						$("#mbsp_datesub").val(formatDate(result.member.mbsp_datesub));
+						$("#mbsp_updatedate").val(formatDate(result.member.mbsp_updatedate));
+						$("#mbsp_lastlogin").val(formatDate(result.member.mbsp_lastlogin));
+
+						if(result.member.mbsp_lastlogin){
+							$("#mbsp_lastlogin").val(formatDate(result.member.mbsp_lastlogin));
+						} else{
+							$("#mbsp_lastlogin").val('');
+						}
+
+						if(result.member.mbsp_receive == 'Y') {
+							$("#mbsp_receive1").prop("checked", true);
+						} else if(result.member.mbsp_receive == 'N') {
+							$("#mbsp_receive2").prop("checked", true);
+						}
+
+					}
+				});
+			}
+
+			//[날짜 형식변환 함수]
+			function formatDate(dateStr){
+				const date = new Date(dateStr);
+				const yyyy = date.getFullYear();
+				const MM = String(date.getMonth() + 1).padStart(2, '0');
+				const dd = String(date.getDate()).padStart(2, '0');
+				const HH = String(date.getHours()).padStart(2, '0');
+				const mm = String(date.getMinutes()).padStart(2, '0');
+				const ss = String(date.getSeconds()).padStart(2, '0');
+				return `${yyyy}-${MM}-${dd} ${HH}:${mm}:${ss}`;
+			}
+
+			// [회원정보 수정하기] id="btn_member_modify_save"
+			$("button#btn_member_modify_save").on("click", function() {
+				
+				//수정할 정보
+				let member_modify_data = {
+					mbsp_id : mbsp_id,
+					mbsp_email : $("#mbsp_email").val(),
+					mbsp_phone : $("#mbsp_phone").val() ,
+					mbsp_zipcode : $("#sample2_postcode").val(),
+					mbsp_addr : $("#sample2_address").val(),
+					mbsp_deaddr : $("#sample2_detailAddress").val(),
+					mbsp_receive : $("input[name='mbsp_receive']:checked").val(),
+				}
+
+				$.ajax ({
+					url : '/admin/member/member_modify',
+					type : 'post',
+					data : member_modify_data,
+					dataType : 'text',
+					success : function(result) {
+						if(result == "success") {
+							alert("회원정보가 수정되었습니다.");
+							member_detail_info();
+						}
+					}
+				});
+
+			});
+
+
+			// [회원삭제] name="btn_member_del"
+			$("button[name='btn_member_del']").on("click", function() {
+
+				if(!confirm("선택한 회원목록을 삭제하시겠습니까?")) return;
+
+				let mbsp_id = $(this).data("mbsp_id");
+				console.log("삭제회원:" + mbsp_id);
+
+				
+
+				actionForm.find("input[name='mbsp_id']").remove();
+
+				let str = `<input type="hidden" name="mbsp_id" id="mbsp_id" value="${mbsp_id}" />`;
+
+				actionForm.append(str);
+
+				
+				actionForm.attr("method", "post");
+				actionForm.attr("action", "/admin/member/member_delete");
+				actionForm.submit();
+			});
+
+
+			// 체크상품 일괄 삭제 id="btn_check_delete"
+			$("#btn_check_delete").on("click", function() {
+			//삭제버튼 클릭시
+
+				//선택한 체크박스가 없다면 함수 종료
+				if($("input[name='check']:checked").length == 0) {
+					alert("삭제할 상품을 체크하세요");
+					return;
+				}
+
+				let pro_num = [];
+				
+				//체크된 체크박스 값을 pro_num배열에 추가
+				$("input[name = 'check']:checked").each(function() {
+					pro_num.push($(this).val());
+				});
+				console.log("삭제목록:"+ pro_num);
+
+				$.ajax({
+					url: "/admin/product/pro_checked_delete",
+					type: 'post',
+					data: {pro_num : pro_num},
+					dataType : 'text',
+					success: function(result) {
+						if(result == 'success') {
+							alert("체크상품이 삭제되었습니다.");
+							location.reload();
+						}
+					},
+					error: function(xhr, status, error) {
+						alert("에러가 발생했습니다:" + error);
+					}
+				});
+			});
+
+	
+
+
+
+		});  //ready end
+      
+      
+      </script>
+    </th:block>
+
+
+</html>

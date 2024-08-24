@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.smilemall.basic.common.constants.Constants;
 import com.smilemall.basic.common.dto.Criteria;
 import com.smilemall.basic.common.dto.PageDTO;
-import com.smilemall.basic.member.MemberVO;
+import com.smilemall.basic.member.MemberVo;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -69,7 +69,7 @@ public class ReviewController {
 	public ResponseEntity<String> review_save(@RequestBody ReviewVo vo, HttpSession session) throws Exception {
 		
 		// 아이디 가져오기
-		String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
+		String mbsp_id = ((MemberVo) session.getAttribute("login_status")).getMbsp_id();
 		vo.setMbsp_id(mbsp_id);
 		
 		log.info("상품후기데이터 : " + vo);

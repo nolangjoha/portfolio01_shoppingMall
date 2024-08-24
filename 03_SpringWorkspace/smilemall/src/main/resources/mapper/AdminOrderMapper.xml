@@ -86,6 +86,7 @@
 			order_tbl
 		WHERE
 			<include refid="criteria"></include> 
+			<include refid="period"></include>
 			ord_code > 0 		<!-- 사용자가 검색기능을 사용하지 않았을때 where절까지만 작성되고 끊기므로 해당 조건 기입. 
 									 해당 조건 사용시 include문이 생성되지 않아도 에러가 발생하지 않음. -->
 	</select>
