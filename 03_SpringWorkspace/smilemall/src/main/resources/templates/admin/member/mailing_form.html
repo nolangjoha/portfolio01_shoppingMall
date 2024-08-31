@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{admin/layout/adminlayout}">
+
+    <th:block layout:fragment = "content">
+	<script src="/plugins/ckeditor/ckeditor.js"></script>
+	  <!-- Content Wrapper. Contains page content -->
+	  <div class="content-wrapper">
+	    <!-- Content Header (Page header) -->
+	    <section th:replace="~{admin/member/member_top_menu}"></section>
+	
+	    <!-- Main content -->
+	    <section class="content container-fluid">
+	
+	      <div class="row">
+	    		<div class="col-md-12">
+	    			<div class="box box-primary">
+						<div class="box-header with-border">
+							<h3 class="box-title mt-5" style="font-weight:bold;">메일링 등록폼</h3>
+						</div>
+						<!-- 절대경로 /board/register -->
+						<form role="form" name="mailing_form" id="mailing_form" method="post" action="" enctype="multipart/form-data" style="padding-right:40px; padding-left:40px;">
+							<div class="box-body">
+
+								<div class="form-group row">
+									<label for="title" class="col-sm-1 col-form-label">구분</label>
+									<div class="col-sm-11">
+										<input class="form-check-input" type="radio" name="mail_kind" id="mail_kind_ad_event" value="광고/이벤트">
+										<label class="form-check-label" for="mail_kind_ad_event">
+										  광고/이벤트
+										</label>
+										<input class="form-check-input" type="radio" name="mail_kind" id="mail_kind_business" value="일반">
+										<label class="form-check-label" for="mail_kind_business">
+										  일반
+										</label>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="title" class="col-sm-1 col-form-label">메일제목</label>
+									<div class="col-sm-11">
+										<input type="text" class="form-control" name="mail_title" id="mail_title" placeholder="제목을 입력하세요">
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="title" class="col-sm-1 col-form-label">메일내용</label>
+									<div class="col-sm-11">
+										<textarea class="form-control" name="mail_content" id="mail_content" rows="3"></textarea>
+									</div>
+								</div>	
+
+							</div>
+
+							<div class="box-footer">
+									<div class="text-center">
+										<button type="button" id="btn_mail_save" class="btn btn-primary">저장</button>
+										<button type="button" id="btn_mail_send" class="btn btn-primary">발송</button>
+										<button type="button" id="btn_mail_list" class="btn btn-primary">목록보기</button>
+									</div>
+							</div>
+						</form>
+					</div>
+	    		</div>
+	    	</div>
+	
+	    </section>
+	    <!-- /.content -->
+	  </div>
+	  <!-- /.content-wrapper -->
+    </th:block>
+
+
+    <th:block layout:fragment = "script">
+		<script th:inline="javascript">
+			let msg = [[${msg}]];
+			if(msg == "save") {
+				alert("메일정보가 저장됨");
+			}
+		</script>
+
+		<script>
+			$(document).ready(function(){
+
+				// [ckeditor 환경설정]
+				var ckeditor_config = {
+					resize_enabled: false,					//사이즈 조정	
+					enterMode: CKEDITOR.ENTER_BR,			//엔터키 입력시 br 태그 변경
+					shiftEnterMode: CKEDITOR.ENTER_P,		//엔터키 입력시 pxormfh qusrud
+					toolbarCanCollapse: true,				//툴바 접히는 기능 넣을 때 사용
+					removePlugins: "elementspath",			//에디터 하단 상태바 태그 표시
+					//업로드 탭기능 추가 속성. CKEDITOR에서 파일 업로드해서 서버로 전송 버튼을 클릭하면, 이 주소가 동작된다.
+					filebrowserUploadUrl: '/admin/member/ckeditor_image_upload'  
+				}
+
+				CKEDITOR.replace("mail_content", ckeditor_config);
+			
+				// 메일링폼 전역변수
+				let mailing_form = $("#mailing_form");
+
+				// [메일저장] id="btn_mail_save"
+				$("#btn_mail_save").on("click", function() {
+					mailing_form.attr("action", "/admin/member/mailing_save");
+					mailing_form.submit();
+				});
+			
+				// [메일발송] id="btn_mail_send"
+				$("#btn_mail_send").on("click", function() {
+					mailing_form.attr("action", "/admin/member/mailing_send");
+					mailing_form.submit();
+				});
+			
+				// [메일목록] id="btn_mail_list"
+				$("#btn_mail_list").on("click", function() {
+					location.href="/admin/member/mailing_list";
+				});
+			
+			
+			});  //ready end
+		
+		
+		</script>
+    </th:block>
+
+
+</html>

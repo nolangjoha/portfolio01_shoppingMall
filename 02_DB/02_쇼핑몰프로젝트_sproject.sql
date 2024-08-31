@@ -242,6 +242,7 @@ COMMIT;
 
 -- 컬럼 길이 변경
 ALTER TABLE ORDER_TBL MODIFY ord_addr_basic VARCHAR2(100);
+ALTER TABLE ORDER_TBL RENAME COLUMN ord_admin_meno TO ord_admin_memo;
 
 -- 8. 주문상세테이블(상품정보)
 DROP TABLE ORDETAIL_TBL;
@@ -292,11 +293,37 @@ ADD CONSTRAINT PK_PAYINFO_ID PRIMARY KEY (p_id);
 
 COMMIT;
 
-
-
 --관리자 주문관리
 -- 주문정보
 SELECT ot.ord_code, ot.pro_num, ot.dt_amount, ot.dt_price, p.pro_name, p.pro_up_folder, p.pro_img
 FROM ordetail_tbl ot INNER JOIN product_tbl p
 ON ot.pro_num = p.pro_num
 WHERE  ot.ord_code = 40;
+
+
+--10. 메일발송 테이블
+DROP TABLE mailing_tbl;
+CREATE TABLE mailing_tbl(
+    mail_idx        NUMBER,                     --메일번호
+    mail_title      VARCHAR2(100),              --메일제목
+    mail_content    VARCHAR2(4000) NOT NULL,    --메일내용
+    mail_kind       VARCHAR2(20) NOT NULL,      --메일종류
+    mail_send_count NUMBER DEFAULT 0,           --메일발송횟수
+    reg_date        DATE DEFAULT SYSDATE        --메일발송날짜
+);
+/*
+mailing_tbl
+mail_idx, mail_title, mail_content, mail_kind, mail_send_count, reg_date
+pk_mailing_idx
+seq_mailing_tbl
+*/
+
+-- PRIMARY KEY 생성
+ALTER TABLE mailing_tbl
+ADD CONSTRAINT PK_MAILING_IDX PRIMARY KEY (mail_idx);
+
+-- SEQUENCE 생성
+DROP SEQUENCE SEQ_MAILING_TBL;
+CREATE SEQUENCE SEQ_MAILING_TBL;
+
+COMMIT;

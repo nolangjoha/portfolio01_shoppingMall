@@ -14,7 +14,7 @@ public class OrderVo {
 	order_tbl, seq_ord_code, pk_ord_code
 	ord_code, mbsp_id, ord_name, ord_tel, ord_regdate, 
 	ord_addr_zipcode, ord_addr_basic, ord_addr_detail, 
-	ord_price, ord_desc, ord_admin_meno
+	ord_price, ord_desc, ord_admin_memo
 	*/
 	
 	private Long ord_code;				// 주문코드
@@ -24,9 +24,9 @@ public class OrderVo {
 	private Date ord_regdate;			// 주문날짜
 	private String ord_addr_zipcode;	// 우편번호
 	private String ord_addr_basic;		// 기본주소
-	private String ord_addr_detail;		// 상셎주소	
+	private String ord_addr_detail;		// 상세주소	
 	private int ord_price;				// 결제 금액
 	private String ord_desc;			// 배송요청
-	private String ord_admin_meno;		// 관리자 메모
+	private String ord_admin_memo;		// 관리자 메모
 
 }

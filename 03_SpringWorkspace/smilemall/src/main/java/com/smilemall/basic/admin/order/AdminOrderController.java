@@ -61,9 +61,6 @@ public class AdminOrderController {
 
 		model.addAttribute("order_list", order_list);
 		model.addAttribute("pageMaker", new PageDTO(cri, totalCount) );
-
-		
-		
 	}
 	
 	// [주문상세정보]

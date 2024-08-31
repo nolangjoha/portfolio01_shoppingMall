@@ -141,4 +141,175 @@
 		</foreach>
 	</delete>
 
+	<!-- [회원주문정보목록] -->
+	<select id="member_ord_info_list" parameterType="String" resultType="OrderVo">
+		SELECT
+	        ord_code, 
+			mbsp_id, 
+			ord_name, 
+			ord_tel, 
+			ord_regdate, 
+			ord_addr_zipcode, 
+			ord_addr_basic, 
+			ord_addr_detail, 
+			ord_price, 
+			ord_desc, 
+			ord_admin_memo
+		FROM
+			order_tbl
+		WHERE
+			mbsp_id = #{mbsp_id}
+	</select> 
+	
+	<!-- [전체회원 데이터 수] -->
+	<select id="getTotalCountOrderList" parameterType="String" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			order_tbl
+		WHERE
+	    	mbsp_id = #{mbsp_id}
+	</select>
+
+	<!-- [회원주문정보목록: 총주문금액] -->
+	<select id="OrderPriceTotal" parameterType="String" resultType="int">
+	    SELECT
+	        COALESCE(SUM(ord_price), 0)
+	    FROM
+	        order_tbl
+	    WHERE
+	        mbsp_id = #{mbsp_id}
+	</select>
+	
+	<!-- [메일저장] -->
+	<insert id="mailing_save" parameterType="MailingVo">
+		<selectKey keyProperty="mail_idx" resultType="Integer" order="BEFORE">
+			SELECT
+				seq_mailing_tbl.NEXTVAL
+			FROM
+				dual
+		</selectKey>
+		INSERT INTO
+			mailing_tbl (
+				mail_idx,
+				mail_title,
+				mail_content,
+				mail_kind
+				)
+		VALUES (
+			#{mail_idx},
+			#{mail_title},
+			#{mail_content},
+			#{mail_kind}
+		)
+	</insert>
+	
+	<!-- 검색조건 -->
+	<sql id="mail_search">
+	    <if test="keyword != null and !keyword.equals('')">
+	        AND mail_title like '%' || #{keyword} || '%'
+	    </if>
+	</sql>
+
+	<!-- [메일목록] -->
+	<select id="mailing_list" parameterType="Criteria" resultType="MailingVo">
+	    SELECT
+	        mail_idx, 
+	        mail_title, 
+	        mail_content, 
+	        mail_kind, 
+	        mail_send_count, 
+	        reg_date
+	    FROM (
+	        SELECT /*+ INDEX_DESC(mailing_tbl PK_MAILING_IDX) */
+	            ROWNUM AS RN, 
+	            mail_idx, 
+	            mail_title, 
+	            mail_content, 
+	            mail_kind, 
+	            mail_send_count, 
+	            reg_date
+	        FROM
+	            mailing_tbl
+	        WHERE
+	            1 = 1
+	            <include refid="mail_search" />
+	            <![CDATA[
+	                AND ROWNUM <= (#{pageNum} * #{amount})
+	            ]]>
+	        )
+	    WHERE
+	        RN > ((#{pageNum} -1) * #{amount})
+	</select>
+	
+	<!-- [메일목록 총개수] -->
+	<select id="getMailingTotalCount" parameterType="Criteria" resultType="int">
+	    SELECT
+	        COUNT(*)
+	    FROM
+	        mailing_tbl
+	    WHERE
+	        1 = 1
+	        <include refid="mail_search" />
+	</select>
+	
+	<!-- [저장메일 정보]  -->
+	<select id="mailing_save_info" parameterType="int" resultType="MailingVo">
+		SELECT
+			mail_idx, 
+			mail_title, 
+			mail_content, 
+			mail_kind, 
+			mail_send_count, 
+			reg_date
+		FROM
+			mailing_tbl
+		WHERE
+			mail_idx = #{mail_idx}
+	</select>
+	
+	<!-- [저장메일 수정] -->
+	<update id="mailing_modify" parameterType="MailingVo">
+		UPDATE 
+			mailing_tbl
+		SET
+			mail_title = #{mail_title}, 
+			mail_content = #{mail_content}, 
+			mail_kind = #{mail_kind}, 
+			reg_date = sysdate
+		WHERE
+			mail_idx = #{mail_idx}
+	</update>
+	
+	<!-- [저장메일 삭제] -->
+	<delete id="mailing_delete" parameterType="int">
+		DELETE FROM
+			mailing_tbl
+		WHERE
+			mail_idx = #{mail_idx}
+	</delete>
+	
+	<!-- [마케팅 수신동의 회원목록 메일정보 읽어오기] -->
+	<select id="all_mail_address" resultType="String">
+		SELECT
+			mbsp_email
+		FROM
+			mbsp_tbl	
+		WHERE
+			mbsp_receive = 'Y'		
+	</select>
+		
+	<!-- [메일발송 횟수 업데이트] -->
+	<update id="mailSendCountUpdate" parameterType="int">
+		UPDATE
+			mailing_tbl
+		SET
+			mail_send_count = mail_send_count + 1
+		WHERE
+			mail_idx = #{mail_idx}
+	</update>
+	
+	
+	
+	
 </mapper>

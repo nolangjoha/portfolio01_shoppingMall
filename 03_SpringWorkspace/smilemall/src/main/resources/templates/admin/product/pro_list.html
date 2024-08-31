@@ -300,6 +300,11 @@
 					return;
 				}
 
+				// 삭제기능 수행 전
+				if(!confirm("정말로 삭제하시겠습니까?")) {
+					return;
+				}
+
 				let pro_num = [];
 				
 				//체크된 체크박스 값을 pro_num배열에 추가
@@ -315,7 +320,7 @@
 					dataType : 'text',
 					success: function(result) {
 						if(result == 'success') {
-							alert("체크상품이 삭제되었습니다.");
+							alert("체크 된 상품이 삭제되었습니다.");
 							location.reload();
 						}
 					},

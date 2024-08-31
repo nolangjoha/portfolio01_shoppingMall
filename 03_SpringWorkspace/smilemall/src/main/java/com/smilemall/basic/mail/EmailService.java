@@ -55,5 +55,25 @@ public class EmailService {
 		return templateEngine.process(type, context);
 	}
 	
+	//[마케팅 메일 발송용]
+	public void group_sendMail(EmailDTO dto, String[] all_mail_address_arr) {
+		//메일구성정보 담당 객체 : (받는사람, 보내는사람, 받는사람 메일주소, 본문내용)
+		MimeMessage mimeMessage = mailsender.createMimeMessage();
+		
+		try {
+			// 메일템플릿 사용목작
+			MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
+			mimeMessageHelper.setTo(all_mail_address_arr);  //메일 수신자
+			mimeMessageHelper.setFrom(new InternetAddress(dto.getSenderMail(), dto.getSenderName())); //메일 발신자
+			mimeMessageHelper.setSubject(dto.getSubject()); //메일 제목
+			mimeMessageHelper.setText(dto.getMessage(), true); //메일본문내용
+			
+			//메일 발송 기능
+			mailsender.send(mimeMessage);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 }

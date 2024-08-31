@@ -36,7 +36,7 @@
 
 
 
-	<!-- [상품리스트] -->
+	<!-- [주문리스트] -->
 	<select id="ord_list" parameterType="map" resultType="OrderVo">
 		SELECT
 			ord_code, 
@@ -49,7 +49,7 @@
 			ord_addr_detail, 
 			ord_price, 
 			ord_desc, 
-			ord_admin_meno
+			ord_admin_memo
 		FROM (
 			SELECT
 				/*+ INDEX_DESC (order_tbl PK_ORD_CODE)*/
@@ -64,7 +64,7 @@
 					ord_addr_detail, 
 					ord_price, 
 					ord_desc, 
-					ord_admin_meno
+					ord_admin_memo
 			FROM
 				order_tbl
 			WHERE
@@ -105,7 +105,7 @@
 			ord_addr_detail, 
 			ord_price, 
 			ord_desc, 
-			ord_admin_meno
+			ord_admin_memo
 		FROM
 			order_tbl
 		WHERE
@@ -145,7 +145,7 @@
 			ord_addr_basic = #{ord_addr_basic},
 			ord_addr_detail = #{ord_addr_detail},
 			ord_desc = #{ord_desc},
-			ord_admin_meno = #{ord_admin_meno}
+			ord_admin_memo = #{ord_admin_memo}
 		WHERE
 			ord_code = #{ord_code}
 	</update>

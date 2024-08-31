@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{admin/layout/adminlayout}">
+		
+
+
+    <th:block layout:fragment = "content">
+	<script src="/plugins/ckeditor/ckeditor.js"></script>
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<section th:replace="~{admin/member/member_top_menu}"></section>
+		
+			<!-- Main content -->
+			<section class="content container-fluid">
+		
+				<div class="row">
+					<div class="col-md-12">
+						<div class="box box-primary">
+							<div class="box-header with-border">
+								<div class="row">
+									<div class="col-md-2">
+										<h3 class="box-title mt-5" style="font-weight:bold;">메일링 목록</h3>
+									</div>
+									<div class="col-md-10 text-right">
+										<button type="button" class="btn btn-primary" onclick="location.href='/admin/member/mailing_form'">메일링 등록</button>
+									</div>
+								</div>
+							</div>
+							
+							<!--box-body 시작-->
+							<div class="box-body">
+								<!-- 검색 -->
+								<div>
+									<form id="search_form" action="/admin/member/mailing_list" method="get">
+										<div class="form-group row">
+											<label for="title" class="col-sm-1 col-form-label">메일제목</label>
+											<div class="col-sm-11">
+											  <input type="text" class="form-control" id="serarch_keyword" name="keyword" placeholder="메일제목 입력..." th:value="${pageMaker.cri.keyword}">
+											  <input type="hidden" name="pageNum" th:value="${pageMaker.cri.pageNum}"/>
+											  <input type="hidden" name="amount" th:value="${pageMaker.cri.amount}"/>
+											</div>	
+										</div>
+										<div class="form-group row text-center">
+											<button type="submit" class="btn btn-primary">검색</button>
+											<button type="submit" class="btn btn-danger" id="btn_reset_search">검색초기화</button>
+										</div>
+									</form>
+								</div>
+								<!-- 검색 끝-->
+								<hr>
+								<!-- 메일링 목록 -->
+								<table class="table table-bordered">
+									<tbody>
+										<tr>
+											<th style="width: 10%; text-align: center;">no</th>
+											<th style="width: 40%; text-align: center;">메일링 제목</th>
+											<th style="width: 10%; text-align: center;">발송횟수</th>
+											<th style="width: 15%; text-align: center;">등록일</th>
+											<th style="width: 15%; text-align: center;">관리</th>
+											<th style="width: 10%; text-align: center;">발송</th>
+										</tr>
+										<tr th:each="mail : ${mailing_list}" th:if="${!#lists.isEmpty(mailing_list)}">
+											<td style="text-align: center; vertical-align: middle;">
+												<span th:text="${mail.mail_idx}"></span>
+											</td>
+											<td style="text-align: center; vertical-align: middle;">
+												[[${mail.mail_title}]]
+											</td>
+											<td style="text-align: center; vertical-align: middle;">
+												<span th:text="${mail.mail_send_count}"></span>
+											</td>
+											<td style="text-align: center; vertical-align: middle;">
+												<span th:text="${#dates.format(mail.reg_date, 'yyyy-MM-dd HH:mm:ss')}"></span>
+											</td>
+											<td style="text-align: center; vertical-align: middle;">
+												<button type="button" class="btn btn-primary" name="btn_mail_modify" th:data-mail_idx="${mail.mail_idx}">수정</button>
+												<button type="button" class="btn btn-danger" name="btn_mail_del" th:data-mail_idx="${mail.mail_idx}">삭제</button>
+											</td>
+											<td style="text-align: center; vertical-align: middle;">
+												<button type="button" class="btn btn-primary" name="btn_mail_send" th:data-mail_idx="${mail.mail_idx}">발송</button>
+											</td>
+											
+										</tr>
+									</tbody>
+								</table>	
+								<div th:if="${#lists.isEmpty(mailing_list)}" style="text-align: center;">
+								<span><strong>표시할 내역이 없습니다.</strong></span>
+								</div>	
+								<!-- 메일링 목록 끝-->		
+							</div>
+							<!--box-body 끝-->
+
+							<!--box-footer 시작-->
+							<div class="box-footer clearfix">
+								<div class="row">
+									<div class="col-md-3">
+										<!--actionForm-->	
+										<form id="actionForm" action="" method="get">
+											<input type="hidden" name="pageNum" id="pageNum" th:value="${pageMaker.cri.pageNum}" />
+											<input type="hidden" name="amount" id="amount" th:value="${pageMaker.cri.amount}" />
+											<input type="hidden" name="keyword" id="keyword" th:value="${pageMaker.cri.keyword}" />
+										</form>
+									</div>
+								</div>
+								<div class="row">
+									<!--페이징-->
+									<div class="col-md text-center" th:if="${!#lists.isEmpty(mailing_list)}">
+																			
+										<nav aria-label="...">
+											<ul class="pagination">
+												<!-- 이전 표시여부 -->
+												
+												<th:block th:if="${pageMaker.prev }">
+													<li class="page-item">
+														<a th:href="${pageMaker.startPage - 1 }" class="page-link movepage">이전</a>
+													</li>
+												</th:block>
+
+												<th:block th:with="pageMaker = ${pageMaker}">
+													<th:block th:each="num : *{#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+													<li class='page-item' th:classappend="${pageMaker.cri.pageNum ==  num ? 'active': '' }" aria-current="page">
+														<a class="page-link movepage" th:href="${num }" th:text="${num }"></a>
+													</li>
+													</th:block>
+												</th:block>
+
+												<!--  다음 표시여부 -->
+												<th:block th:if="${pageMaker.next }">
+													<li class="page-item">
+														<a th:href="${pageMaker.endPage + 1 }" class="page-link movepage">다음</a>
+													</li>
+												</th:block>
+												
+											</ul>
+										</nav>
+									</div>
+									<!-- 페이징 끝-->
+								</div>
+							</div>
+							<!--box-footer 끝-->
+						</div>
+					</div>
+				</div>
+			</section>
+
+	    <!-- /.content -->
+		</div>
+	<!-- /.content-wrapper -->
+
+
+    </th:block>
+
+
+    <th:block layout:fragment = "script">
+		<script th:inline="javascript">
+			let msg = [[${msg}]];
+			if(msg == "send") {  
+				alert("메일이 발송되었습니다.");
+			}
+
+		</script>
+
+		<script>
+			
+
+			$(document).ready(function(){
+
+				// [페이징] id="actionForm"
+				let actionForm = $("#actionForm"); // 액션폼 전역변수
+				$(".movepage").on("click", function(e) {
+					e.preventDefault();
+
+					actionForm.attr("action", "/admin/member/mailing_list");
+					actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+					actionForm.find("input[name='mail_title']").val($("input[name='mail_title']").val());
+
+					actionForm.submit();
+				});
+
+				// [검색초기화] id="btn_reset_search", id="search_form", id="serarch_keyword" 
+				$("#btn_reset_search").on("click",function() {       
+					$("#serarch_keyword").val('');		
+					$("input[name='pageNum']").val(1);  
+					$("#search_form").submit();			
+				});
+
+				// [메일수정] name="btn_mail_modify"
+				$("button[name='btn_mail_modify']").on("click", function() {
+					let mail_idx = $(this).data("mail_idx");
+					location.href = "/admin/member/mailing_save_info?mail_idx=" + mail_idx;
+				});
+
+				// [메일삭제] name="btn_mail_del"
+				$("button[name='btn_mail_del']").on("click", function() {
+					if(!confirm("선택한 메일링목록을 삭제하시겠습니까?")) return;
+
+					let mail_idx = $(this).data("mail_idx");
+					//console.log("삭제메일링번호"+ mail_idx);
+					actionForm.find("input[name='mail_idx']").remove();
+
+					let str = `<input type="hidden" name="mail_idx" id="mail_idx" value="${mail_idx}" />`;
+					actionForm.append(str);
+					actionForm.attr("method", "post");
+					actionForm.attr("action", "/admin/member/mailing_delete");
+					actionForm.submit();
+				});
+
+				// [메일발송] name="btn_mail_send"
+				$("button[name='btn_mail_send']").on("click", function() {
+					let mail_idx = $(this).data("mail_idx");
+					location.href = "/admin/member/mailing_save_info?mail_idx=" + mail_idx;
+				});
+
+
+			});  //ready end
+		
+			
+
+
+		</script>
+    </th:block>
+
+
+</html>
