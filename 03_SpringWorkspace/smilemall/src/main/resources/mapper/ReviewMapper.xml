@@ -11,7 +11,10 @@
 		    re_title, 
 		    re_content,
 		    re_rate, 
-		    re_date
+		    re_date,
+		    re_admin_reply_content,
+		    re_admin_reply_date,
+		    re_admin_reply_status		    
 		FROM (
 			SELECT /*+ INDEX_DESC(review_tbl pk_re_code) */
 				ROWNUM AS RN, 
@@ -21,7 +24,10 @@
 			    re_title, 
 			    re_content,
 			    re_rate, 
-			    re_date
+			    re_date,
+			    re_admin_reply_content,
+		    	re_admin_reply_date,
+		    	re_admin_reply_status
 			FROM
 				review_tbl
 			WHERE

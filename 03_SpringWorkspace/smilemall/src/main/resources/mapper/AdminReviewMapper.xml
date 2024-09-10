@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smilemall.basic.admin.review.AdminReviewMapper">
+
+	<!-- 검색조건 : 상품명, 상품코드, 작성자 ID, -->
+	<sql id="criteria">
+		<trim prefix="(" suffix=")AND" prefixOverrides="OR">
+			<foreach collection="typeArr" item="type">
+				<trim prefix="OR">
+					<choose>
+						<when test="type == 'N'.toString()">
+							pro_name like '%' || #{keyword} || '%'
+						</when>
+						<when test="type == 'C'.toString()">
+							pro_num like '%' || #{keyword} || '%'
+						</when>
+						<when test="type == 'I'.toString()">
+							mbsp_id like '%' || #{keyword} || '%'
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	</sql>
+
+	<!-- [리뷰목록] -->
+	<select id="rev_list" parameterType="Criteria" resultType="ReviewVo">
+		SELECT
+		    re_code, 
+		    mbsp_id, 
+		    pro_num,
+		    pro_name,
+		    pro_up_folder,
+		    pro_img,
+		    re_title, 
+		    re_content, 
+		    re_rate, 
+		    re_date, 
+		    re_admin_reply_content, 
+		    re_admin_reply_date, 
+		    re_admin_reply_status
+		FROM (
+		    SELECT
+		        /*+ INDEX_DESC (r PK_RE_CODE) USE_NL(r p) */
+		        ROWNUM AS RN, 
+		        r.re_code, 
+		        r.mbsp_id, 
+		        r.pro_num,
+		        p.pro_name,
+		        p.pro_up_folder,
+		        p.pro_img,
+		        r.re_title, 
+		        r.re_content, 
+		        r.re_rate, 
+		        r.re_date, 
+		        r.re_admin_reply_content, 
+		        r.re_admin_reply_date,
+		        r.re_admin_reply_status
+		    FROM
+		        review_tbl r
+		    JOIN
+		        product_tbl p ON p.pro_num = r.pro_num
+		    WHERE
+				<include refid="criteria"></include>
+				<![CDATA[
+					ROWNUM <= (#{pageNum} * #{amount})
+				]]>
+			)
+		WHERE
+			RN > (#{pageNum} - 1) * #{amount}
+	</select>
+	
+	
+
+	<!-- [전체 데이터 개수] -->
+	<select id="getTotalCount" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			review_tbl r
+		JOIN
+			product_tbl p ON r.pro_num = p.pro_num
+		WHERE	
+			<include refid="criteria"></include>
+			r.re_code > 0
+	</select>
+
+	<!-- [상품후기 데이터] -->
+	<select id="rev_info" parameterType="Long" resultType="ReviewVo">
+		SELECT
+		  	r.re_code, 
+	        r.mbsp_id, 
+	        r.pro_num,
+	        p.pro_name,
+	        p.pro_up_folder,
+	        p.pro_img,
+	        r.re_title, 
+	        r.re_content, 
+	        r.re_rate, 
+	        r.re_date, 
+	        r.re_admin_reply_content, 
+	        r.re_admin_reply_date,
+	        r.re_admin_reply_status
+		FROM
+			review_tbl r
+		JOIN
+			product_tbl p ON r.pro_num = p.pro_num
+		WHERE
+			re_code = #{re_code}
+	</select>
+
+	<!-- [상품후기수정] -->
+	<update id="rev_modify" parameterType="ReviewVo">
+		UPDATE
+			review_tbl
+		SET
+			re_title = #{re_title}, 
+			re_content = #{re_content}, 
+			re_rate = #{re_rate}
+		WHERE
+			re_code = #{re_code}
+	</update>
+
+	<!-- [상품후기삭제] -->
+	<delete id="rev_delete" parameterType="Long">
+		DELETE FROM
+			review_tbl
+		WHERE
+			re_code = #{re_code}
+	</delete>
+
+	<!-- [상품후기 일괄삭제] -->
+	<delete id="rev_checked_delete" parameterType="List">
+		<foreach collection="list" item="item" open="declare begin" separator=";" close="; end;">
+			DELETE FROM
+				review_tbl
+			WHERE
+				re_code = #{item}
+		</foreach>
+	</delete>
+
+	<!-- [상품후기수정] -->
+	<update id="admin_rev_reply" parameterType="ReviewVo">
+		UPDATE
+			review_tbl
+		SET
+			re_admin_reply_content = #{re_admin_reply_content}, 
+			re_admin_reply_date = SYSDATE, 
+			re_admin_reply_status = 'Y'
+		WHERE
+			re_code = #{re_code}
+	</update>
+
+	<!-- 관리자 답변수정] -->
+	<update id="admin_rev_modify" parameterType="ReviewVo">
+		UPDATE
+			review_tbl
+		SET
+			re_admin_reply_content = #{re_admin_reply_content},
+			re_admin_reply_date = SYSDATE
+		WHERE
+			re_code = #{re_code}
+	</update>
+	
+	<!-- 관리자 답변삭제 -->
+	<update id="admin_rev_delete" parameterType="ReviewVo">
+		UPDATE
+			review_tbl
+		SET
+			re_admin_reply_content = NULL,
+			re_admin_reply_date = NULL,
+			re_admin_reply_status = 'N'
+		WHERE
+			re_code = #{re_code}
+	</update>
+	
+	
+	
+</mapper>

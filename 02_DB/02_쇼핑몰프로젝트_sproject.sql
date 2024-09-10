@@ -167,6 +167,7 @@ COMMIT;
 
 
 --6. 상품후기 테이블
+DROP TABLE review_tbl;
 CREATE TABLE review_tbl (
     re_code     NUMBER         NOT NULL,      -- 리뷰번호
     mbsp_id     VARCHAR(50)    NOT NULL,      -- 리뷰작성자 아이디
@@ -176,16 +177,27 @@ CREATE TABLE review_tbl (
     re_rate     NUMBER         NOT NULL,      -- 리뷰점수(별점)
     re_date     DATE DEFAULT SYSDATE          -- 리뷰작성 날짜
 );
--- review_tbl(re_code, mbsp_id, pro_num, re_title, re_content, re_rate, re_date)
+-- review_tbl(re_code, mbsp_id, pro_num, re_title, re_content, re_rate, re_date, re_admin_reply_content, re_admin_reply_date, re_admin_reply_status)
 -- SEQ_REVIEW_CODE
 -- PK_RE_CODE
 
 -- SEQUENCE 생성
+DROP SEQUENCE SEQ_REVIEW_CODE;
 CREATE SEQUENCE SEQ_REVIEW_CODE;
 
 -- PRIMARY KEY 생성
 ALTER TABLE review_tbl
 ADD CONSTRAINT PK_RE_CODE PRIMARY KEY (re_code);
+
+-- 컬럼 수정
+ALTER TABLE review_tbl MODIFY re_content VARCHAR2(2000);
+ALTER TABLE review_tbl ADD re_admin_reply_content VARCHAR2(1000);
+ALTER TABLE review_tbl ADD re_admin_reply_date DATE;
+ALTER TABLE review_tbl ADD re_admin_reply_status CHAR(1) DEFAULT 'N';
+
+
+DESC review_tbl;
+
 
 --리뷰 데이터 임시 삽입
 INSERT INTO 
@@ -199,12 +211,12 @@ INSERT INTO
         )
 VALUES (
     SEQ_REVIEW_CODE.NEXTVAL, 
-    'user100', 
-    81, 
-    '후기제목2', 
-    '후기내용2', 
+    'user11', 
+    59, 
+    '후기제목', 
+    '후기내용', 
     3
-    );
+    );    
 
 COMMIT;
 

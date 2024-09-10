@@ -12,11 +12,11 @@
 					max-width: 100%;
 					max-height: 1050px;
 				}
-
+/*
 				#revtable thead, tbody {
 					text-align: center;
 				}
-
+*/
 				p#star_re_rate a.re_rate {
 					font-size: 22px;
 					text-decoration: none;
@@ -37,31 +37,50 @@
 			
 			<!-- 핸들바 템플릿-->
 			<script id="review-template" type="text/x-handlebars-template">
-				<table id="revtable" class="table">
-					<thead>
-					  <tr>
-						<th scope="col">번호</th>
-						<th scope="col">제목</th>
-						<th scope="col">내용</th>
-						<th scope="col">평점</th>
-						<th scope="col">작성자</th>
-						<th scope="col">등록일</th>
-						<th scope="col">비고</th>
-					  </tr>
-					</thead>
+				
+				  <table id="revtable" class="table">
+					{{#each .}}
 					<tbody>
-					  {{#each .}}
-						<tr>
-							<th scope="row">{{re_code}}</th>
-							<td>{{re_title}}</td>
-							<td>{{re_content}}</td>
-							<td>{{displayStar re_rate}}</td>
-							<td>{{mbsp_id}}</td>
-							<td>{{converDate re_date}}</td>
-							<td>{{authControlView mbsp_id re_code}}</td>
-						</tr>
-					  {{/each}}
+					  <tr>
+						<th style="width:20%;">
+							<div><span style="color:gray; font-size: 13px;">{{re_code}}</span></div>
+							<div>
+								<span style="color:red;">{{displayStar re_rate}}</span>
+							</div>
+							<div>
+								<span>{{filteringId mbsp_id}}</span>
+								<span style="color:gray; font-size: 13px;">{{converDate re_date}}</span>
+							</div>
+						</th>
+						<td>
+							<!--리뷰-->
+							<div style="padding: 5px 5px 10px 5px;">
+								<div><strong>{{re_title}}</strong></div>
+								<div>{{re_content}}</div>
+								<div>{{authControlView mbsp_id re_code}}</div>
+							</div>
+							<!--리뷰 끝.-->
+							<!--관리자 답변-->
+							{{#if (eq re_admin_reply_status 'Y')}}
+							<div style="background-color: lightgray; padding: 5px 5px 5px 5px;">
+								<div style="width: 100%;">
+									<div>
+										<div style="width: 100%; float: left;">
+											<strong>Smile Mall</strong>&nbsp<span style="color:gray; font-size: 13px;">{{converDate re_admin_reply_date}}</span>
+										</div>
+									</div>
+								</div>
+								
+								<div>	
+									<div>{{re_admin_reply_content}}</div>
+								</div>
+							</div>
+							{{/if}}
+							<!--관리자 답변 끝.-->
+						</td>
+					  </tr>
 					</tbody>
+					{{/each}}
 				  </table>
 
 			 </script>
@@ -359,6 +378,28 @@
 					return `${year}/${month}/${date}/ ${hour}:${minute}`;
 				});
 
+				// [핸들바함수] 아이디 필터링
+				Handlebars.registerHelper("filteringId", function(mbsp_id) {
+					let loginVo = [[${session.login_status}]]; // 로그인 상태
+					
+					let loginId = ""; //로그인 아이디 초기화
+
+					if(loginVo !== null) { // 로그인상태가 없지 않다면 > 로그인 상태라면
+						loginId = [[${session.login_status == null ? '' : session.login_status.mbsp_id}]]; 
+					}
+
+					if(loginVo !== null && loginId == mbsp_id) {
+						return mbsp_id;
+					}else {
+						let filtering_Id = mbsp_id.substring(0,4) + '***';
+						return filtering_Id
+					}
+				});
+
+				// [핸들바함수] 값일치 여부 확인
+				Handlebars.registerHelper('eq', function(a, b) {
+					return a === b;
+				});
 
 				// [핸들바함수] 로그인아이디와 리뷰작성자가 같을 때 수정, 삭제 버튼 출력
 				Handlebars.registerHelper("authControlView", function(mbsp_id, re_code) {
@@ -374,8 +415,8 @@
 					let str = "";
 
 					if(loginVo !== null && loginId == mbsp_id) {
-						str += `<button type="button" name="btn_review_edit" class="btn btn-primary" data-re_code="${re_code}">수정</button>`;
-						str += `<button type="button" name="btn_review_delete" class="btn btn-danger" data-re_code="${re_code}">삭제</button>`;
+						str += `<button type="button" name="btn_review_edit" class="btn btn-primary btn-sm" data-re_code="${re_code}">수정</button>`;
+						str += `<button type="button" name="btn_review_delete" class="btn btn-danger btn-sm" data-re_code="${re_code}">삭제</button>`;
 						
 						return new Handlebars.SafeString(str);
 					}else {
@@ -615,6 +656,10 @@
 					location.href = "/order/orderinfo?" + queryParams;
 
 				});
+
+				
+
+
 
 
 

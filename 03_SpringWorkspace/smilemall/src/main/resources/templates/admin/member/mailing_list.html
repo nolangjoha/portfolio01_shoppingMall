@@ -155,7 +155,9 @@
     <th:block layout:fragment = "script">
 		<script th:inline="javascript">
 			let msg = [[${msg}]];
-			if(msg == "send") {  
+			if(msg == "save") {
+				alert("메일정보가 저장됨");
+			} else if(msg == "send") {  
 				alert("메일이 발송되었습니다.");
 			}
 

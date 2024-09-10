@@ -19,7 +19,7 @@
 							<h3 class="box-title mt-5" style="font-weight:bold;">메일링 등록폼</h3>
 						</div>
 						<!-- 절대경로 /board/register -->
-						<form role="form" name="mailing_form" id="mailing_form" method="post" action="" enctype="multipart/form-data" style="padding-right:40px; padding-left:40px;">
+						<form role="form" name="mailing_form" id="mailing_form" method="post" action="/admin/member/mailing_save" enctype="multipart/form-data" style="padding-right:40px; padding-left:40px;">
 							<div class="box-body">
 
 								<div class="form-group row">
@@ -54,8 +54,7 @@
 
 							<div class="box-footer">
 									<div class="text-center">
-										<button type="button" id="btn_mail_save" class="btn btn-primary">저장</button>
-										<button type="button" id="btn_mail_send" class="btn btn-primary">발송</button>
+										<button type="submit" id="btn_mail_save" class="btn btn-primary">저장</button>
 										<button type="button" id="btn_mail_list" class="btn btn-primary">목록보기</button>
 									</div>
 							</div>
@@ -72,13 +71,6 @@
 
 
     <th:block layout:fragment = "script">
-		<script th:inline="javascript">
-			let msg = [[${msg}]];
-			if(msg == "save") {
-				alert("메일정보가 저장됨");
-			}
-		</script>
-
 		<script>
 			$(document).ready(function(){
 
@@ -94,22 +86,7 @@
 				}
 
 				CKEDITOR.replace("mail_content", ckeditor_config);
-			
-				// 메일링폼 전역변수
-				let mailing_form = $("#mailing_form");
-
-				// [메일저장] id="btn_mail_save"
-				$("#btn_mail_save").on("click", function() {
-					mailing_form.attr("action", "/admin/member/mailing_save");
-					mailing_form.submit();
-				});
-			
-				// [메일발송] id="btn_mail_send"
-				$("#btn_mail_send").on("click", function() {
-					mailing_form.attr("action", "/admin/member/mailing_send");
-					mailing_form.submit();
-				});
-			
+						
 				// [메일목록] id="btn_mail_list"
 				$("#btn_mail_list").on("click", function() {
 					location.href="/admin/member/mailing_list";

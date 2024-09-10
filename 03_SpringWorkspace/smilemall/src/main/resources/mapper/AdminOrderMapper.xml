@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.smilemall.basic.admin.order.AdminOrderMapper">
 
-	<!-- 검색조건 : 상품명, 제조사, 내용-->
+	<!-- 검색조건 : 주문자, 주문코드, 아이디-->
 	<sql id="criteria">
 		<trim prefix="(" suffix=")AND" prefixOverrides="OR">
 			<foreach collection="cri.typeArr" item="type">

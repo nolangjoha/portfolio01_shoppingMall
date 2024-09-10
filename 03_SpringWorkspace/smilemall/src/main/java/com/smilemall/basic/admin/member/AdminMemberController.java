@@ -147,7 +147,7 @@ public class AdminMemberController {
 	
 	// [메일저장]
 	@PostMapping("/mailing_save")
-	public String mailing_save(@ModelAttribute("vo") MailingVo vo, Model model) throws Exception {
+	public String mailing_save(MailingVo vo, Model model, RedirectAttributes rttr) throws Exception {
 		log.info("메일내용:" + vo);
 		
 		//메일저장
@@ -158,9 +158,9 @@ public class AdminMemberController {
 		// 메일발송횟수에서 사용
 		model.addAttribute("mail_idx", vo.getMail_idx());
 		
-		model.addAttribute("msg", "save");
+		rttr.addFlashAttribute("msg", "save");
 
-		return "/admin/member/mailing_form";
+		return "redirect:/admin/member/mailing_list";
 	}
 	
 	// [메일목록]

@@ -49,6 +49,7 @@ public class ReviewController {
 		
 		//후기목록 데이터
 		List<ReviewVo> revlist = reviewService.rev_list(pro_num, cri);
+		log.info("목록데이터:" +revlist);
 		
 		// 선택한 상품의 후기 데이터 전체
 		int revcount = reviewService.getCountReviewByPro_num(pro_num);
