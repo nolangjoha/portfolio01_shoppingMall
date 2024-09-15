@@ -339,3 +339,55 @@ DROP SEQUENCE SEQ_MAILING_TBL;
 CREATE SEQUENCE SEQ_MAILING_TBL;
 
 COMMIT;
+
+
+-- 11. 상품후기 테이블
+CREATE TABLE qa_tbl (
+    qa_code     NUMBER         NOT NULL,      -- 문의번호
+    mbsp_id     VARCHAR(50)    NOT NULL,      -- 문의작성자 아이디
+    pro_num     NUMBER         NOT NULL,      -- 상품번호
+    qa_title    VARCHAR(50)    NOT NULL,      -- 문의제목
+    qa_content  VARCHAR(2000)    NOT NULL,      -- 문의내용
+    qa_date     DATE DEFAULT SYSDATE,          -- 문의작성 날짜
+    qa_admin_reply_content VARCHAR2(1000),          -- 관리자 답변 내용
+    qa_admin_reply_date DATE,                               -- 관리자 답변 날짜
+    qa_admin_reply_status CHAR(1) DEFAULT 'N'       -- 관리자 답변 상태
+);
+/*
+qa_tbl
+qa_code, mbsp_id, pro_num, qa_title, qa_content, qa_date, qa_admin_reply_content, qa_admin_reply_date, qa_admin_reply_status
+seq_qa_code
+pk_qa_code
+*/
+-- SEQUENCE 생성
+DROP SEQUENCE SEQ_QA_CODE;
+CREATE SEQUENCE SEQ_QA_CODE;
+
+-- PRIMARY KEY 생성
+ALTER TABLE qa_tbl
+ADD CONSTRAINT PK_QA_CODE PRIMARY KEY (qa_code);
+
+DESC qa_tbl;
+
+-- 임시데이터
+INSERT INTO 
+    qa_tbl (
+       qa_code, 
+       mbsp_id,
+       pro_num, 
+       qa_title,
+       qa_content
+        )
+VALUES (
+    SEQ_QA_CODE.NEXTVAL, 
+    'user100', 
+    141, 
+    '상품문의제목', 
+    '상품문의내용'
+    );    
+
+COMMIT;
+
+
+
+

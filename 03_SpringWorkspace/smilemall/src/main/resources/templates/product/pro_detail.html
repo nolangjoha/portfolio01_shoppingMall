@@ -36,6 +36,8 @@
 			<script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
 			
 			<!-- 핸들바 템플릿-->
+
+			<!-- 상품후기 템플릿-->
 			<script id="review-template" type="text/x-handlebars-template">
 				
 				  <table id="revtable" class="table">
@@ -57,7 +59,7 @@
 							<div style="padding: 5px 5px 10px 5px;">
 								<div><strong>{{re_title}}</strong></div>
 								<div>{{re_content}}</div>
-								<div>{{authControlView mbsp_id re_code}}</div>
+								<div>{{authControlView mbsp_id re_code "review"}}</div>
 							</div>
 							<!--리뷰 끝.-->
 							<!--관리자 답변-->
@@ -84,7 +86,58 @@
 				  </table>
 
 			 </script>
-			<!-- 핸들바 템플릿 끝-->
+			<!-- 상품후기 템플릿 끝-->
+
+			<!-- 상품문의 템플릿-->
+			<script id="question-template" type="text/x-handlebars-template">
+				
+				<table id="qa_table" class="table">
+				  {{#each .}}
+				  <tbody>
+					<tr>
+					  <th style="width:20%;">
+						  <div><span style="color:gray; font-size: 13px;">{{qa_code}}</span></div>
+						  <div>
+							  <span>{{filteringId mbsp_id}}</span>
+							  <span style="color:gray; font-size: 13px;">{{converDate qa_date}}</span>
+						  </div>
+					  </th>
+					  <td>
+						  <!--리뷰-->
+						  <div style="padding: 5px 5px 10px 5px;">
+							  <div><strong>{{qa_title}}</strong></div>
+							  <div>{{qa_content}}</div>
+							  <div>{{authControlView mbsp_id qa_code "question"}}</div>
+						  </div>
+						  <!--리뷰 끝.-->
+						  <!--관리자 답변-->
+						  {{#if (eq qa_admin_reply_status 'Y')}}
+						  <div style="background-color: lightgray; padding: 5px 5px 5px 5px;">
+							  <div style="width: 100%;">
+								  <div>
+									  <div style="width: 100%; float: left;">
+										  <strong>Smile Mall</strong>&nbsp<span style="color:gray; font-size: 13px;">{{converDate qa_admin_reply_date}}</span>
+									  </div>
+								  </div>
+							  </div>
+							  
+							  <div>	
+								  <div>{{qa_admin_reply_content}}</div>
+							  </div>
+						  </div>
+						  {{/if}}
+						  <!--관리자 답변 끝.-->
+					  </td>
+					</tr>
+				  </tbody>
+				  {{/each}}
+				</table>
+
+		   </script>
+		   <!-- 상품문의 템플릿 끝-->
+
+
+		   <!-- 핸들바 템플릿 끝-->
 		</th:block>
 
 <body>
@@ -141,7 +194,7 @@
 								<ul>
 								  <li><a href="#pro_detail">상품상세정보</a></li>
 								  <li><a href="#pro_review">상품리뷰</a></li>
-								  <li><a href="#tabs-3">상품문의</a></li>
+								  <li><a href="#pro_question">상품문의</a></li>
 								</ul>
 								<div id="pro_detail">
 								  <p th:utext="${product.pro_content}"></p>
@@ -149,15 +202,20 @@
 								<div id="pro_review">
 									<!-- 상품후기 작성 버튼(모달)-->
 									<button type="button" class="btn btn-outline-primary" id="btn_review_modal" th:data-pro_num="${product.pro_num}">상품후기 작성</button>
-									<hr>
+									
 									<!--상품후기 출력위치(핸들바)-->
-									<div id="review_list"></div>
+									<div id="review_list" style="padding-top: 10px;"></div>
 									<!--페이징 출력위치-->
 									<div id="review_paging"></div>
 								</div>
-								<div id="tabs-3">
-								  <p>3</p>
-								  <p>4</p>
+								<div id="pro_question">
+									<!-- 상품문의 작성 버튼(모달)-->
+									<button type="button" class="btn btn-outline-primary" id="btn_question_modal" th:data-pro_num="${product.pro_num}">상품문의 작성</button>
+									
+									<!--상품문의 출력위치(핸들바)-->
+									<div id="question_list" style="padding-top: 10px;"></div>
+									<!--페이징 출력위치-->
+									<div id="question_paging"></div>
 								</div>
 							  </div>
 
@@ -216,6 +274,47 @@
 			</div>
 			<!-- 상품후기 모달 끝-->
 
+			<!-- 상품문의 모달-->
+			<!-- Modal -->
+			<div class="modal fade" id="question_modal" tabindex="-1" aria-labelledby="exampleModalLabe" aria-hidden="true">
+				<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabe">상품문의 작성</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="card-body">
+								<div class="form-group row">
+									<label for="qa_title"><strong>제목</strong></label>
+									<select class="form-control" id="qa_title">
+									  <option value="" selected>제목을 선택하세요.</option>
+									  <option value="상품문의">상품문의</option>
+									  <option value="배송문의">배송문의</option>
+									  <option value="결제문의">결제문의</option>
+									  <option value="반품문의">반품문의</option>
+									</select>
+									<input type="hidden" class="form-control" id="qa_code">
+								</div>
+								<div class="form-group row">
+									<label for="qa_content" class="col-form-label"><strong>내용</strong></label>
+									<textarea class="form-control" id="qa_content" placeholder="내용을 입력하세요."></textarea>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" id="btn_question_save" class="btn btn-primary" th:data-pro_num="${product.pro_num}">상품문의 저장</button>
+						<button type="button" id="btn_question_modify" class="btn btn-primary" th:data-pro_num="${product.pro_num}">상품문의 수정</button>
+					</div>
+				</div>
+				</div>
+			</div>
+			<!-- 상품문의 모달 끝-->
+
 
 
 		</th:block>
@@ -235,7 +334,7 @@
 			$(document).ready(function(){
 				
 				//jquery-ui, tabs
-				$( "#pro_info" ).tabs();
+				$("#pro_info").tabs();
 
 
 				//[장바구니 추가] 장바구니버튼: id="btn_cart_add", 수량:id="btn_cart_amount"
@@ -259,87 +358,105 @@
 							}
 						}
 					});
-
 				});
 
 
-				// [상품후기 출력] 핸들바 사용, 출력위치 : id="review_list" , 핸들바 템플릿 스크립트 : id="review-template"
+				// [핸들바 출력] 상품후기, 출력위치 : id="review_list" , 핸들바 템플릿 스크립트 : id="review-template"
 				let reviewPage = 1; // 후기 첫번째 페이지
-				let url = "/review/revlist/" + [[${product.pro_num}]] + "/" + reviewPage;  //선택한 상품의 상품후기주소
-				console.log("상품후기주소: ", url);
+				let reviewUrl = "/review/revlist/" + [[${product.pro_num}]] + "/" + reviewPage;  //선택한 상품의 상품후기주소
+				//console.log("상품후기주소: ", reviewUrl);
+				getData(reviewUrl, $("#review_list"), $("#review-template"), $("#review_paging"));
 
-				getReviewList(url); //리뷰주소요청 함수 호출
 
-				//[리뷰 주소요청 함수]
-				function getReviewList(url) {
-					$.getJSON(url, function(reviewlist) { 
-						console.log("reviewlist.revlist: ", reviewlist.revlist);
-						console.log("reviewlist.pageMaker: ", reviewlist.pageMaker);
+				// [핸들바 출력] 상품문의, 출력위치 : id="question_list" , 핸들바 템플릿 스크립트 : id="question-template"
+				let questionPage = 1; // 문의 첫번째 페이지
+				let questionUrl = "/question/question_list/" + [[${product.pro_num}]] + "/" + questionPage;
+				//console.log("상품문의주소: ", questionUrl);
+				getData(questionUrl, $("#question_list"), $("#question-template"), $("#question_paging"));
 
-						//함수호출
-						print_reviewlist(reviewlist.revlist, $("#review_list"), $("#review-template")); // (리뷰데이터, 출력위치, 사용템플릿)
-						print_paging(reviewlist.pageMaker,$("#review_paging"));
+				//[핸들바함수] 데이터 요청함수
+				function getData(url, listTarget, templateTarget, pagingTarget) {
+					$.getJSON(url, function(data) {
+						//console.log("데이터 리스트: ", data);
+						//console.log("페이징 정보: ", data.pageMaker);
 
+						// 상품후기, 상품문의 종류 따라 list를 구분해서 처리
+						let listData = data.revlist || data.question_list;
+
+						// 템플릿 데이터 출력
+						printDataList(listData, listTarget, templateTarget);
+						// 페이징 정보 출력
+						printPaging(data.pageMaker, pagingTarget, url);
 					});
 				}
 
-				// [상품 후기 ui작업]
-				let print_reviewlist = function(reviewDate, target, template) {
-					let templateObj = Handlebars.compile(template.html());  //html형태로 입력된 경로의 템플릿 compile
-					let reviewHtml = templateObj(reviewDate); // db데이터(리뷰데이터)를 템플릿에 적용
-					target.children().remove(); // 출력위치에 불필요한 하위요소 제거
-					target.append(reviewHtml);	// 출력위치에 템플릿 적용한 데이터 출력
+
+				//[핸들바] 데이터 출력함수
+				let printDataList = function(dataList, target, template) {
+					let templateObj = Handlebars.compile(template.html()); //html형태로 입력된 경로의 템플릿 compile
+					let html = templateObj(dataList);  // db데이터를 템플릿에 적용
+					target.children().remove();  // 출력위치에 불필요한 하위요소 제거
+					target.append(html);  // 출력위치에 템플릿 적용한 데이터 출력
 				}
 
-				// [상품후기페이징ui]
-				let print_paging = function(pageData, target) {
 
+				//[핸들바] 페이징 출력함수
+				let printPaging = function(pageData, target, baseUrl) {
 					let str = `<nav aria-label="Page navigation example">`;
 						str += `<ul class="pagination">`;
 
-							//이전페이지
-							if(pageData.prev) {
-								str += `<li class="page-item">`;
-								str += `<a class="page-link" href="${pageData.startPage - 1}" aria-label="Previous">`;
-								str += `<span aria-hidden="true">이전</span>`;
-								str += `</a>`;
-								str += `</li>`;
-							}
+					//이전페이지
+					if(pageData.prev) {
+						str += `<li class="page-item">`;
+						str += `<a class="page-link" href="${pageData.startPage - 1}" aria-label="Previous">`;
+						str += `<span aria-hidden="true">이전</span>`;
+						str += `</a>`;
+						str += `</li>`;
+					}
 
-							// 선택페이지
-							for(let i=pageData.startPage; i<=pageData.endPage; i++) {
-								let className = pageData.cri.pageNum == i ? 'active' : '';
-								str += `<li class="page-item ${className}"><a class="page-link" href="${i}">${i}</a></li>`;
-							}
+					// 선택페이지
+					for(let i=pageData.startPage; i<=pageData.endPage; i++) {
+						let className = pageData.cri.pageNum == i ? 'active' : '';
+						str += `<li class="page-item ${className}"><a class="page-link" href="${i}">${i}</a></li>`;
+					}
 
-							// 다음페이지
-							if(pageData.next) {
-								str += `<li class="page-item">`;
-								str += `<a class="page-link" href="${pageData.endPage + 1}" aria-label="Next">`;
-								str += `<span aria-hidden="true">다음</span>`;
-								str += `</a>`;
-								str += `</li>`;
-							}
-						
-						str += `</ul>`;
-						str += `</nav>`;	
+					// 다음페이지
+					if(pageData.next) {
+						str += `<li class="page-item">`;
+						str += `<a class="page-link" href="${pageData.endPage + 1}" aria-label="Next">`;
+						str += `<span aria-hidden="true">다음</span>`;
+						str += `</a>`;
+						str += `</li>`;
+					}
+
+					str += `</ul>`;
+					str += `</nav>`;    
 
 					target.html(str); //target에 페이지html값 추가
 				}
 
+				// [핸들바]페이징 클릭 이벤트
+				$("#review_paging, #question_paging").on("click", "nav ul.pagination a", function(e) {
 
-				// [페이징 클릭 이벤트]
-				$("#review_paging").on("click", "nav ul.pagination a", function(e) {
-					e.preventDefault();
+					e.preventDefault(); //href 제거
 
-					reviewPage = $(this).attr("href");
+					let parentDiv = $(this).closest('div').attr("id"); //페이징 출력div의 id
+					let currentPage = $(this).attr("href");	//클릭한 페이지
+					//console.log("parentDiv값:", parentDiv);	
+					//console.log("currentPage값:", currentPage);
+						
+					if (parentDiv == "review_paging") {
+						reviewPage = currentPage;	
+						reviewUrl = "/review/revlist/" + [[${product.pro_num}]] + "/" + reviewPage;  
+						getData(reviewUrl, $("#review_list"), $("#review-template"), $("#review_paging"));
 
-					url = "/review/revlist/" + [[${product.pro_num}]] + "/" + reviewPage;
-
-					getReviewList(url);
-
+					} else if (parentDiv == "question_paging") {
+						questionPage = currentPage;
+						questionUrl = "/question/question_list/" + [[${product.pro_num}]] + "/" + questionPage;
+						getData(questionUrl, $("#question_list"), $("#question-template"), $("#question_paging"));
+					}	
 				});
-
+	 
 
 				// [핸들바함수] 상품후기 평점 별모양표시
 				Handlebars.registerHelper("displayStar", function(rating) {
@@ -365,7 +482,7 @@
 				});
  
 
-				// [핸들바함수] 상품후기 날짜형식 
+				// [핸들바함수] 상품후기,문의 날짜형식 
 				Handlebars.registerHelper("converDate", function(re_date) {
 					const d = new Date(re_date);
 
@@ -402,10 +519,9 @@
 				});
 
 				// [핸들바함수] 로그인아이디와 리뷰작성자가 같을 때 수정, 삭제 버튼 출력
-				Handlebars.registerHelper("authControlView", function(mbsp_id, re_code) {
+				Handlebars.registerHelper("authControlView", function(mbsp_id, code, type) {
 
 					let loginVo = [[${session.login_status}]]; // 로그인 상태
-					
 					let loginId = ""; //로그인 아이디 초기화
 
 					if(loginVo !== null) { // 로그인상태가 없지 않다면 > 로그인 상태라면
@@ -414,17 +530,21 @@
 
 					let str = "";
 
-					if(loginVo !== null && loginId == mbsp_id) {
-						str += `<button type="button" name="btn_review_edit" class="btn btn-primary btn-sm" data-re_code="${re_code}">수정</button>`;
-						str += `<button type="button" name="btn_review_delete" class="btn btn-danger btn-sm" data-re_code="${re_code}">삭제</button>`;
-						
+					if(loginVo !== null && loginId == mbsp_id) { 
+						if(type == "review") {
+							str += `<button type="button" name="btn_review_edit" class="btn btn-primary btn-sm" data-re_code="${code}">수정</button>`;
+							str += `<button type="button" name="btn_review_delete" class="btn btn-danger btn-sm" data-re_code="${code}">삭제</button>`;
+						} else if(type == "question") {
+							str += `<button type="button" name="btn_question_edit" class="btn btn-primary btn-sm" data-qa_code="${code}">수정</button>`;
+							str += `<button type="button" name="btn_question_delete" class="btn btn-danger btn-sm" data-qa_code="${code}">삭제</button>`;
+						}
 						return new Handlebars.SafeString(str);
 					}else {
 						return "";
 					}
 				});
 
-
+				
 				// [상품후기작성 modal 출력] id="btn_review_modal"
 				$("#btn_review_modal").on("click", function() {
 
@@ -439,7 +559,6 @@
 
 				});
 
-
 				// [별평점 클릭시 이벤트 발생]
 				$("p#star_re_rate a.re_rate").on("click", function(e) {
 					e.preventDefault(); // 링크기능 제거
@@ -447,7 +566,6 @@
 					$(this).parent().children().removeClass("on");
 					$(this).addClass("on").prevAll("a").addClass("on");
 				});
-
 
 				// [상품후기 저장] id="btn_review_save"
 				$("button#btn_review_save").on("click", function() {
@@ -498,7 +616,7 @@
 							if(result == "success") {
 								alert("상품후기가 등록되었습니다.");
 								$("#review_modal").modal('hide');
-								getReviewList(url);
+								getData(reviewUrl, $("#review_list"), $("#review-template"), $("#review_paging"));
 							}
 						},
 						beforeSend : function(xhr) {
@@ -524,7 +642,7 @@
 						success: function(result) {
 							if(result == "success") {
 								alert("상품후기가 삭제되었습니다.");
-								getReviewList(url);
+								getData(reviewUrl, $("#review_list"), $("#review-template"), $("#review_paging"));
 							}
 						}
 					});
@@ -609,7 +727,159 @@
 							if(result == "success") {
 								alert("상품후기가 수정되었습니다.");
 								$("#review_modal").modal('hide');
-								getReviewList(url);
+								getData(reviewUrl, $("#review_list"), $("#review-template"), $("#review_paging"));
+							}
+						},
+						beforeSend : function(xhr) {
+							xhr.setRequestHeader("AJAX", "true");
+						},
+						error : function() {
+							location.href = "/member/login";
+						}
+					});
+				});
+
+
+				
+				// [상품문의작성 modal 출력] id="btn_question_modal"
+				$("#btn_question_modal").on("click", function() {
+
+					$("#qa_title").val("");
+					$("#qa_content").val("");
+					$("#qa_code").val("");
+					
+					$("#btn_question_save").show();
+					$("#btn_question_modify").hide();
+					$("#question_modal").modal('show');
+				});
+
+				// [상품문의 저장] id="btn_question_save"
+				$("button#btn_question_save").on("click", function() {
+					let pro_num = $(this).data("pro_num");
+					//console.log("상품문의 pro_num :", pro_num);
+
+					let qa_title = $("#qa_title").val();
+					//console.log("qa_title :", qa_title);
+
+					let qa_content = $("#qa_content").val();
+					//console.log("qa_content :", qa_content);
+
+
+					// (유효성검사)
+					if(re_title == "") {
+						alert("제목을 선택하세요");
+						return;
+					}
+
+					if(re_content == "") {
+						alert("내용을 입력하세요");
+						return;
+					}
+
+					// 자바스크립트 object문법으로 데이터 전달
+					let question_data = {pro_num : pro_num, qa_title : qa_title, qa_content : qa_content}; 
+
+					$.ajax({
+						url: '/question/question_save',
+						headers: {"Content-Type" : "application/json"},
+						type: 'post',
+						data: JSON.stringify(question_data),  //자바스크립트  object문법을 json으로 변환하는 작업
+						dataType: 'text',
+						success: function(result) {
+							if(result == "success") {
+								alert("상품문의가 등록되었습니다.");
+								$("#question_modal").modal('hide');
+								getData(questionUrl, $("#question_list"), $("#question-template"), $("#question_paging"));
+							}
+						},
+						beforeSend : function(xhr) {
+							xhr.setRequestHeader("AJAX", "true");
+						},
+						error : function() {
+							location.href = "/member/login";
+						}
+					});
+				});
+
+				// [상품문의 삭제]
+				$("div#question_list").on("click", "button[name='btn_question_delete']", function() {
+					if(!confirm("상품문의를 삭제하시겠습니까?")) return;
+
+					let qa_code = $(this).data("qa_code");
+					$.ajax({
+						url: '/question/question_delete/' + qa_code,
+						headers: {"Content-Type" : "application/json", "X-HTTP-Method-Override" : "DELETE" },
+						type: 'delete',
+						dataType: 'text',
+						success: function(result) {
+							if(result == "success") {
+								alert("상품문의가 삭제되었습니다.");
+								getData(questionUrl, $("#question_list"), $("#question-template"), $("#question_paging"));
+							}
+						}
+					});
+				});
+
+
+				// [상품문의 수정폼]  id="question_list"  //name="btn_question_edit"
+				$("div#question_list").on("click", "button[name='btn_question_edit']", function() {
+					let qa_code = $(this).data("qa_code");
+
+					$.ajax({
+						url: '/question/question_modify/' + qa_code,
+						headers: {"Content-Type" : "application/json"},
+						type: 'get',
+						dataType: 'json',
+						success: function(result) {
+							console.log("수정할데이터:" + result);
+
+							//수정내용출력 / id="qa_title", id="qa_content", id="qa_code"
+							$("#qa_title").val(result.qa_title);
+							$("#qa_content").val(result.qa_content);
+							$("#qa_code").val(result.qa_code);
+							
+										
+							$("#btn_question_save").hide();
+							$("#btn_question_modify").show();
+							$("#question_modal").modal('show');
+						}
+					});
+				});
+
+				// [상품문의 수정하기]  id="btn_question_modify"
+				$("button#btn_question_modify").on("click", function() {
+					let pro_num = $(this).data("pro_num");
+					console.log(pro_num);
+
+					let qa_code = $("#qa_code").val();
+					let qa_title = $("#qa_title").val();
+					let qa_content = $("#qa_content").val();
+							
+					// (유효성검사)
+					if(re_title == "") {
+						alert("제목을 선택하세요");
+						return;
+					}
+
+					if(re_content == "") {
+						alert("내용을 입력하세요");
+						return;
+					}
+
+					// 자바스크립트 object문법으로 데이터 전달
+					let question_data = {pro_num : pro_num, qa_title : qa_title, qa_content : qa_content, qa_code : qa_code}; 
+
+					$.ajax({
+						url: '/question/question_modify',
+						headers: {"Content-Type" : "application/json", "X-HTTP-Method-Override" : "PUT"},
+						type: 'put',
+						data: JSON.stringify(question_data),  //자바스크립트  object문법을 json으로 변환하는 작업
+						dataType: 'text',
+						success: function(result) {
+							if(result == "success") {
+								alert("상품문의가 수정되었습니다.");
+								$("#question_modal").modal('hide');
+								getData(questionUrl, $("#question_list"), $("#question-template"), $("#question_paging"));
 							}
 						},
 						beforeSend : function(xhr) {

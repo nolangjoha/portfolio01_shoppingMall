@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{admin/layout/adminlayout}">
+
+	<!-- 각 페이지의 css 재정의-->		
+	<th:block layout:fragment="css">
+		<style>
+			
+			table.table-bordered[name="table_info"] th {
+				width:10%;
+				vertical-align: middle;
+			}
+
+		</style>
+	</th:block>	
+
+    <th:block layout:fragment = "content">
+	  <!-- Content Wrapper. Contains page content -->
+	  <div class="content-wrapper">
+	    <!-- Content Header (Page header) -->
+	    <section th:replace="~{/admin/community/community_top_menu}"></section>
+	
+	    <!-- Main content -->
+	    <section class="content container-fluid">
+	
+		<div class="row">
+			<div class="col-md-12">
+				<div class="box box-primary">
+					<div class="box-header with-border">
+						<h3 class="box-title mt-5" style="font-weight:bold;">사용자 문의 수정폼</h3>
+					</div>
+					<!-- 절대경로 /board/register -->
+					<form role="form" method="post" action="/admin/community/question/question_modify" enctype="multipart/form-data" style="padding-right:20px; padding-left:20px;">
+						
+						<div class="box-body">
+							<!--사용자 문의내용-->
+							<table class="table table-bordered" name="table_info">
+								
+								<tr>
+									<th>문의코드</th>
+									<td>
+										<strong><span th:text="${question.qa_code}"></span></strong>
+										<input type="hidden" class="form-control" id="qa_code" name="qa_code" th:value="${question.qa_code}">
+									</td>
+								</tr>
+								<tr>
+									<th>상품정보</th>
+									<td>
+										<table>
+											<tr>
+												<td rowspan="2">
+													<img th:src="${'/admin/product/image_display?dateFolderName=' + question.pro_up_folder + '&fileName=s_' + question.pro_img}" style="width: 50px; height: 50px;">
+												</td>
+												<td style="padding:0 0 0 10px;" >
+													<strong>
+														<span>상품코드:</span>
+														<span th:text="${question.pro_num}"></span>
+													</strong>	
+												</td>
+											</tr>
+											<tr>
+												<td style="padding:0 0 0 10px;">
+													<span th:text="${question.pro_name}"></span>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+								<tr></tr>
+									<th>작성자</th>
+									<td th:text="${question.mbsp_id}"></td>
+								</tr>
+								<tr>
+									<th>작성날짜</th>
+									<td th:text="${#dates.format(question.qa_date, 'yyyy-MM-dd HH:mm:ss')}"></td>
+								</tr>
+								<tr>
+									<th>문의제목</th>
+									<td>
+										<select class="form-control" id="qa_title" name="qa_title" th:value="${question.qa_title}">
+											<option value="상품문의" th:selected="${question.qa_title} == '상품문의'">상품문의</option>
+											<option value="배송문의" th:selected="${question.qa_title} == '배송문의'">배송문의</option>
+											<option value="결제문의" th:selected="${question.qa_title} == '결제문의'">결제문의</option>
+											<option value="반품문의" th:selected="${question.qa_title} == '반품문의'">반품문의</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>문의내용</th>
+									<td>
+										<textarea class="form-control" id="qa_content" name="qa_content" th:text="${question.qa_content}"></textarea>
+									</td>
+								</tr>
+							</table>
+						</div>
+						
+						<!--Creteria 파라미터를 위한 정보 -->
+						<input type="hidden" name="pageNum" id="pageNum" th:value="${cri.pageNum}" />
+						<input type="hidden" name="amount" id="amount" th:value="${cri.amount}" />
+						<input type="hidden" name="type" id="type" th:value="${cri.type}" />
+						<input type="hidden" name="keyword" id="keyword" th:value="${cri.keyword}" />
+						<!--Creteria 파라미터를 위한 정보. 끝 -->
+
+
+						<div class="box-footer" style="text-align: center;" >
+							<button type="submit" id="btn_question_modify" class="btn btn-primary" th:data-qa_code="${question.qa_code}">수정</button>
+							<button type="button" id="btn_question_list" class="btn btn-primary">목록보기</button>
+						</div>
+					</form>
+
+					
+
+				</div>
+				
+
+
+				
+			</div>
+		</div>
+	
+	    </section>
+	    <!-- /.content -->
+	  </div>
+	  <!-- /.content-wrapper -->
+    </th:block>
+
+
+    <th:block layout:fragment = "script">
+      <script>
+		$(document).ready(function(){
+
+			// [목록보기] id="btn_question_list"
+			$("#btn_question_list").on("click", function() {
+				location.href="/admin/community/question/question_list";
+			});
+
+		});  //ready end
+      
+      
+      </script>
+    </th:block>
+
+
+</html>

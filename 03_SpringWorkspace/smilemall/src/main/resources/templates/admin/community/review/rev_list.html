@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{admin/layout/adminlayout}">
+
+	<!-- 각 페이지의 css 재정의-->		
+	<th:block layout:fragment="css">
+		<style>
+			
+			div#admin_reply_box {
+				background-color: lightblue; 
+				border:1px solid; 
+				padding: 5px 5px 5px 5px;
+			}
+
+			div#admin_reply_title {
+				width: 100%;
+			}
+
+			div.admin_reply_box_left {
+				width: 50%; float: left;	
+			}
+	
+			div.admin_reply_box_right {
+				width: 50%; 
+				float: right; 
+				text-align:right;	
+			}
+
+
+		</style>
+	</th:block>	
+
+    <th:block layout:fragment = "content">
+	<script src="/plugins/ckeditor/ckeditor.js"></script>
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+			<section th:replace="~{/admin/community/community_top_menu}"></section>
+
+			<!-- Main content -->
+			<section class="content container-fluid">
+
+				<div class="row">
+					<div class="col-md-12">
+						<div class="box box-primary">
+							<div class="box-header with-border">
+								<h3 class="box-title mt-5" style="font-weight:bold;">후기관리</h3>
+							</div>
+							
+							<div class="box-body">
+								<!-- 검색옵션 -->
+								<div>
+									<form action="/admin/community/review/rev_list" method="get" id="search_form">
+										<div style="display: inline-block">
+											<select class="form-control" name="type">
+												<option selected>검색종류 선택</option>
+												<option value="N" name="search_type" th:selected="${pageMaker.cri.type =='N'}">상품명</option>
+												<option value="C" name="search_type" th:selected="${pageMaker.cri.type =='C'}">상품코드</option>
+												<option value="I" name="search_type" th:selected="${pageMaker.cri.type =='I'}">구매자 아이디</option>
+											</select>
+										</div>
+										<div style="display: inline-block">
+											<input type="text" class="form-control" id="serarch_keyword" name="keyword" th:value="${pageMaker.cri.keyword}" style="width:150px;" />
+											<input type="hidden" name="pageNum" th:value="${pageMaker.cri.pageNum}"/>
+											<input type="hidden" name="amount" th:value="${pageMaker.cri.amount}"/>
+										</div>
+										<div style="display: inline-block">
+											<button type="submit" class="btn btn-primary">검색</button>
+											<button type="submit" class="btn btn-danger" id="btn_reset_search">검색초기화</button>
+										</div>	
+									</form>
+								</div>
+								
+								<hr>
+								<!-- 후기 테이블 -->
+								<table class="table table-bordered" th:if="${!#lists.isEmpty(rev_list)}">
+									<tbody>
+										<tr>
+											<th style="width: 3%; text-align: center;"><input type="checkbox" id="checkAll"></th>
+											<th style="width: 6%; text-align: center;">후기코드</th>
+											<th style="width: 6%; text-align: center;">답변여부</th>
+											<th style="width: 20%; text-align: center;">상품정보</th>
+											<th style="width: 30%; text-align: center;">내용</th>
+											<th style="width: 5%; text-align: center;">작성자</th>
+											<th style="width: 10%; text-align: center;">작성일</th>
+											<th style="width: 15%; text-align: center;">관리</th>
+										</tr>
+										<tr th:each="review : ${rev_list}">
+											<td style="text-align: center; vertical-align: middle;"><input type="checkbox" name="check" th:value="${review.re_code}"></td>
+											<td style="text-align: center; vertical-align: middle;">[[${review.re_code}]]</td>
+											<td style="text-align: center; vertical-align: middle;">
+												<span th:if="${review.re_admin_reply_status =='N'}" style="color:red;">답변대기</span>
+												<span th:if="${review.re_admin_reply_status =='Y'}" style="color: blue;">답변완료</span>
+											</td>
+											<td style="vertical-align: middle;">
+												<table>
+													<tbody>
+														<tr>
+															<td rowspan="2">
+																<img th:src="${'/admin/product/image_display?dateFolderName=' + review.pro_up_folder + '&fileName=s_' + review.pro_img}" style="width: 50px; height: 50px;">
+															</td>
+															<td style="padding:0 0 0 10px;" >
+																<strong>
+																	<span>상품코드:</span>
+																	<span th:text="${review.pro_num}"></span>
+																</strong>
+															</td>
+														</tr>
+														<tr>
+															<td style="padding:0 0 0 10px;">
+																<span th:text="${review.pro_name}"></span>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</td>
+											<td style="text-align: left; vertical-align: middle;">
+												<div class="star_rateing" th:text="${review.re_rate}" style="color:red;"></div>
+												<hr style="width: 100%; margin-top: 5px; margin-bottom: 5px;">
+												<strong><div th:text="${review.re_title}"></div></strong>
+												<div th:text="${review.re_content}"></div>
+												
+												<hr style="width: 100%; margin-top: 5px; margin-bottom: 10px; " th:if="${review.re_admin_reply_status =='Y'}">
+
+												<div id="admin_reply_box" th:if="${review.re_admin_reply_status =='Y'}">
+													<div id="admin_reply_title">
+														<div>
+															<div class="admin_reply_box_left">
+																<strong>관리자 답변</strong>
+															</div>
+															<div class="admin_reply_box_right">
+																<strong><span th:text="${#dates.format(review.re_admin_reply_date, 'yyyy-MM-dd HH:mm:ss')}"></span></strong>
+															</div>
+														</div>
+													</div>
+													<hr style="width: 100%; margin-top: 5px; margin-bottom: 5px;">
+													<div>	
+														<div th:text="${review.re_admin_reply_content}"></div>
+														<div>
+															<button type="button" class="btn btn-secondary btn-sm" name="admin_reply_modify" th:data-re_code="${review.re_code}">답변수정</button>
+															<button type="button" class="btn btn-danger btn-sm" name="admin_reply_delete" th:data-re_code="${review.re_code}">답변삭제</button>
+														</div>	
+													</div>
+												</div>
+												
+											
+											</td>
+											<td style="text-align: center; vertical-align: middle;">[[${review.mbsp_id}]]</td>
+											<td th:text="${#dates.format(review.re_date, 'yyyy-MM-dd HH:mm:ss')}" style="text-align: center; vertical-align: middle;"></td>
+											
+											<td style="text-align: center; vertical-align: middle;">
+												<button type="button" class="btn btn-primary btn-sm" name="btn_admin_rev" th:data-re_code="${review.re_code}" th:if="${review.re_admin_reply_status =='N'}">답변등록</button>
+												<button type="button" class="btn btn-primary btn-sm" th:if="${review.re_admin_reply_status =='Y'}" disabled>답변등록</button>
+												<button type="button" class="btn btn-primary btn-sm" name="btn_rev_modify" th:data-re_code="${review.re_code}">수정</button>
+												<button type="button" class="btn btn-danger btn-sm" name="btn_rev_del" th:data-re_code="${review.re_code}">삭제</button>
+											</td>
+										</tr>
+									</tbody>
+								</table>	
+								<div th:if="${#lists.isEmpty(rev_list)}" style="text-align: center;">
+									<span><strong>표시할 내역이 없습니다.</strong></span>
+								</div>							
+							
+							</div>
+							<div class="box-footer clearfix">
+								
+								<div class="row" th:if="${!#lists.isEmpty(rev_list)}">
+
+									<div class="col-md-3">
+										<button type="button" class="btn btn-danger" id="btn_check_delete">일괄삭제</button>
+										<!--actionForm-->	
+										<form id="actionForm" action="" method="get">
+											<input type="hidden" name="pageNum" id="pageNum" th:value="${pageMaker.cri.pageNum}" />
+											<input type="hidden" name="amount" id="amount" th:value="${pageMaker.cri.amount}" />
+											<input type="hidden" name="type" id="type" th:value="${pageMaker.cri.type}" />
+											<input type="hidden" name="keyword" id="keyword" th:value="${pageMaker.cri.keyword}" />
+										</form>
+									</div>
+									<!--페이징-->
+									<div class="col-md-8 text-center">
+										
+											<nav aria-label="...">
+											<ul class="pagination">
+												<!-- 이전 표시여부 -->
+												
+												<th:block th:if="${pageMaker.prev }">
+													<li class="page-item">
+														<a th:href="${pageMaker.startPage - 1 }" class="page-link movepage">Previous</a>
+													</li>
+												</th:block>
+			
+												<th:block th:with="pageMaker = ${pageMaker}">
+													<th:block th:each="num : *{#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+													<li class='page-item' th:classappend="${pageMaker.cri.pageNum ==  num ? 'active': '' }" aria-current="page">
+														<a class="page-link movepage" th:href="${num }" th:text="${num }"></a>
+													</li>
+													</th:block>
+												</th:block>
+			
+												<!--  다음 표시여부 -->
+												<th:block th:if="${pageMaker.next }">
+													<li class="page-item">
+														<a th:href="${pageMaker.endPage + 1 }" class="page-link movepage">Next</a>
+													</li>
+												</th:block>
+											</ul>
+											</nav>
+									</div>
+								</div>
+			
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+    </th:block>
+
+
+    <th:block layout:fragment = "script">
+      <script>
+		$(document).ready(function(){
+
+			// 액션폼 전역변수
+			let actionForm = $("#actionForm"); 
+
+			// [페이징]
+			$(".movepage").on("click", function(e) {
+				e.preventDefault();
+
+				actionForm.attr("action", "/admin/community/review/rev_list");
+				actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+				
+				actionForm.submit();
+			});
+
+			// [검색초기화] id="btn_reset_search", id="search_form", id="serarch_keyword" 
+			$("#btn_reset_search").on("click",function() {       
+				$("#serarch_keyword").val('');	
+				$("option[name='search_type']").val('');
+				$("input[name='pageNum']").val(1);  
+				$("#search_form").submit();			
+			});
+
+			//[별졈 표시]
+			$(".star_rateing").each(function() {
+				let rating = $(this).text(); 
+				let stars = '';
+
+				switch(rating) {
+					case '1' :
+						stars = '★☆☆☆☆';
+						break;
+					case '2' :
+						stars = '★★☆☆☆';
+						break;
+					case '3' :
+						stars = '★★★☆☆';
+						break;
+					case '4' :
+						stars = '★★★★☆';
+						break;
+					case '5' :
+						stars = '★★★★★';
+						break;
+				}
+				$(this).text(stars);
+			});
+			
+			//[수정버튼 클릭시]
+			$("button[name='btn_rev_modify']").on("click", function() {
+				let re_code = $(this).data("re_code");  
+
+				actionForm.find("input[name='re_code']").remove();
+
+				console.log("리뷰코드 : " + re_code);
+
+				let str = `<input type="hidden" name="re_code" id="re_code" value="${re_code}" />`;
+
+				actionForm.append(str);
+				
+				actionForm.attr("method", "get");
+				actionForm.attr("action", "/admin/community/review/rev_modify");
+				actionForm.submit();
+			});
+
+
+			//[삭제버튼 클릭시] name=btn_rev_del
+			$("button[name='btn_rev_del']").on("click", function() {
+				
+				if(!confirm("리뷰를 삭제하시겠습니까?")) return;
+
+				let re_code = $(this).data("re_code");
+
+				actionForm.find("input[name='re_code']").remove();
+
+				let str = `<input type="hidden" name="re_code" id="re_code" value="${re_code}" />`;
+
+				actionForm.append(str);
+				
+				actionForm.attr("method", "post");
+				actionForm.attr("action", "/admin/community/review/rev_delete");
+				actionForm.submit();
+
+			});
+
+			//[답변버튼 클릭시] name="btn_admin_rev"
+			$("button[name='btn_admin_rev']").on("click", function() {
+				let re_code = $(this).data("re_code");  
+
+				actionForm.find("input[name='re_code']").remove();
+
+				console.log("리뷰코드 : " + re_code);
+
+				let str = `<input type="hidden" name="re_code" id="re_code" value="${re_code}" />`;
+
+				actionForm.append(str);
+				
+				actionForm.attr("method", "get");
+				actionForm.attr("action", "/admin/community/review/admin_rev_form");
+				actionForm.submit();
+			});
+
+			// 제목행 checkBox 체크시 일괄체크하기 // id="checkAll
+			let ischeck = true;   
+			$("#checkAll").on("click", function() {
+			//id값이 checkAll인 요소를 클릭하면 아래 구문 실행
+
+				$("input[name='check']").prop("checked", this.checked);
+				// name값이 check인 input태그들에 checked속성을 this.checked속성으로 설정
+				// this.checked는 #checkAll의 체크상태를 의미.
+
+				isCheck = this.checked;
+				// 전체 체크박스의 상태를 대입.
+			});
+
+
+			// 목록 데이터행 체크하기
+			$("input[name='check']").on("click", function() {
+				//name값이 check인 input태그들을 클릭했을 때 아래 구문 실행
+
+				$("#checkAll").prop("checked", this.checked);
+				// id값이 checkAll인 태그의 checked상태를 현재 클릭된 체크박스 상태로 설정.
+
+				$("input[name='check']").each(function() {
+					if(!$(this).is(":checked")) {
+						//name이 check인 input태그들의 상태가 checked가 아닐경우 아래 구문 실행
+						$("#checkAll").prop("checked", false);
+						// id값이 checkAll인 요소의 checked 상태는 거짓. 즉 전체체크 상태 해제
+					}
+				});
+			});
+
+
+			// 체크상품 일괄 삭제 id="btn_check_delete"
+			$("#btn_check_delete").on("click", function() {
+			//삭제버튼 클릭시
+
+				//선택한 체크박스가 없다면 함수 종료
+				if($("input[name='check']:checked").length == 0) {
+					alert("삭제할 리뷰를 체크하세요");
+					return;
+				}
+
+				// 삭제기능 수행 전
+				if(!confirm("정말로 삭제하시겠습니까?")) {
+					return;
+				}
+
+				let re_code = [];
+				
+				//체크된 체크박스 값을 re_code배열에 추가
+				$("input[name = 'check']:checked").each(function() {
+					re_code.push($(this).val());
+				});
+				console.log("삭제목록:"+ re_code);
+
+				$.ajax({
+					url: "/admin/community/review/rev_checked_delete",
+					type: 'post',
+					data: {re_code : re_code},
+					dataType : 'text',
+					success: function(result) {
+						if(result == 'success') {
+							alert("체크 된 상품이 삭제되었습니다.");
+							location.reload();
+						}
+					},
+					error: function(xhr, status, error) {
+						alert("에러가 발생했습니다:" + error);
+					}
+				});
+			});
+
+
+			//[관리자 답변수정버튼 클릭시] name="admin_reply_modify"
+			$("button[name='admin_reply_modify']").on("click", function() {
+				let re_code = $(this).data("re_code");  
+
+				actionForm.find("input[name='re_code']").remove();
+
+				console.log("상품코드 : " + re_code);
+
+				let str = `<input type="hidden" name="re_code" id="re_code" value="${re_code}" />`;
+
+				actionForm.append(str);
+				
+				actionForm.attr("method", "get");
+				actionForm.attr("action", "/admin/community/review/admin_rev_modify");
+				actionForm.submit();
+			});
+
+
+			//[관리자 답변 삭제버튼 클릭시] name="admin_reply_delete"
+			$("button[name='admin_reply_delete']").on("click", function() {
+				
+				if(!confirm("관리자 답변을 삭제하시겠습니까?")) return;
+
+				let re_code = $(this).data("re_code");
+
+				actionForm.find("input[name='re_code']").remove();
+
+				let str = `<input type="hidden" name="re_code" id="re_code" value="${re_code}" />`;
+
+				actionForm.append(str);
+				
+				actionForm.attr("method", "post");
+				actionForm.attr("action", "/admin/community/review/admin_rev_delete");
+				actionForm.submit();
+
+			});
+
+
+			
+
+
+		});  //ready end
+      
+      
+      </script>
+    </th:block>
+
+
+</html>

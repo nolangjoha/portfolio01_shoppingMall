@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/admin/review/*")
+@RequestMapping("/admin/community/review/*")
 public class AdminReviewController {
 	
 	private final AdminReviewService adminReviewService;
@@ -63,7 +63,10 @@ public class AdminReviewController {
 		log.info("수정할페이징" + cri);
 		//수정데이터
 		ReviewVo rev_info = adminReviewService.rev_info(re_code);
-	
+		
+		//이미지 구분자 변환
+		rev_info.setPro_up_folder(rev_info.getPro_up_folder().replace("\\", "/"));
+		
 		model.addAttribute("review", rev_info);
 	}
 	
@@ -77,7 +80,7 @@ public class AdminReviewController {
 		
 		log.info("페이징" + cri);
 				
-		return "redirect:/admin/review/rev_list" + cri.getListLink();
+		return "redirect:/admin/community/review/rev_list" + cri.getListLink();
 	}
 	
 	//[상품후기삭제]
@@ -87,7 +90,7 @@ public class AdminReviewController {
 		
 		adminReviewService.rev_delete(re_code);
 		
-		return "redirect:/admin/review/rev_list" + cri.getListLink();
+		return "redirect:/admin/community/review/rev_list" + cri.getListLink();
 	}
 	
 	
@@ -127,7 +130,7 @@ public class AdminReviewController {
 		log.info("페이징"+ cri);
 		log.info("등록데이터"+ vo);
 		
-		return "redirect:/admin/review/rev_list" + cri.getListLink();
+		return "redirect:/admin/community/review/rev_list" + cri.getListLink();
 	}
 	
 	//[관리자 답변수정폼]
@@ -153,7 +156,7 @@ public class AdminReviewController {
 		log.info("페이징"+ cri);
 		log.info("수정데이터"+ vo);
 		
-		return "redirect:/admin/review/rev_list" + cri.getListLink();
+		return "redirect:/admin/community/review/rev_list" + cri.getListLink();
 	}
 	
 	//[관리자 답변삭제]
@@ -163,7 +166,7 @@ public class AdminReviewController {
 		
 		adminReviewService.admin_rev_delete(vo);
 		
-		return "redirect:/admin/review/rev_list" + cri.getListLink();
+		return "redirect:/admin/community/review/rev_list" + cri.getListLink();
 	}
 	
 	

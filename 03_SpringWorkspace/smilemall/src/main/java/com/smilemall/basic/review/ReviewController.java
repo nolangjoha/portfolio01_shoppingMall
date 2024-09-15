@@ -49,7 +49,7 @@ public class ReviewController {
 		
 		//후기목록 데이터
 		List<ReviewVo> revlist = reviewService.rev_list(pro_num, cri);
-		log.info("목록데이터:" +revlist);
+		//log.info("목록데이터:" +revlist);
 		
 		// 선택한 상품의 후기 데이터 전체
 		int revcount = reviewService.getCountReviewByPro_num(pro_num);
@@ -73,7 +73,7 @@ public class ReviewController {
 		String mbsp_id = ((MemberVo) session.getAttribute("login_status")).getMbsp_id();
 		vo.setMbsp_id(mbsp_id);
 		
-		log.info("상품후기데이터 : " + vo);
+		//log.info("상품후기데이터 : " + vo);
 		
 		// 후기저장
 		reviewService.review_save(vo); 
@@ -91,7 +91,7 @@ public class ReviewController {
 		
 		ResponseEntity<String> entity = null;
 		
-		log.info("장바구니 코드: " + re_code);
+		//log.info("삭제후기 코드: " + re_code);
 		
 		reviewService.review_delete(re_code);
 		entity = new ResponseEntity<String>("success", HttpStatus.OK);
@@ -108,7 +108,7 @@ public class ReviewController {
 		
 		entity = new ResponseEntity<ReviewVo>(reviewService.review_modify(re_code),HttpStatus.OK);
 		
-		log.info("후기수정페이지" + re_code); 
+		//log.info("수정후기코드" + re_code); 
 		
 		return entity;
 	}

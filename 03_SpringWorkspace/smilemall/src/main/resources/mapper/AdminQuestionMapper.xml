@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smilemall.basic.admin.question.AdminQuestionMapper">
+
+	<!-- 검색조건 : 상품명, 상품코드, 작성자 ID, -->
+	<sql id="criteria">
+		<trim prefix="(" suffix=")AND" prefixOverrides="OR">
+			<foreach collection="typeArr" item="type">
+				<trim prefix="OR">
+					<choose>
+						<when test="type == 'N'.toString()">
+							p.pro_name like '%' || #{keyword} || '%'
+						</when>
+						<when test="type == 'C'.toString()">
+							q.pro_num like '%' || #{keyword} || '%'
+						</when>
+						<when test="type == 'I'.toString()">
+							q.mbsp_id like '%' || #{keyword} || '%'
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	</sql>
+
+	<!-- [문의목록] -->
+	<select id="question_list" parameterType="Criteria" resultType="QuestionVo">
+		SELECT
+		    qa_code, 
+		    mbsp_id, 
+		    pro_num,
+		    pro_name,
+		    pro_up_folder,
+		    pro_img,
+		    qa_title, 
+		    qa_content, 
+		    qa_date, 
+		    qa_admin_reply_content, 
+		    qa_admin_reply_date, 
+		    qa_admin_reply_status
+		FROM (
+		    SELECT
+		        /*+ INDEX_DESC (q PK_QA_CODE) USE_NL(q p) */
+		        ROWNUM AS RN, 
+		        q.qa_code, 
+		        q.mbsp_id, 
+		        q.pro_num,
+		        p.pro_name,
+		        p.pro_up_folder,
+		        p.pro_img,
+		        q.qa_title, 
+		        q.qa_content, 
+		        q.qa_date, 
+		        q.qa_admin_reply_content, 
+		        q.qa_admin_reply_date,
+		        q.qa_admin_reply_status
+		    FROM
+		        qa_tbl q
+		    JOIN
+		        product_tbl p ON p.pro_num = q.pro_num
+		    WHERE
+				<include refid="criteria"></include>
+				<![CDATA[
+					ROWNUM <= (#{pageNum} * #{amount})
+				]]>
+			)
+		WHERE
+			RN > (#{pageNum} - 1) * #{amount}
+	</select>
+	
+	
+	<!-- [문의 전체 데이터 개수] -->
+	<select id="getTotalCount" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			qa_tbl q
+		JOIN
+			product_tbl p ON q.pro_num = p.pro_num
+		WHERE	
+			<include refid="criteria"></include>
+			q.qa_code > 0
+	</select>
+
+
+	<!-- [문의데이터] -->
+	<select id="question_info" parameterType="Long" resultType="QuestionVo">
+		SELECT
+		  	q.qa_code, 
+	        q.mbsp_id, 
+	        q.pro_num,
+	        p.pro_name,
+	        p.pro_up_folder,
+	        p.pro_img,
+	        q.qa_title, 
+	        q.qa_content, 
+	        q.qa_date, 
+	        q.qa_admin_reply_content, 
+	        q.qa_admin_reply_date,
+	        q.qa_admin_reply_status
+		FROM
+			qa_tbl q
+		JOIN
+			product_tbl p ON q.pro_num = p.pro_num
+		WHERE
+			qa_code = #{qa_code}
+	</select>
+
+	<!-- [문의데이터 수정] -->
+	<update id="question_modify" parameterType="QuestionVo">
+		UPDATE
+			qa_tbl
+		SET
+			qa_title = #{qa_title},
+			qa_content = #{qa_content}
+		WHERE
+			qa_code = #{qa_code}
+	</update>	
+
+	<!--  [문의데이터 삭제] -->
+	<delete id="question_delete" parameterType="Long">
+		DELETE FROM
+			qa_tbl
+		WHERE
+			qa_code = #{qa_code}
+	</delete>
+
+	<!-- [문의일괄삭제] -->
+	<delete id="question_checked_delete" parameterType="List">
+		<foreach collection="list" item="item" open="declare begin" separator=";" close="; end;">
+			DELETE FROM
+				qa_tbl
+			WHERE
+				qa_code = #{item}
+		</foreach>
+	</delete>
+
+	<!-- [관리자 답변등록] -->
+	<update id="admin_question_reply" parameterType="QuestionVo">
+		UPDATE
+			qa_tbl
+		SET
+			qa_admin_reply_content = #{qa_admin_reply_content},
+			qa_admin_reply_date = SYSDATE,
+			qa_admin_reply_status = 'Y'
+		WHERE
+			qa_code = #{qa_code}
+	</update>
+
+	<!-- [관리자 답변수정] -->
+	<update id="admin_question_reply_modify" parameterType="QuestionVo">
+		UPDATE
+			qa_tbl
+		SET
+			qa_admin_reply_content = #{qa_admin_reply_content},
+			qa_admin_reply_date = SYSDATE
+		WHERE
+			qa_code = #{qa_code}
+	</update>
+
+
+	<!-- [관리자 답변삭제] -->
+	<update id="admin_question_reply_delete" parameterType="QuestionVo">
+		UPDATE
+			qa_tbl
+		SET
+			qa_admin_reply_content = NULL,
+			qa_admin_reply_date = NULL,
+			qa_admin_reply_status = 'N'
+		WHERE
+			qa_code = #{qa_code}
+	</update>
+
+
+</mapper>

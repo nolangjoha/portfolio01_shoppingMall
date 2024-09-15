@@ -11,6 +11,10 @@ public final class Constants {
 	
 	// 사용자 페이지 상품상세페이지 리뷰출력 개수
 	public static final int REVIEW_LIST_AMOUNT = 5;
+
+	// 사용자 페이지 상품상세페이지 문의출력 개수
+	public static final int QUESTION_LIST_AMOUNT = 5;
+	
 	
 	// 관리자 주문목록 출력개수
 	public static final int AMIN_ORDER_LIST_AMOUNT = 3;
@@ -26,4 +30,7 @@ public final class Constants {
 	
 	// 관리자 리뷰관리 목록 출력개수
 	public static final int AMIN_REVIEW_LIST_AMOUNT = 5;
+	
+	// 관리자 문의관리 목록 출력개수
+	public static final int AMIN_QUESTION_LIST_AMOUNT = 5;
 }

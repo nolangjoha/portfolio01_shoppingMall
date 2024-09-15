@@ -19,7 +19,7 @@
 	  <!-- Content Wrapper. Contains page content -->
 	  <div class="content-wrapper">
 	    <!-- Content Header (Page header) -->
-	    <section th:replace="~{admin/review/board_top_menu}"></section>
+	    <section th:replace="~{/admin/community/community_top_menu}"></section>
 	
 	    <!-- Main content -->
 	    <section class="content container-fluid">
@@ -62,8 +62,14 @@
 										</table>
 									</td>
 								</tr>
-							
-							
+								<tr></tr>
+									<th>작성자</th>
+									<td th:text="${review.mbsp_id}"></td>
+								</tr>
+								<tr>
+									<th>작성날짜</th>
+									<td th:text="${#dates.format(review.re_date, 'yyyy-MM-dd HH:mm:ss')}"></td>
+								</tr>
 								<tr>
 									<th>평점</th>
 									<td class="star_rateing" th:text="${review.re_rate}" style="color:red;"></td>
@@ -76,18 +82,7 @@
 									<th>리뷰내용</th>
 									<td th:text="${review.re_content}"></td>
 								</tr>
-								<tr>
-									<th>작성자</th>
-									<td th:text="${review.mbsp_id}"></td>
-								</tr>
-								<tr>
-									<th>작성날짜</th>
-									<td th:text="${#dates.format(review.re_date, 'yyyy-MM-dd HH:mm:ss')}"></td>
-								</tr>
-								
 							</table>
-
-
 						</div>
 
 						<div style="font-size: 15px;">
@@ -95,7 +90,7 @@
 						</div>
 						<div>
 							<!--관리자 답변내용-->
-							<form role="form" method="post" action="/admin/review/admin_rev_reply" enctype="multipart/form-data" style="padding-right:20px; padding-left:20px;">
+							<form role="form" method="post" action="/admin/community/review/admin_rev_reply" enctype="multipart/form-data" style="padding-right:20px; padding-left:20px;">
 				
 								<table class="table table-bordered" name="table_info">
 									
@@ -150,7 +145,7 @@
 
 			// [목록보기] id="btn_review_list"
 			$("#btn_review_list").on("click", function() {
-				location.href="/admin/review/rev_list";
+				location.href="/admin/community/review/rev_list";
 			});
 
 			//[별졈 표시]

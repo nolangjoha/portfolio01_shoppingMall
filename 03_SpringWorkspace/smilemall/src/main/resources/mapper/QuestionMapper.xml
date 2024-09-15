@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smilemall.basic.question.QuestionMapper">
+
+	<!-- [문의목록] -->
+	<select id="question_list" parameterType="map" resultType="QuestionVo">
+		SELECT 
+		    qa_code, 
+		    mbsp_id, 
+		    pro_num, 
+		    qa_title, 
+		    qa_content, 
+		    qa_date, 
+		    qa_admin_reply_content, 
+		    qa_admin_reply_date, 
+		    qa_admin_reply_status		    
+		FROM (
+			SELECT /*+ INDEX_DESC(qa_tbl pk_qa_code) */
+				ROWNUM AS RN, 
+				qa_code, 
+			    mbsp_id, 
+			    pro_num, 
+			    qa_title, 
+			    qa_content, 
+			    qa_date, 
+			    qa_admin_reply_content, 
+			    qa_admin_reply_date, 
+			    qa_admin_reply_status
+			FROM
+				qa_tbl
+			WHERE
+				pro_num = #{pro_num}
+			AND
+				<![CDATA[
+					ROWNUM <= (#{cri.pageNum} * #{cri.amount})
+				]]>
+			)
+		WHERE
+		    RN > (#{cri.pageNum} - 1) * #{cri.amount}
+	</select>
+
+	<!-- [전체 문의개수] -->
+	<select id="getCountQuestionByPro_num">
+		SELECT
+			COUNT(*)
+		FROM
+			qa_tbl
+		WHERE
+			pro_num = #{pro_num}
+	</select>
+
+	<!-- [상품문의 저장]  -->
+	<insert id="question_save" parameterType="QuestionVo">
+		INSERT INTO 
+			qa_tbl(
+				qa_code,
+			    mbsp_id,
+			    pro_num,
+			    qa_title,
+			    qa_content)
+		VALUES (
+			SEQ_QA_CODE.NEXTVAL,
+			#{mbsp_id},
+			#{pro_num},
+			#{qa_title},
+			#{qa_content})
+	</insert>
+
+	<!-- [상품문의 삭제] -->
+	<delete id="question_delete" parameterType="Long">
+		DELETE FROM
+			qa_tbl
+		WHERE
+			qa_code = #{qa_code}
+	</delete>
+
+	<!-- [문의수정 페이지] -->
+	<select id="question_modify" parameterType="Long" resultType="QuestionVo">
+		SELECT 
+			qa_code,
+		    mbsp_id,
+		    pro_num,
+		    qa_title,
+		    qa_content,
+		    qa_date
+		FROM
+			qa_tbl
+		WHERE
+			qa_code = #{qa_code}
+	</select>
+
+	<!-- [문의수정] -->
+	<update id="question_update" parameterType="QuestionVo">
+		UPDATE
+			qa_tbl
+		SET
+			qa_title = #{qa_title}, 
+		    qa_content = #{qa_content},
+		    qa_date = SYSDATE
+		WHERE
+			qa_code = #{qa_code}
+	</update>
+
+
+
+
+
+
+</mapper>

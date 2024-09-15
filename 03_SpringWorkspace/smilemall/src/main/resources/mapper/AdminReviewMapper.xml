@@ -9,13 +9,13 @@
 				<trim prefix="OR">
 					<choose>
 						<when test="type == 'N'.toString()">
-							pro_name like '%' || #{keyword} || '%'
+							p.pro_name like '%' || #{keyword} || '%'
 						</when>
 						<when test="type == 'C'.toString()">
-							pro_num like '%' || #{keyword} || '%'
+							r.pro_num like '%' || #{keyword} || '%'
 						</when>
 						<when test="type == 'I'.toString()">
-							mbsp_id like '%' || #{keyword} || '%'
+							r.mbsp_id like '%' || #{keyword} || '%'
 						</when>
 					</choose>
 				</trim>
@@ -139,7 +139,7 @@
 		</foreach>
 	</delete>
 
-	<!-- [상품후기수정] -->
+	<!-- [관리자 답변등록] -->
 	<update id="admin_rev_reply" parameterType="ReviewVo">
 		UPDATE
 			review_tbl
@@ -151,7 +151,7 @@
 			re_code = #{re_code}
 	</update>
 
-	<!-- 관리자 답변수정] -->
+	<!-- [관리자 답변수정] -->
 	<update id="admin_rev_modify" parameterType="ReviewVo">
 		UPDATE
 			review_tbl
