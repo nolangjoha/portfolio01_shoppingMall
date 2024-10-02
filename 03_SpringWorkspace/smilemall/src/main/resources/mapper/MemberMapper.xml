@@ -72,7 +72,6 @@
 			mbsp_id = #{mbsp_id} 
 	</select>
 
-	
 	<!-- [아이디 찾기] -->
 	<select id="idfind" resultType="String">
 		SELECT
@@ -84,7 +83,6 @@
 		AND
 			mbsp_email = #{mbsp_email}	
 	</select>
-
 
 	<!-- [비밀번호 찾기] -->
 	<select id="pwfind" resultType="String" parameterType="map">
@@ -135,7 +133,6 @@
 			mbsp_id = #{mbsp_id}
 	</update>
 
-
 	<!-- 회원탈퇴 -->
 	<delete id="delete" parameterType="String">
 		DELETE FROM
@@ -155,4 +152,350 @@
 	</update>
 	
 	
+	
+	
+	<!-- 검색조건 : 키워드 -->
+	<sql id="criteria">
+		<trim prefix="(" suffix=")AND" prefixOverrides="OR">
+			<foreach collection="cri.typeArr" item="type">
+				<trim prefix="OR">
+					<choose>
+						<when test="type == 'N'.toString()">
+							p.pro_name like '%' || #{cri.keyword} || '%'
+						</when>
+						<when test="type == 'T'.toString()">
+							r.re_title like '%' || #{cri.keyword} || '%'
+						</when>
+						<when test="type == 'C'.toString()">
+							r.re_content like '%' || #{cri.keyword} || '%'
+						</when>
+						<when test="type == 'Q'.toString()">
+							q.qa_title like '%' || #{cri.keyword} || '%'
+						</when>
+						<when test="type == 'A'.toString()">
+							q.qa_content like '%' || #{cri.keyword} || '%'
+						</when>
+						<when test="type == 'O'.toString()">
+							o.ord_code like '%' || #{cri.keyword} || '%'
+						</when>											
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	</sql>
+	
+	<!-- 검색조건 : 날짜  -->
+	<sql id="period">
+		<if test="start_date != null and !start_date.equals('') and end_date != null and !end_date.equals('')">
+			<![CDATA[
+			
+				${date_column} >= to_date(#{start_date}) AND ${date_column} < to_date(#{end_date}) + 1 AND
+			]]>
+		
+		</if>
+	</sql>
+
+	<!-- 검색조건 : 운영자 답변여부 -->
+	<sql id="reply_status">
+		<if test="reply_status != null and !reply_status.equals('')">
+			${reply_column} = #{reply_status} AND
+		</if>
+	</sql>
+	
+	<!-- 검색조건 : 결제여부 -->
+	<sql id="pay_status">
+		<if test="p_status != null and !p_status.equals('')">
+			pi.p_status = #{p_status} AND
+		</if>
+	</sql>
+
+
+
+	<!-- [리뷰목록] -->
+	<select id="rev_list" parameterType="map" resultType="ReviewVo">
+		SELECT
+		    re_code, 
+		    mbsp_id, 
+		    pro_num,
+		    pro_name,
+		    pro_up_folder,
+		    pro_img,
+		    re_title, 
+		    re_content, 
+		    re_rate, 
+		    re_date, 
+		    re_admin_reply_content, 
+		    re_admin_reply_date, 
+		    re_admin_reply_status
+		FROM (
+		    SELECT
+		        /*+ INDEX_DESC (r PK_RE_CODE) USE_NL(r p) */
+		        ROWNUM AS RN, 
+		        r.re_code, 
+		        r.mbsp_id, 
+		        r.pro_num,
+		        p.pro_name,
+		        p.pro_up_folder,
+		        p.pro_img,
+		        r.re_title, 
+		        r.re_content, 
+		        r.re_rate, 
+		        r.re_date, 
+		        r.re_admin_reply_content, 
+		        r.re_admin_reply_date,
+		        r.re_admin_reply_status
+		    FROM
+		        review_tbl r
+		    JOIN
+		        product_tbl p ON p.pro_num = r.pro_num
+		    WHERE
+		    	r.mbsp_id = #{mbsp_id} AND
+				<include refid="reply_status">
+					<property name="reply_column" value="r.re_admin_reply_status"></property>
+				</include>
+				
+				<include refid="criteria"></include>
+				<include refid="period">
+					<property name="date_column" value="r.re_date"></property>
+				</include>
+				<![CDATA[
+					ROWNUM <= (#{cri.pageNum} * #{cri.amount})
+				]]>
+			)
+		WHERE
+			RN > (#{cri.pageNum} - 1) * #{cri.amount}
+	</select>
+	
+	<!-- [상품리뷰 전체데이터개수] -->
+	<select id="getTotalReviewCount" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			review_tbl r
+		JOIN
+			product_tbl p ON r.pro_num = p.pro_num
+		WHERE	
+			<include refid="reply_status">
+					<property name="reply_column" value="r.re_admin_reply_status"></property>
+				</include>
+			
+			<include refid="criteria"></include>
+			<include refid="period">
+				<property name="date_column" value="r.re_date"></property>
+			</include>
+			mbsp_id = #{mbsp_id}
+	</select>
+	
+	<!-- [리뷰상세보기] -->
+	<select id="review_more" parameterType="map" resultType="ReviewVo">
+		SELECT
+		  	r.re_code, 
+	        r.mbsp_id, 
+	        r.pro_num,
+	        p.pro_name,
+	        p.pro_up_folder,
+	        p.pro_img,
+	        r.re_title, 
+	        r.re_content, 
+	        r.re_rate, 
+	        r.re_date, 
+	        r.re_admin_reply_content, 
+	        r.re_admin_reply_date,
+	        r.re_admin_reply_status
+		FROM
+			review_tbl r
+		JOIN
+			product_tbl p ON r.pro_num = p.pro_num
+		WHERE
+			 r.mbsp_id = #{mbsp_id} 
+			 AND 
+			 re_code = #{re_code}
+	</select>
+	
+	
+
+	<!-- [문의목록] -->
+	<select id="question_list" parameterType="map" resultType="QuestionVo">
+		SELECT
+		    qa_code, 
+		    mbsp_id, 
+		    pro_num,
+		    pro_name,
+		    pro_up_folder,
+		    pro_img,
+		    qa_title, 
+		    qa_content, 
+		    qa_date, 
+		    qa_admin_reply_content, 
+		    qa_admin_reply_date, 
+		    qa_admin_reply_status
+		FROM (
+		    SELECT
+		        /*+ INDEX_DESC (q PK_QA_CODE) USE_NL(q p) */
+		        ROWNUM AS RN, 
+		        q.qa_code, 
+		        q.mbsp_id, 
+		        q.pro_num,
+		        p.pro_name,
+		        p.pro_up_folder,
+		        p.pro_img,
+		        q.qa_title, 
+		        q.qa_content, 
+		        q.qa_date, 
+		        q.qa_admin_reply_content, 
+		        q.qa_admin_reply_date,
+		        q.qa_admin_reply_status
+		    FROM
+		        qa_tbl q
+		    JOIN
+		        product_tbl p ON p.pro_num = q.pro_num
+		    WHERE
+		    	q.mbsp_id = #{mbsp_id} AND
+		    	<include refid="reply_status">
+					<property name="reply_column" value="q.qa_admin_reply_status"></property>
+				</include>
+				<include refid="criteria"></include>
+				<include refid="period">
+					<property name="date_column" value="q.qa_date"></property>
+				</include>
+				<![CDATA[
+					ROWNUM <= (#{cri.pageNum} * #{cri.amount})
+				]]>
+			)
+		WHERE
+			RN > (#{cri.pageNum} - 1) * #{cri.amount}
+	</select>
+	
+	<!-- [문의 전체 데이터 개수] -->
+	<select id="getTotalQuestionCount" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			qa_tbl q
+		JOIN
+			product_tbl p ON q.pro_num = p.pro_num
+		WHERE	
+			<include refid="reply_status">
+				<property name="reply_column" value="q.qa_admin_reply_status"></property>
+			</include>
+			<include refid="criteria"></include>
+			<include refid="period">
+				<property name="date_column" value="q.qa_date"></property>
+			</include>
+			mbsp_id = #{mbsp_id}
+	</select>
+
+	<!-- [문의상세보기] -->
+	<select id="question_more" parameterType="map" resultType="QuestionVo">
+		SELECT
+		  	q.qa_code, 
+	        q.mbsp_id, 
+	        q.pro_num,
+	        p.pro_name,
+	        p.pro_up_folder,
+	        p.pro_img,
+	        q.qa_title, 
+	        q.qa_content, 
+	        q.qa_date, 
+	        q.qa_admin_reply_content, 
+	        q.qa_admin_reply_date,
+	        q.qa_admin_reply_status
+		FROM
+			qa_tbl q
+		JOIN
+			product_tbl p ON q.pro_num = p.pro_num
+		WHERE
+			q.mbsp_id = #{mbsp_id} 
+			AND 
+			qa_code = #{qa_code}
+	</select>
+
+	
+	
+	<!-- [주문목록] -->
+	<select id="ord_list" parameterType="map" resultType="MemberOrderVo">
+		SELECT
+	        ord_code, 
+	        ord_regdate, 
+	        dt_amount,
+	        dt_price,
+	        pro_num,
+	        pro_up_folder,
+	        pro_img,
+	        pro_name,
+	        p_status
+	    FROM (
+	        SELECT
+	            ROWNUM AS RN,  
+	            ord_code, 
+	            ord_regdate, 
+	            dt_amount,
+	            dt_price,
+	            pro_num,
+	            pro_up_folder,
+	            pro_img,
+	            pro_name,
+	            p_status
+	        FROM (
+	            SELECT
+	                o.ord_code, 
+	                o.ord_regdate, 
+	                ot.dt_amount,
+	                ot.dt_price,
+	                p.pro_num,
+	                p.pro_up_folder,
+	                p.pro_img,
+	                p.pro_name,
+	                pi.p_status
+	            FROM
+	                order_tbl o
+	            JOIN
+	                ordetail_tbl ot ON o.ord_code = ot.ord_code
+	            JOIN    
+	                product_tbl p ON ot.pro_num = p.pro_num
+	            JOIN    
+	                PAYINFO pi ON o.ord_code = pi.ord_code
+	            WHERE
+	                o.mbsp_id = #{mbsp_id} AND  
+	                <include refid="criteria"></include>  
+	                <include refid="pay_status"></include>  
+	                <include refid="period">
+	                    <property name="date_column" value="o.ord_regdate"></property>
+	                </include>  
+	                1=1
+	            
+	            ORDER BY
+	                o.ord_code DESC  
+	        )
+	        WHERE
+	     	   <![CDATA[
+	            ROWNUM <= (#{cri.pageNum} * #{cri.amount}) 
+	            ]]>
+	    )
+	    WHERE
+	        RN > (#{cri.pageNum} - 1) * #{cri.amount} 
+	</select>	
+	
+	<!-- [주문목록 전체 갯수]  -->
+	<select id="getTotalOrderCount" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+		    order_tbl o
+		JOIN 
+			ordetail_tbl ot ON o.ord_code = ot.ord_code
+		JOIN 
+			product_tbl p ON ot.pro_num = p.pro_num
+		JOIN	
+            PAYINFO pi ON o.ord_code = pi.ord_code
+		WHERE
+			<include refid="pay_status"></include>
+           	<include refid="criteria"></include>
+			<include refid="period">
+				<property name="date_column" value="o.ord_regdate"></property>
+			</include>
+			o.mbsp_id = #{mbsp_id}
+	</select>
+
+		
 </mapper>

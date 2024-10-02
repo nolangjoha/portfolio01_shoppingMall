@@ -32,7 +32,7 @@ public class ReviewService {
 	}
 
 	// [상품후기 삭제]
-	void review_delete (Long re_code) {
+	public void review_delete (Long re_code) {
 		reviewMapper.review_delete(re_code);
 	}
 

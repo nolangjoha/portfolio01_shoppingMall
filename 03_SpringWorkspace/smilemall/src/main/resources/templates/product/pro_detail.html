@@ -544,6 +544,23 @@
 					}
 				});
 
+				//[핸들바 함수]
+				Handlebars.registerHelper("conditionalContentView", function(mbsp_id, content) {
+					let loginVo = [[${session.login_status}]]; // 로그인 상태
+					let loginId = ""; //로그인 아이디 초기화
+
+					if(loginVo !== null) { // 로그인상태가 없지 않다면 > 로그인 상태라면
+						loginId = [[${session.login_status == null ? '' : session.login_status.mbsp_id}]]; 
+					}
+
+					if(loginVo !== null && loginId == mbsp_id) { 
+						return new Handlebars.SafeString(content);
+					} else {
+						return "작성자만 확인 가능합니다.";
+					}
+
+				});
+
 				
 				// [상품후기작성 modal 출력] id="btn_review_modal"
 				$("#btn_review_modal").on("click", function() {
@@ -666,6 +683,9 @@
 							$("#re_content").val(result.re_content);
 							$("#re_code").val(result.re_code);
 							
+							// 별점초기화
+							$("p#star_re_rate a.re_rate").removeClass("on");
+
 							let re_rate =result.re_rate;
 							$("p#star_re_rate a.re_rate").each(function(index, item) {
 

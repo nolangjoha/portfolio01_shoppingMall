@@ -341,7 +341,7 @@ CREATE SEQUENCE SEQ_MAILING_TBL;
 COMMIT;
 
 
--- 11. 상품후기 테이블
+-- 11. 상품문의 테이블
 CREATE TABLE qa_tbl (
     qa_code     NUMBER         NOT NULL,      -- 문의번호
     mbsp_id     VARCHAR(50)    NOT NULL,      -- 문의작성자 아이디
@@ -382,12 +382,11 @@ VALUES (
     SEQ_QA_CODE.NEXTVAL, 
     'user100', 
     141, 
-    '상품문의제목', 
-    '상품문의내용'
+    '배송문의', 
+    '배송내용'
     );    
 
 COMMIT;
-
 
 
 

@@ -1,18 +1,38 @@
 package com.smilemall.basic.member;
 
-import org.apache.ibatis.annotations.Param;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.smilemall.basic.admin.order.AdminOrderService;
+import com.smilemall.basic.admin.order.OrderDetailInfoVo;
+import com.smilemall.basic.common.constants.Constants;
+import com.smilemall.basic.common.dto.Criteria;
+import com.smilemall.basic.common.dto.PageDTO;
 import com.smilemall.basic.mail.EmailDTO;
 import com.smilemall.basic.mail.EmailService;
+import com.smilemall.basic.order.OrderVo;
+import com.smilemall.basic.payinfo.PayInfoService;
+import com.smilemall.basic.payinfo.PayInfoVo;
+import com.smilemall.basic.question.QuestionService;
+import com.smilemall.basic.question.QuestionVo;
+import com.smilemall.basic.review.ReviewService;
+import com.smilemall.basic.review.ReviewVo;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -27,10 +47,12 @@ public class MemberController {
 
 	
 	private final PasswordEncoder passwordEncoder;
-	
 	private final MemberService memberService;
-	
 	private final EmailService emailService;
+	private final ReviewService reviewService;
+	private final QuestionService questionService;
+	private final AdminOrderService adminOrderService;
+	private final PayInfoService payInfoService;
 	
 	
 	// [회원가입 폼]
@@ -79,7 +101,6 @@ public class MemberController {
 		return entity;
 	}
 	
-	
 	// [회원가입 저장]
 	@PostMapping("/join")
 	public String joinOk(MemberVo vo, HttpServletRequest request) throws Exception {
@@ -96,13 +117,11 @@ public class MemberController {
 		return "redirect:/";  // 
 	}
 	
-	
 	// [로그인 폼]
 	@GetMapping("/login")
 	public void loginForm() {
 		log.info("loginForm 실행");
 	}
-	
 	
 	// [로그인 작업]
 	@PostMapping("/login")
@@ -141,7 +160,6 @@ public class MemberController {
  		
  		return "redirect:" + url; // 로그인 성공시 메인으로 이동
 	}
-
 	
 	// [로그아웃]
 	@GetMapping("/logout")
@@ -150,15 +168,13 @@ public class MemberController {
 		session.invalidate();
 		return "redirect:/";
 	}
-
 	
 	//[아이디 찾기 폼]
 	@GetMapping("/idfind")
 	public void idfindForm() {
 		log.info("idfindForm 실행");
 	}
-	
-	
+		
 	//[아이디 찾기 작업]
 	@PostMapping("/idfind")
 	public String idfndOk(String mbsp_name, String mbsp_email, String authcode, HttpSession session, RedirectAttributes rttr) throws Exception {
@@ -205,8 +221,6 @@ public class MemberController {
 		
 		return "redirect:" + url; 
 	}
-	
-	
 	
 	// [비밀번호 찾기 페이지]
 	@GetMapping("/pwfind")
@@ -261,7 +275,6 @@ public class MemberController {
 		return "redirect:" + url;  // 마이페이지 구현하면 로그인 화면나오게하고 비밀번호 변경 페이지로 이동하게 하기
 	}
 	
-	
 	//[마이페이지 출력]
 	@GetMapping("/mypage")
 	public void mypage(HttpSession session, Model model) throws Exception {
@@ -299,14 +312,11 @@ public class MemberController {
 		return "redirect:/member/mypage";
 	}
 	
-	
-	
 	//[비밀번호 변경 페이지]
 	@GetMapping("/changepw")
 	public void changePwForm() {
 		log.info("changePwForm출력");
 	}
-	
 	
 	// [비밀번호 변경하기]
 	@PostMapping("/changepw")
@@ -341,7 +351,6 @@ public class MemberController {
 		
 		return "redirect:/member/changepw";
 	}
-	
 	
 	// [회원탈퇴 페이지]
 	@GetMapping("/delete")
@@ -382,4 +391,283 @@ public class MemberController {
 		
 		return "redirect:" + url;
 	}
+	
+	
+	
+	// [나의 상품리뷰 페이지]
+	@GetMapping("/my_review")
+	public void my_review(HttpSession session, Model model, Criteria cri, @ModelAttribute("reply_status") String reply_status,
+			@ModelAttribute("start_date") String start_date,@ModelAttribute("end_date") String end_date) {
+		//만약 로그인 상태라면
+		if(session.getAttribute("login_status") != null) {
+			//로그인상태로 지정된 세션의 아이디를 mbsp_id에 대입한다.
+			String mbsp_id = ((MemberVo) session.getAttribute("login_status")).getMbsp_id();
+			//사용자가 넣은 아이디로 로그인한 정보들을 vo에 대입한다.
+			
+			log.info("리뷰출력 아이디 정보" + mbsp_id);
+		
+
+			//상품후기 출력 개수
+			cri.setAmount(Constants.MYPAGE_REVIEW_LIST_AMOUNT);
+			log.info("cri정보 :" + cri);	
+
+			log.info("reply_status정보 :" + reply_status);	
+			//상품후기 목록
+			List<ReviewVo> rev_list = memberService.rev_list(cri, mbsp_id, reply_status, start_date, end_date);
+						
+			//이미지 폴더 구분자 변환
+			rev_list.forEach(vo -> {
+				vo.setPro_up_folder(vo.getPro_up_folder().replace("\\", "/"));
+			});
+			
+			//상품후기 데이터 총합
+			int totalReviewCount = memberService.getTotalReviewCount(cri, mbsp_id, reply_status, start_date, end_date);
+			
+			model.addAttribute("rev_list", rev_list);
+			model.addAttribute("pageMaker", new PageDTO(cri, totalReviewCount));
+		}
+	
+	}
+	
+	// [리뷰상세보기]
+	@GetMapping("/review_more/{re_code}")
+	public ResponseEntity<ReviewVo> review_more(@PathVariable("re_code") Long re_code, HttpSession session) throws Exception {
+		
+		
+		String mbsp_id = ((MemberVo) session.getAttribute("login_status")).getMbsp_id();
+		log.info("리뷰상세 아이디 정보" + mbsp_id);
+		
+		ResponseEntity<ReviewVo> entity = null;
+		
+		ReviewVo rev_info = memberService.review_more(re_code, mbsp_id);
+		rev_info.setPro_up_folder(rev_info.getPro_up_folder().replace("\\", "/"));
+		
+		entity = new ResponseEntity<ReviewVo>(rev_info,HttpStatus.OK);
+		
+		log.info("상세보기 후기코드" + re_code); 
+		
+		return entity;
+	}	
+	
+	// [리뷰수정 페이지]
+	@GetMapping("/review_modify/{re_code}")
+	public ResponseEntity<ReviewVo> review_modify(@PathVariable("re_code") Long re_code) throws Exception {
+		
+		ResponseEntity<ReviewVo> entity = null;
+		
+		entity = new ResponseEntity<ReviewVo>(reviewService.review_modify(re_code),HttpStatus.OK);
+		
+		//log.info("수정후기코드" + re_code); 
+		
+		return entity;
+	}
+	
+	// [리뷰수정]
+	@PutMapping("/review_modify")
+	public ResponseEntity<String> review_modify(@RequestBody ReviewVo vo) throws Exception {
+		
+		ResponseEntity<String> entity = null;
+		
+		reviewService.review_update(vo);
+		
+		entity = new ResponseEntity<String>("success", HttpStatus.OK);
+		
+		return entity;
+	}
+	
+	// [상품후기 삭제]
+	@DeleteMapping("/review_delete/{re_code}")
+	public ResponseEntity<String> review_delete(@PathVariable("re_code") Long re_code) throws Exception  {
+		
+		ResponseEntity<String> entity = null;
+		
+		//log.info("삭제후기 코드: " + re_code);
+		
+		reviewService.review_delete(re_code);
+		entity = new ResponseEntity<String>("success", HttpStatus.OK);
+			
+		return entity;
+	}
+	
+	
+	
+	// [나의 문의 페이지]
+	@GetMapping("/my_question")
+	public void my_question(HttpSession session, Model model, Criteria cri, @ModelAttribute("reply_status") String reply_status,
+			@ModelAttribute("start_date") String start_date,@ModelAttribute("end_date") String end_date) {
+		//만약 로그인 상태라면
+		if(session.getAttribute("login_status") != null) {
+			//로그인상태로 지정된 세션의 아이디를 mbsp_id에 대입한다.
+			String mbsp_id = ((MemberVo) session.getAttribute("login_status")).getMbsp_id();
+			//사용자가 넣은 아이디로 로그인한 정보들을 vo에 대입한다.
+			
+			log.info("문의 아이디 정보" + mbsp_id);
+		
+
+			//상품문의 출력 개수
+			cri.setAmount(Constants.MYPAGE_QUESTION_LIST_AMOUNT);
+			log.info("cri정보 :" + cri);
+			log.info("reply_status정보 :" + reply_status);	
+			
+			//상품문의 목록
+			List<QuestionVo> question_list = memberService.question_list(cri, mbsp_id, reply_status, start_date, end_date);			
+			
+			//이미지 폴더 구분자 변환
+			question_list.forEach(vo -> {
+				vo.setPro_up_folder(vo.getPro_up_folder().replace("\\", "/"));
+			});
+			
+			//상품문의 데이터 총합
+			int totalQuestionCount = memberService.getTotalQuestionCount(cri, mbsp_id, reply_status, start_date, end_date);
+			
+			
+			model.addAttribute("question_list", question_list);
+			model.addAttribute("pageMaker", new PageDTO(cri, totalQuestionCount));
+		}
+	
+	}
+	
+	// [문의상세보기]
+	@GetMapping("/question_more/{qa_code}")
+	public ResponseEntity<QuestionVo> question_more(@PathVariable("qa_code") Long qa_code, HttpSession session) throws Exception {
+		
+		
+		String mbsp_id = ((MemberVo) session.getAttribute("login_status")).getMbsp_id();
+		log.info("문의상세 아이디 정보" + mbsp_id);
+		
+		ResponseEntity<QuestionVo> entity = null;
+		
+		QuestionVo qa_info = memberService.question_more(qa_code, mbsp_id);
+		qa_info.setPro_up_folder(qa_info.getPro_up_folder().replace("\\", "/"));
+		
+		entity = new ResponseEntity<QuestionVo>(qa_info,HttpStatus.OK);
+		
+		log.info("상세보기 후기코드" + qa_code); 
+		
+		return entity;
+	}	
+	
+	// [문의수정 페이지]
+	@GetMapping("/question_modify/{qa_code}")
+	public ResponseEntity<QuestionVo> question_modify(@PathVariable("qa_code") Long qa_code) throws Exception {
+		
+		ResponseEntity<QuestionVo> entity = null;
+		
+		entity = new ResponseEntity<QuestionVo>(questionService.question_modify(qa_code),HttpStatus.OK);
+		
+		log.info("수정문의코드" + qa_code); 
+		
+		return entity;
+	}
+	
+	// [문의수정]
+	@PutMapping("/question_modify")
+	public ResponseEntity<String> question_modify(@RequestBody QuestionVo vo) throws Exception {
+		
+		ResponseEntity<String> entity = null;
+		
+		questionService.question_update(vo);
+		
+		entity = new ResponseEntity<String>("success", HttpStatus.OK);
+		
+		return entity;
+	}
+	
+	// [문의후기 삭제]
+	@DeleteMapping("/question_delete/{qa_code}")
+	public ResponseEntity<String> question_delete(@PathVariable("qa_code") Long qa_code) throws Exception  {
+		
+		ResponseEntity<String> entity = null;
+		
+		log.info("삭제문의 코드: " + qa_code);
+		
+		questionService.question_delete(qa_code);
+		entity = new ResponseEntity<String>("success", HttpStatus.OK);
+			
+		return entity;
+	}
+	
+	
+	
+	// [나의 주문내역 페이지]
+	@GetMapping("/my_order")
+	public void my_order(HttpSession session, Model model, Criteria cri,
+						@ModelAttribute("p_status")	String p_status,
+						@ModelAttribute("start_date") String start_date,
+						@ModelAttribute("end_date") String end_date
+						) throws Exception {
+		
+		//만약 로그인 상태라면
+		if(session.getAttribute("login_status") != null) {
+			//로그인상태로 지정된 세션의 아이디를 mbsp_id에 대입한다.
+			String mbsp_id = ((MemberVo) session.getAttribute("login_status")).getMbsp_id();
+			//사용자가 넣은 아이디로 로그인한 정보들을 vo에 대입한다.
+			
+			log.info("로그인 아이디 정보" + mbsp_id);
+		
+			//주문내역 출력 개수
+			cri.setAmount(Constants.MYPAGE_ORDER_LIST_AMOUNT);
+			//log.info("cri정보 :" + cri);
+			
+			//상품문의 목록
+			List<MemberOrderVo> order_list = memberService.ord_list(cri, mbsp_id, p_status, start_date, end_date);
+			
+			//이미지 폴더 구분자 변환
+			order_list.forEach(vo -> {
+				vo.setPro_up_folder(vo.getPro_up_folder().replace("\\", "/"));
+			});
+			
+			//상품문의 데이터 총합
+			int totalOrderCount = memberService.getTotalOrderCount(cri, mbsp_id, p_status, start_date, end_date);
+			
+			model.addAttribute("order_list", order_list);
+			model.addAttribute("pageMaker", new PageDTO(cri, totalOrderCount));
+			
+		}
+	
+	}
+	
+	// [주문상세정보]
+	@GetMapping("/order_detail_info")
+	public ResponseEntity<Map<String, Object>> order_detail_info(Long ord_code,Model model) throws Exception {
+		
+		ResponseEntity<Map<String, Object>> entity = null;
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		// [주문자정보(수령인:order_tbl)
+		OrderVo vo = adminOrderService.order_info(ord_code);
+		map.put("ord_basic", vo);
+		
+		// [주문자상세정보(상품:ordetail_tbl)]
+		List<OrderDetailInfoVo> ord_product_list = adminOrderService.order_detail_info(ord_code);
+		ord_product_list.forEach(ord_pro -> {
+			ord_pro.setPro_up_folder(ord_pro.getPro_up_folder().replace("\\", "/"));
+		});
+		map.put("ord_pro_list",ord_product_list);
+		
+		// [상품가격 총합(배송비제외)]
+		int totalProductPriceByOrder = adminOrderService.calculateTotalAmount(ord_code);
+		map.put("totalProductPriceByOrder", totalProductPriceByOrder);
+		
+		log.info("상품합계:" +  totalProductPriceByOrder);
+		
+		// [결제정보]
+		PayInfoVo p_vo = payInfoService.ord_pay_info(ord_code);
+		map.put("payinfo", p_vo);
+		
+		entity = new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
+		
+		return entity;
+		
+	}	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

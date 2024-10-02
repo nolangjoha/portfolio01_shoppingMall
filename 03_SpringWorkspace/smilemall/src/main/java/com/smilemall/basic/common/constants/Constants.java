@@ -16,6 +16,16 @@ public final class Constants {
 	public static final int QUESTION_LIST_AMOUNT = 5;
 	
 	
+	// 마이페이지 리뷰출력 게수
+	public static final int MYPAGE_REVIEW_LIST_AMOUNT = 3;
+	
+	// 마이페이지 리뷰출력 게수
+	public static final int MYPAGE_QUESTION_LIST_AMOUNT = 3;
+	
+	// 마이페이지 주문내역출력 게수
+	public static final int MYPAGE_ORDER_LIST_AMOUNT = 5;
+	
+	
 	// 관리자 주문목록 출력개수
 	public static final int AMIN_ORDER_LIST_AMOUNT = 3;
 	
@@ -33,4 +43,9 @@ public final class Constants {
 	
 	// 관리자 문의관리 목록 출력개수
 	public static final int AMIN_QUESTION_LIST_AMOUNT = 5;
+	
+	
+	
+	
+	
 }
