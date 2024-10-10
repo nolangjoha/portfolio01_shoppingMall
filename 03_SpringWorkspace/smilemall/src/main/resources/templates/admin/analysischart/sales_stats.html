@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{admin/layout/adminlayout}">
+	<!-- 각 페이지의 css 재정의-->		
+	<th:block layout:fragment="css">
+
+		<style>
+			
+			.chart-container {
+				position: relative;
+				height: 50vh;  /* 화면 높이의 50% */
+				width: 100%;   
+				margin: 0 auto; 
+			}
+
+		</style>
+	</th:block>	
+
+    <th:block layout:fragment = "content">
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<section th:replace="~{admin/analysischart/analysischart_top_menu}"></section>
+
+			<!-- Main content -->
+			<section class="content container-fluid">
+
+				<div class="row">
+					<div class="col-md-12">
+						<div class="box box-primary">
+							<div class="box-header with-border">
+								<h3 class="box-title mt-5" style="font-weight:bold;">총매출현황</h3>
+							</div>
+
+							<div class="box-body">
+
+								<div style="margin-bottom: 15px;">
+									<button type="button" class="btn btn-info" id="dailyView">일자별</button>
+									<button type="button" class="btn btn-info" id="montlyView">월별</button>
+								</div>
+
+								<!--일자별 매출 차트-->
+								<div id="dailySalesSection">
+									<form action="" method="get">
+										<select name="year" id="year">
+											<option th:each="i : ${#numbers.sequence(2020, #dates.year(#dates.createNow()))}" th:value="${i}" th:text="${i}"
+											 th:selected="${i} == ${year}"></option>
+										</select>
+										년
+										<select name="month" id="month">
+											<th:block th:each="i : ${#numbers.sequence(1,12)}">
+												<option th:value="${i}" th:text="${i}" th:selected="${i} == ${month}"></option>
+											</th:block>
+										</select>
+										월
+										<button type="button" class="btn btn-primary" id="selectSearch">검색</button>
+									</form>
+									<br>
+									<div>
+										<span style="font-weight:bold;">해당 월의 매출 총액: <span id="totalMonthlySales">0</span>원</span>
+									</div>
+									<div class="chart-container">
+										<canvas id="dailySalesChart" width="300" height="100"></canvas>
+									</div>
+								</div>
+
+								
+								<!--월별 매출 차트-->
+								<div id="monthlySalesSection" style="display: none;">
+									<form action="" method="get">
+										<select name="year" id="yearMonthly">
+											<option th:each="i : ${#numbers.sequence(2020, #dates.year(#dates.createNow()))}" th:value="${i}" th:text="${i}"
+											 th:selected="${i} == ${year}"></option>
+										</select>
+										년
+										<button type="button" class="btn btn-primary" id="monthlySelectSearch">검색</button>
+									</form>
+									<br>
+									<div>
+										<span style="font-weight:bold;">해당 연도의 매출 총액: <span id="totalYearlySales">0</span>원</span>
+									</div>
+									<div class="chart-container">
+										<canvas id="monthlySalesChart" width="300" height="100"></canvas>
+									</div>
+								</div>
+
+								
+
+							</div>
+
+
+
+
+							
+							
+						</div>
+					</div>
+				</div>
+
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+    </th:block>
+
+
+    <th:block layout:fragment = "script">
+      <script>
+
+		// 전역변수
+		let dailySalesChart = null;  // 일일매출 차트 
+		let monthlySalesChart = null; // 월별매출차트
+
+		$(document).ready(function(){
+
+				// [페이지 로딩 시 차트 데이터 호출]
+				dailySalesChartData();
+
+
+				// ['일자별'버튼 클릭시 일일 매출 차트 출력]
+				$("#dailyView").on("click", function() {
+					$("#dailySalesSection").show();
+					$("#monthlySalesSection").hide();
+
+					if(dailySalesChart) {
+						dailySalesChart.destroy();
+						dailySalesChart = null;
+					}
+
+					dailySalesChartData();
+				});
+
+				// ['월별'버튼 클릭시 일일 매출 차트 출력]
+				$("#montlyView").on("click", function() {
+					$("#monthlySalesSection").show();
+					$("#dailySalesSection").hide();
+
+					if(monthlySalesChart) {
+						monthlySalesChart.destroy();
+						monthlySalesChart = null;
+					}
+
+					monthlySalesChartData();
+				});
+
+				// [일일매출 검색 시]
+				$("#selectSearch").on("click", function() {
+					//console.log("일일매출 검색");
+
+					if (dailySalesChart !== undefined) {
+						dailySalesChart.destroy();
+						dailySalesChart = null;
+					} 
+					dailySalesChartData();  
+				});
+
+				// [월매출 검색 시]
+				$("#monthlySelectSearch").on("click", function() {
+					//console.log("월매출 검색");
+
+					if (monthlySalesChart !== undefined) {
+						monthlySalesChart.destroy();
+						monthlySalesChart = null;
+					} 
+					monthlySalesChartData();  
+				});
+
+
+				//[함수] 일일매출 차트 데이터 호출 및 구현
+				function dailySalesChartData() {
+					$.ajax({
+						url : '/admin/analysischart/dailySalesStatusByMonth',
+						type: 'get',
+						data : {year : $("#year").val(), month : $("#month").val()},
+						dataType : 'json',
+						success:function(result) {
+							//console.log("일일매출 결과", result);
+
+							//연도 및 날짜
+							let year = parseInt($("#year").val());
+							let month = parseInt($("#month").val());
+							let daysInMonth = new Date(year, month, 0).getDate(); // 선택 월의 마지막 일자
+
+							// 데이터 변수
+							let labelNames = Array.from({ length: daysInMonth}, (_, i) => String(i + 1) + "일"); //x축 : 일자
+							let salesPriceData = Array(daysInMonth).fill(0); // 0으로 초기화 // y축 : 매출합계
+							let totalSales = 0; // 월별 총 매출 합계
+
+							// 데이터 유무에 따라 출력
+							if(result.length === 0) {
+								labelNames = ['데이터 없음'];
+								salesPriceData = [0];
+							} else {
+								$.each(result, function() {
+									let dayIndex = parseInt(this['SALES_DAY']) - 1;  //x축 : 일자
+									salesPriceData[dayIndex] = this['SALES_TOTAL'];  // y축 : 매출합계
+									totalSales += this['SALES_TOTAL']; // 월별 총 매출 합계
+								});
+							}
+							
+							//월별 총 매출합계액 표시
+							$("#totalMonthlySales").text(totalSales.toLocaleString());
+
+							// 차트 생성
+							let dCt = document.getElementById('dailySalesChart');
+								dailySalesChart = new Chart(dCt, {
+									type: 'bar',
+									data: {
+										labels: labelNames,
+										datasets: [
+											{
+												label: '일별매출',
+												data: salesPriceData,
+												backgroundColor: 'rgba(102, 204, 255, 0.2)',
+												borderColor: 'rgba(102, 204, 255, 1)',
+												borderWidth: 1
+											}
+										]
+									},
+									options: {
+										responsive: true,
+										maintainAspectRatio: false,
+										scales: {
+											y: {
+												beginAtZero: true
+											}
+										}
+									}
+								});
+
+
+							
+							
+							
+						}
+					});
+				}
+
+				//[함수] 월매출 차트 데이터 호출 및 구현
+				function monthlySalesChartData() {
+					$.ajax({
+						url : '/admin/analysischart/monthlySalesStatsByYear',
+						type: 'get',
+						data : {year : $("#yearMonthly").val()},
+						dataType : 'json',
+						success:function(result) {
+							//console.log("월별매출결과", result);
+
+							// 데이터 변수
+							let labelNames =  ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']; //x축 : 월
+							let salesPriceData = Array(12).fill(0); // 0으로 초기화 // y축 : 매출합계
+							let totalYearlySales = 0; // 연간 총 매출 합계
+
+							// 데이터 유무에 따라 출력
+							if(result.length === 0) {
+								labelNames = ['데이터 없음'];
+								salesPriceData = [0];
+							} else {
+								$.each(result, function() {
+									let monthIndex = parseInt(this['SALES_MONTH']) - 1;  //x축 : 일자
+									salesPriceData[monthIndex] = this['SALES_TOTAL'];  // y축 : 매출합계
+									totalYearlySales += this['SALES_TOTAL']; // 연간 총 매출 합계
+								});
+							}
+							
+							//월별 총 매출합계액 표시
+							$("#totalYearlySales").text(totalYearlySales.toLocaleString());
+
+							// 차트 생성
+							let mCt = document.getElementById('monthlySalesChart');
+								monthlySalesChart = new Chart(mCt, {
+									type: 'bar',
+									data: {
+										labels: labelNames,
+										datasets: [
+											{
+												label: '월별매출',
+												data: salesPriceData,
+												backgroundColor: 'rgba(204, 000, 051, 0.2)',
+												borderColor: 'rgba(204, 000, 051, 1)',
+												borderWidth: 1
+											}
+										]
+									},
+									options: {
+										responsive: true,
+										maintainAspectRatio: false,
+										scales: {
+											y: {
+												beginAtZero: true
+											}
+										}
+									}
+								});
+							
+						}
+					});
+				}
+
+
+
+			}); // ready 끝.
+      
+      
+      </script>
+    </th:block>
+
+
+</html>

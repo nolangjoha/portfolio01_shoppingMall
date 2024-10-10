@@ -45,6 +45,8 @@ public interface MemberMapper {
 	void last_login(String mbsp_id);
 	
 	
+	
+	// [상품리뷰 목록]
 	List<ReviewVo> rev_list(@Param("cri") Criteria cri, @Param("mbsp_id") String mbsp_id,  @Param("reply_status") String reply_status,
 			@Param("start_date") String start_date, @Param("end_date") String end_date);
 

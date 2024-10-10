@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smilemall.basic.admin.analysischart.AnalysisChartMapper">
+
+	<!-- <월간 일일매출 현황> -->
+	<select id="dailySalesStatsByMonth" parameterType="String" resultType="hashmap">
+		select
+			TO_CHAR(o.ord_regdate, 'DD') as sales_day,
+			sum(d.dt_amount * d.dt_price) as sales_total
+		from
+			order_tbl o
+		inner join
+			ordetail_tbl d
+		on
+			o.ord_code = d.ord_code
+		where
+			TO_CHAR(o.ord_regdate, 'YYYY/MM') = #{ord_month}
+		group by
+			TO_CHAR(o.ord_regdate, 'DD')
+		order by
+			sales_day
+	</select>
+
+	<!-- <연간 월매출 현황> -->
+	<select id="monthlySalesStatsByYear" parameterType="String" resultType="hashmap">
+		select
+			TO_CHAR(o.ord_regdate, 'MM') as sales_month,
+			sum(d.dt_amount * d.dt_price) as sales_total
+		from
+			order_tbl o
+		inner join
+			ordetail_tbl d
+		on
+			o.ord_code = d.ord_code
+		where
+			TO_CHAR(o.ord_regdate, 'YYYY') = #{ord_year}
+		group by
+			TO_CHAR(o.ord_regdate, 'MM')
+		order by
+			sales_month
+	</select>
+	
+
+
+	<!--  <월간 상위카테고리 매출 현황> -->
+	<select id="monthlySalesStatusByTopCategory" parameterType="String" resultType="hashmap">
+		select
+			c.cat_name primary_cd,
+			sum(d.dt_amount * d.dt_price) sales_p
+		from
+			product_tbl p 
+		inner join 
+			ordetail_tbl d
+		on
+			p.pro_num = d.pro_num
+		inner join (
+			select 
+				c2.cat_name,
+				c1.cat_code 
+			from 
+				category_tbl c1, category_tbl c2
+			where
+				c1.cat_prtcode = c2.cat_code
+			) c
+		on 
+			p.cat_code = c.cat_code
+		inner join
+			order_tbl o
+		on
+			o.ord_code = d.ord_code
+		and
+			TO_CHAR(o.ord_regdate, 'YYYY/MM') = #{ord_date}
+		group by
+			c.cat_name, TO_CHAR(o.ord_regdate, 'YYYY/MM')
+		order by
+			c.cat_name
+	</select> 
+
+	<!--  <월간 하위카테고리 매출 현황> --> 
+	<select id="monthlySalesStatusBySubCategory" parameterType="String" resultType="hashmap">
+		select 
+	        c.cat_name sub_category_name, 
+	        sum(d.dt_amount * d.dt_price) sales_p
+	    from 
+	        product_tbl p 
+	    inner join 
+	    	ordetail_tbl d
+	    on 
+	        p.pro_num=d.pro_num
+	    inner join 
+    		category_tbl c 
+	    on 
+	    	p.cat_code=c.cat_code
+	    inner join 
+	        order_tbl o
+	    on 
+	        o.ord_code=d.ord_code
+	    and 
+	        TO_CHAR(o.ord_regdate, 'YYYY/MM') =  #{ord_date}               
+	    group by 
+	        c.cat_name, TO_CHAR(o.ord_regdate, 'YYYY/MM')
+	    order by 
+	        c.cat_name
+	</select> 
+
+	<!--  <연간 상위카테고리 매출 현황> -->
+	<select id="yearlySalesStatusByTopCategory" parameterType="String" resultType="hashmap">
+		select
+			c.cat_name primary_cd,
+			sum(d.dt_amount * d.dt_price) sales_p
+		from
+			product_tbl p 
+		inner join 
+			ordetail_tbl d
+		on
+			p.pro_num = d.pro_num
+		inner join (
+			select 
+				c2.cat_name,
+				c1.cat_code 
+			from 
+				category_tbl c1, category_tbl c2
+			where
+				c1.cat_prtcode = c2.cat_code
+			) c
+		on 
+			p.cat_code = c.cat_code
+		inner join
+			order_tbl o
+		on
+			o.ord_code = d.ord_code
+		and
+			TO_CHAR(o.ord_regdate, 'YYYY') = #{ord_year}
+		group by
+			c.cat_name, TO_CHAR(o.ord_regdate, 'YYYY')
+		order by
+			c.cat_name
+	</select> 
+
+	<!-- <연간 하위카테고리 매출 현황> --> 
+	<select id="yearlySalesStatusBySubCategory" parameterType="String" resultType="hashmap">
+		select 
+	        c.cat_name sub_category_name, 
+	        sum(d.dt_amount * d.dt_price) sales_p
+	    from 
+	        product_tbl p 
+	    inner join 
+	    	ordetail_tbl d
+	    on 
+	        p.pro_num=d.pro_num
+	    inner join 
+    		category_tbl c 
+	    on 
+	    	p.cat_code=c.cat_code
+	    inner join 
+	        order_tbl o
+	    on 
+	        o.ord_code=d.ord_code
+	    and 
+	        TO_CHAR(o.ord_regdate, 'YYYY') =  #{ord_year}               
+	    group by 
+	        c.cat_name, TO_CHAR(o.ord_regdate, 'YYYY')
+	    order by 
+	        c.cat_name
+	</select> 
+
+
+
+	<!-- <월간 판매상품 통계> -->
+ 	<select id="monthlyProductSalesRank" parameterType="String" resultType="hashmap">
+ 		select
+ 			p.pro_num,
+ 			p.pro_name,
+ 			sum(d.dt_amount) as total_sales,
+ 			p.pro_price,
+ 			sum(d.dt_amount * d.dt_price) total_sales_price,
+ 			RANK() OVER (ORDER BY sum(d.dt_amount) DESC) as sales_rank
+ 		from
+ 			product_tbl p
+ 		inner join
+ 			ordetail_tbl d
+ 		on
+ 			p.pro_num = d.pro_num
+ 		inner join
+ 			order_tbl o
+ 		on
+ 			o.ord_code = d.ord_code
+ 		where
+ 			TO_CHAR(o.ord_regdate, 'YYYY/MM') = #{ord_month}
+ 		group by
+ 			p.pro_num, p.pro_name, p.pro_price
+ 		order by
+ 			total_sales desc
+ 	</select>
+
+	<!--  <연간 판매상품 통계> -->
+ 	<select id="yearlyProductSalesRank" parameterType="String" resultType="hashmap">
+ 		select
+ 			p.pro_num,
+ 			p.pro_name,
+ 			sum(d.dt_amount) as total_sales,
+ 			p.pro_price,
+ 			sum(d.dt_amount * d.dt_price) total_sales_price,
+ 			RANK() OVER (ORDER BY sum(d.dt_amount) DESC) as sales_rank
+ 		from
+ 			product_tbl p
+ 		inner join
+ 			ordetail_tbl d
+ 		on
+ 			p.pro_num = d.pro_num
+ 		inner join
+ 			order_tbl o
+ 		on
+ 			o.ord_code = d.ord_code
+ 		where
+ 			TO_CHAR(o.ord_regdate, 'YYYY') = #{ord_year}
+ 		group by
+ 			p.pro_num, p.pro_name, p.pro_price
+ 		order by
+ 			total_sales desc
+ 	</select>
+
+</mapper>

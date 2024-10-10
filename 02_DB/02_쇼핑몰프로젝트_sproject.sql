@@ -387,6 +387,3 @@ VALUES (
     );    
 
 COMMIT;
-
-
-

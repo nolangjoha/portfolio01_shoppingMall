@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{admin/layout/adminlayout}">
+	<!-- 각 페이지의 css 재정의-->		
+	<th:block layout:fragment="css">
+		<style>
+			
+			.container {
+				width: 80%;
+				margin: 0 auto;
+			}
+			.table-container {
+				margin-top: 20px;
+			}
+		
+		</style>
+	</th:block>	
+
+    <th:block layout:fragment = "content">
+		<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+		<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<section th:replace="~{admin/analysischart/analysischart_top_menu}"></section>
+
+			<!-- Main content -->
+			<section class="content container-fluid">
+
+				<div class="row">
+					<div class="col-md-12">
+						<div class="box box-primary">
+							<div class="box-header with-border">
+								<h3 class="box-title mt-5" style="font-weight:bold;">판매상품통계</h3>
+							</div>
+
+							<div class="box-body">
+
+								<div style="margin-bottom: 15px;">
+									<button type="button" class="btn btn-info" id="montlyView">월별</button>
+									<button type="button" class="btn btn-info" id="yearlyView">연도별</button>
+								</div>
+
+								<!--월별 판매상품순위-->
+								<div id="monthlySalesSection">
+									<form action="" method="get">
+										<select name="year" id="year">
+											<option th:each="i : ${#numbers.sequence(2020, #dates.year(#dates.createNow()))}" th:value="${i}" th:text="${i}"
+											 th:selected="${i} == ${year}"></option>
+										</select>
+										년
+										<select name="month" id="month">
+											<th:block th:each="i : ${#numbers.sequence(1,12)}">
+												<option th:value="${i}" th:text="${i}" th:selected="${i} == ${month}"></option>
+											</th:block>
+										</select>
+										월
+										<button type="button" class="btn btn-primary" id="selectSearch">검색</button>
+									</form>
+									 <!-- 상품 판매 순위 테이블 -->
+									<div class="table-container">
+										<table id="productSalesTable" class="display" style="width:100%">
+											<thead>
+												<tr>
+													<th style="width: 10%;">순위</th>
+													<th style="width: 10%;">상품코드</th>
+													<th style="width: 30%;">상품명</th>
+													<th style="width: 10%;">판매개수</th>
+													<th style="width: 20%;">개별가격</th>
+													<th style="width: 20%;">총판매금액</th>
+												</tr>
+											</thead>
+											<tbody>
+												<!-- 행 동적추가 -->
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+
+								<!--연도별 판매상품순위-->
+								<div id="yearlySalesSection" style="display: none;">
+									<form action="" method="get">
+										<select name="year" id="yearMonthly">
+											<option th:each="i : ${#numbers.sequence(2020, #dates.year(#dates.createNow()))}" th:value="${i}" th:text="${i}"
+											 th:selected="${i} == ${year}"></option>
+										</select>
+										년
+										
+										<button type="button" class="btn btn-primary" id="yearlySelectSearch">검색</button>
+									</form>
+									 <!-- 상품 판매 순위 테이블 -->
+									<div class="table-container">
+										<table id="yearlyProductSalesTable" class="display" style="width:100%">
+											<thead>
+												<tr>
+													<th style="width: 10%;">순위</th>
+													<th style="width: 10%;">상품코드</th>
+													<th style="width: 30%;">상품명</th>
+													<th style="width: 10%;">판매개수</th>
+													<th style="width: 20%;">개별가격</th>
+													<th style="width: 20%;">총판매금액</th>
+												</tr>
+											</thead>
+											<tbody>
+												<!-- 행 동적추가 -->
+											</tbody>
+										</table>
+									</div>
+								</div>
+								
+								
+
+							</div>
+
+
+
+
+							
+							
+						</div>
+					</div>
+				</div>
+
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+    </th:block>
+
+
+    <th:block layout:fragment = "script">
+      <script>
+
+		// 전역변수
+		let productSalesTable = null;
+		let yearlyProductSalesTable = null;
+
+		$(document).ready(function(){
+
+			// DataTables객체로 초기화
+			productSalesTable = $('#productSalesTable').DataTable();
+			yearlyProductSalesTable = $("#yearlyProductSalesTable").DataTable();
+
+			loadProductSalesTableData();
+
+			// '월별'버튼 클릭시 월별 판매상품순위
+			$("#montlyView").on("click", function() {
+				$("#monthlySalesSection").show();
+				$("#yearlySalesSection").hide();
+				productSalesTable.clear().draw();
+				loadProductSalesTableData();
+			});
+
+			// '연도별'버튼 클릭시 연도 판매상품순위
+			$("#yearlyView").on("click", function() {
+				$("#yearlySalesSection").show();
+				$("#monthlySalesSection").hide();
+				yearlyProductSalesTable.clear().draw();
+				loadYearlyProductSalesTableData();
+			});
+
+			// '월별검색' 버튼 클릭 시 데이터 로드 및 테이블 생성
+			$("#selectSearch").on("click", function() {
+				//console.log("월별검색 버튼 클릭");
+				productSalesTable.clear().draw();
+				loadProductSalesTableData();
+			});
+	 
+			// '연도별검색' 버튼 클릭 시 데이터 로드 및 테이블 생성
+			$("#yearlySelectSearch").on("click", function() {
+				//console.log("연도별검색 버튼 클릭");
+				yearlyProductSalesTable.clear().draw();
+				loadYearlyProductSalesTableData();
+			});
+
+			// [함수] 월간 상품판매 순위 차트
+			function loadProductSalesTableData() {
+				$.ajax({
+					url: '/admin/analysischart/monthlyProductSalesRank',
+					type: 'get',
+					data: { year: $("#year").val(), month: $("#month").val() },
+					dataType: 'json',
+					success: function(result) {
+						//console.log("월별 상품 판매 순위 데이터:", result);
+	
+						// 서버로부터 받은 데이터를 테이블에 추가
+						$.each(result, function(index, item) {
+							productSalesTable.row.add([
+								item['SALES_RANK'], // 순위
+								item['PRO_NUM'],    // 상품코드
+								item['PRO_NAME'], // 상품명
+								item['TOTAL_SALES'].toLocaleString(),   // 판매 개수
+								item['PRO_PRICE'], // 개별판매가격
+								item['TOTAL_SALES_PRICE'].toLocaleString() // 판매금액
+							]).draw(false);  
+						});
+					},
+					error: function(xhr, status, error) {
+						console.error("실패:", error);
+					}
+				});
+			}
+			
+			// [함수]  연간 상품판매 순위 차트
+			function loadYearlyProductSalesTableData() {
+				$.ajax({
+					url: '/admin/analysischart/yearlyProductSalesRank',
+					type: 'get',
+					data: { year: $("#yearMonthly").val()},
+					dataType: 'json',
+					success: function(result) {
+						//console.log("연도별 상품 판매 순위 데이터:", result);
+
+						// 서버로부터 받은 데이터를 테이블에 추가
+						$.each(result, function(index, item) {
+							yearlyProductSalesTable.row.add([
+								item['SALES_RANK'], // 순위
+								item['PRO_NUM'],    // 상품코드
+								item['PRO_NAME'], // 상품명
+								item['TOTAL_SALES'].toLocaleString(),   // 판매 개수
+								item['PRO_PRICE'], // 개별판매가격
+								item['TOTAL_SALES_PRICE'].toLocaleString() // 판매금액
+							]).draw(false); 
+						});
+					},
+					error: function(xhr, status, error) {
+						console.error("실패:", error);
+					}
+				});
+			}
+
+			}); // ready 끝.
+      
+      
+      </script>
+    </th:block>
+
+
+</html>

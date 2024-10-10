@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{admin/layout/adminlayout}">
+
+	<!-- 각 페이지의 css 재정의-->		
+	<th:block layout:fragment="css">
+
+		<style>
+			
+			.chart-container {
+				position: relative; 
+				height: 50vh;  /* 화면 높이의 50% */
+				width: 100%; 
+				margin: 0 auto; 
+			}
+
+		</style>
+	</th:block>	
+
+    <th:block layout:fragment = "content">
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<section th:replace="~{admin/analysischart/analysischart_top_menu}"></section>
+
+			<!-- Main content -->
+			<section class="content container-fluid">
+
+				<div class="row">
+					<div class="col-md-12">
+						<div class="box box-primary">
+
+							<div class="box-header with-border">
+								<h3 class="box-title mt-5" style="font-weight:bold;">카테고리별 매출현황</h3>
+							</div>
+							
+							<div class="box-body">
+
+								<div style="margin-bottom: 15px;">
+									<button type="button" class="btn btn-info" id="montlyView">월별</button>
+									<button type="button" class="btn btn-info" id="yearlyView">연도별</button>
+								</div>
+
+								<!--월별 매출차트-->
+								<div id="monthlySalesSection">
+									<form action="" method="get">
+										<select name="year" id="year">
+											<option th:each="i : ${#numbers.sequence(2020, #dates.year(#dates.createNow()))}" th:value="${i}" th:text="${i}"
+											 th:selected="${i} == ${year}"></option>
+										</select>
+										년
+										<select name="month" id="month">
+											<th:block th:each="i : ${#numbers.sequence(1,12)}">
+												<option th:value="${i}" th:text="${i}" th:selected="${i} == ${month}"></option>
+											</th:block>
+										</select>
+										월
+										<button type="button" class="btn btn-primary" id="selectSearch">검색</button>
+									</form>
+
+									<h4 style="font-weight: bold;">[상위 카테고리별 매출현황]</h4>
+									<div>
+										<span style="font-weight:bold;">해당 월의 매출 총액: <span id="topCategoryTotalSales">0</span>원</span>
+									</div>
+									<div class="chart-container">
+										<canvas id="topCategorySalesChart" width="300" height="100"></canvas>
+									</div>
+	
+									<h4 style="font-weight: bold;">[하위 카테고리별 매출현황]</h4>
+									<div>
+										<span style="font-weight:bold;">해당 월의 매출 총액: <span id="subCategoryTotalSales">0</span>원</span>
+									</div>
+									<div class="chart-container">
+										<canvas id="subCategorySalesChart" width="300" height="100"></canvas>
+									</div>
+								</div>
+								
+								<!--연도별 매출차트-->
+								<div id="yearlySalesSection" style="display: none;">
+									<form action="" method="get">
+										<select name="year" id="yearlyYear">
+											<option th:each="i : ${#numbers.sequence(2020, #dates.year(#dates.createNow()))}" th:value="${i}" th:text="${i}"
+											th:selected="${i} == ${year}"></option>
+										</select>
+										년
+										
+										<button type="button" class="btn btn-primary" id="yearlySelectSearch">검색</button>
+									</form>
+
+									<h4 style="font-weight: bold;">[상위 카테고리별 매출현황]</h4>
+									<div>
+										<span style="font-weight:bold;">해당 연도의 매출 총액: <span id="yearlytopCategorySales">0</span>원</span>
+									</div>
+									<div class="chart-container">
+										<canvas id="yearlyTopCategorySalesChart" width="300" height="100"></canvas>
+									</div>
+		
+									<h4 style="font-weight: bold;">[하위 카테고리별 매출현황]</h4>
+									<div>
+										<span style="font-weight:bold;">해당 연도의 매출 총액: <span id="yearlysubCategorySales">0</span>원</span>
+									</div>
+									<div class="chart-container">
+										<canvas id="yearlySubCategorySalesChart" width="300" height="100"></canvas>
+									</div>
+								</div>
+
+							</div>
+							
+						</div>
+					</div>
+				</div>
+
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+    </th:block>
+
+
+    <th:block layout:fragment = "script">
+      <script>
+
+		// 전역변수
+		let topCategoryChart = null; // 월별 상위 카테고리 매출 차트
+		let subCategoryChart = null; // 월별 하위 카테고리 매출 차트
+		let yearlyTopCategoryChart = null; // 연도별 상위 카테고리 매출 차트
+		let yearlySubCategoryChart = null; // 연도별 하위 카테고리 매출 차트
+
+
+		$(document).ready(function(){
+
+				// [페이지 로딩 시 차트 데이터 호출]
+				chartCategoryData();
+
+				// ['월별'버튼 클릭시 월별 매출 차트 출력]
+				$("#montlyView").on("click", function() {
+					$("#monthlySalesSection").show();
+					$("#yearlySalesSection").hide();
+
+					if(topCategoryChart) {
+						topCategoryChart.destroy();
+						topCategoryChart = null;
+					}
+
+					if(subCategoryChart) {
+						subCategoryChart.destroy();
+						subCategoryChart = null;
+					}
+
+					chartCategoryData();
+				});
+
+				// ['연도별'버튼 클릭시 연도별 매출 차트 출력]
+				$("#yearlyView").on("click", function() {
+					$("#yearlySalesSection").show();
+					$("#monthlySalesSection").hide();
+
+					if(yearlyTopCategoryChart) {
+						yearlyTopCategoryChart.destroy();
+						yearlyTopCategoryChart = null;
+					}
+
+					if(yearlySubCategoryChart) {
+						yearlySubCategoryChart.destroy();
+						yearlySubCategoryChart = null;
+					}
+
+					yearlyChartCategoryData();
+				});
+
+				// ['월별' 검색시]
+				$("#selectSearch").on("click", function() {
+					//console.log("월 날짜 검색");
+
+					if (topCategoryChart !== undefined) {
+						topCategoryChart.destroy();
+						topCategoryChart = null;
+					} 
+
+					if (subCategoryChart !== undefined) {
+						subCategoryChart.destroy();
+						subCategoryChart = null;
+					}
+
+					chartCategoryData();  
+				});
+
+				// ['연도별'검색시]
+				$("#yearlySelectSearch").on("click", function() {
+					//console.log("연도날짜 검색");
+
+					if(yearlyTopCategoryChart) {
+						yearlyTopCategoryChart.destroy();
+						yearlyTopCategoryChart = null;
+					}
+
+					if(yearlySubCategoryChart) {
+						yearlySubCategoryChart.destroy();
+						yearlySubCategoryChart = null;
+					}
+
+					yearlyChartCategoryData();  
+				});
+
+
+
+				//[함수] 월별 카테고리별 매출 차트 데이터 호출 및 구현
+				function chartCategoryData() {
+					$.ajax({
+						url : '/admin/analysischart/monthlySalesStatusByCategories',
+						type: 'get',
+						data : {year : $("#year").val(), month : $("#month").val()},
+						dataType : 'json',
+						success:function(result) {
+							//("월별매출 결과", result);
+							
+							// [상위 카테고리] 데이터 변수
+							let topCategoryLabelNames = [];
+							let topCategorySalesPriceData = [];
+							let topCategoryTotalSales = 0; // 월별 총 매출 합계
+
+							// [상위 카테고리] 데이터 유무에 따라 다르게 표기
+							if(result.topCategorySalesData.length === 0) {
+								topCategoryLabelNames = ['데이터 없음'];
+								topCategorySalesPriceData = [0];
+							} else {
+								$.each(result.topCategorySalesData, function() {
+									topCategoryLabelNames.push(this['PRIMARY_CD']);  // 상위 카테고리명
+									topCategorySalesPriceData.push(this['SALES_P']);  // 매출 합계
+									topCategoryTotalSales += this['SALES_P']; //월별 총 매출 합계
+								});
+							}
+			
+							//월별 총 매출합계액 표시
+							$("#topCategoryTotalSales").text(topCategoryTotalSales.toLocaleString());
+
+							// [상위 카테고리] 차트 생성
+							let topCategoryChartCtx = document.getElementById('topCategorySalesChart');
+							topCategoryChart = new Chart(topCategoryChartCtx, {
+								type: 'bar',
+								data: {
+									labels: topCategoryLabelNames,
+									datasets: [
+										{
+											label: '상위 카테고리별 매출',
+											data: topCategorySalesPriceData,
+											backgroundColor: 'rgba(102, 204, 255, 0.2)',
+											borderColor: 'rgba(102, 204, 255, 1)',
+											borderWidth: 1
+										}
+									]
+								},
+								options: {
+									responsive: true,
+									maintainAspectRatio: false,
+									scales: {
+										y: {
+											beginAtZero: true
+										}
+									}
+								}
+							});
+
+
+							// [하위 카테고리] 데이터 변수
+							let subCategoryLabelNames = [];
+							let subCategorySalesPriceData = [];
+							let subCategoryTotalSales = 0; // 월별 총 매출 합계
+
+							// [하위 카테고리] 데이터 유무에 따라 다르게 표기
+							if(result.subCategorySalesData.length === 0) {
+								subCategoryLabelNames = ['데이터 없음'];
+								subCategorySalesPriceData = [0];
+							} else {
+								$.each(result.subCategorySalesData, function() {
+									subCategoryLabelNames.push(this['SUB_CATEGORY_NAME']);  // 하위 카테고리명
+									subCategorySalesPriceData.push(this['SALES_P']);  // 매출 합계
+									subCategoryTotalSales += this['SALES_P']; //월별 총 매출 합계
+								});
+							}
+
+							//월별 총 매출합계액 표시
+							$("#subCategoryTotalSales").text(subCategoryTotalSales.toLocaleString());
+
+							// [하위 카테고리] 차트 생성
+							let subCategoryChartCtx = document.getElementById('subCategorySalesChart');
+							subCategoryChart = new Chart(subCategoryChartCtx, {
+								type: 'bar',
+								data: {
+									labels: subCategoryLabelNames,
+									datasets: [
+										{
+											label: '하위 카테고리별 매출',
+											data: subCategorySalesPriceData,
+											backgroundColor: 'rgba(204, 000, 051, 0.2)',
+											borderColor: 'rgba(204, 000, 051, 1)',
+											borderWidth: 1
+										}
+									]
+								},
+								options: {
+									responsive: true,
+									maintainAspectRatio: false,
+									scales: {
+										y: {
+											beginAtZero: true
+										}
+									}
+								}
+							});
+						}
+					});
+				}
+
+
+				//[함수] 연도별 카테고리별 매출 차트 데이터 호출 및 구현
+				function yearlyChartCategoryData() {
+					$.ajax({
+						url : '/admin/analysischart/yearlySalesStatusByCategories',
+						type: 'get',
+						data : {year : $("#yearlyYear").val()},
+						dataType : 'json',
+						success:function(result) {
+							//console.log("연도별매출 결과", result);
+							
+							// [상위 카테고리] 데이터 변수
+							let topCategoryLabelNames = [];
+							let topCategorySalesPriceData = [];
+							let topCategoryTotalSales = 0; // 연도별 총 매출 합계
+
+							// [상위 카테고리] 데이터 유무에 따라 다르게 표기
+							if(result.yearlytopCategorySalesData.length === 0) {
+								topCategoryLabelNames = ['데이터 없음'];
+								topCategorySalesPriceData = [0];
+							} else {
+								$.each(result.yearlytopCategorySalesData, function() {
+									topCategoryLabelNames.push(this['PRIMARY_CD']);  // 상위 카테고리명
+									topCategorySalesPriceData.push(this['SALES_P']);  // 매출 합계
+									topCategoryTotalSales += this['SALES_P']; //연도별 총 매출 합계
+								});
+							}
+			
+							//월별 총 매출합계액 표시
+							$("#yearlytopCategorySales").text(topCategoryTotalSales.toLocaleString());
+
+							// [상위 카테고리] 차트 생성
+							let topCategoryChartCtx = document.getElementById('yearlyTopCategorySalesChart');
+							yearlyTopCategoryChart = new Chart(topCategoryChartCtx, {
+								type: 'bar',
+								data: {
+									labels: topCategoryLabelNames,
+									datasets: [
+										{
+											label: '상위 카테고리별 매출',
+											data: topCategorySalesPriceData,
+											backgroundColor: 'rgba(102, 204, 255, 0.2)',
+											borderColor: 'rgba(102, 204, 255, 1)',
+											borderWidth: 1
+										}
+									]
+								},
+								options: {
+									responsive: true,
+									maintainAspectRatio: false,
+									scales: {
+										y: {
+											beginAtZero: true
+										}
+									}
+								}
+							});
+
+
+							// [하위 카테고리] 데이터 변수
+							let subCategoryLabelNames = [];
+							let subCategorySalesPriceData = [];
+							let subCategoryTotalSales = 0; // 월별 총 매출 합계
+
+							// [하위 카테고리] 데이터 유무에 따라 다르게 표기
+							if(result.yearlysubCategorySalesData.length === 0) {
+								subCategoryLabelNames = ['데이터 없음'];
+								subCategorySalesPriceData = [0];
+							} else {
+								$.each(result.yearlysubCategorySalesData, function() {
+									subCategoryLabelNames.push(this['SUB_CATEGORY_NAME']);  // 하위 카테고리명
+									subCategorySalesPriceData.push(this['SALES_P']);  // 매출 합계
+									subCategoryTotalSales += this['SALES_P']; //연도별 총 매출 합계
+								});
+							}
+
+							//월별 총 매출합계액 표시
+							$("#yearlysubCategorySales").text(subCategoryTotalSales.toLocaleString());
+
+							// [하위 카테고리] 차트 생성
+							let subCategoryChartCtx = document.getElementById('yearlySubCategorySalesChart');
+							yearlySubCategoryChart = new Chart(subCategoryChartCtx, {
+								type: 'bar',
+								data: {
+									labels: subCategoryLabelNames,
+									datasets: [
+										{
+											label: '하위 카테고리별 매출',
+											data: subCategorySalesPriceData,
+											backgroundColor: 'rgba(204, 000, 051, 0.2)',
+											borderColor: 'rgba(204, 000, 051, 1)',
+											borderWidth: 1
+										}
+									]
+								},
+								options: {
+									responsive: true,
+									maintainAspectRatio: false,
+									scales: {
+										y: {
+											beginAtZero: true
+										}
+									}
+								}
+							});
+						}
+					});
+				}
+
+
+			});
+      
+      
+      </script>
+    </th:block>
+
+
+</html>
