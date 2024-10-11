@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+				layout:decorate="~{/layout/baselayout}">
+				
+  
+<body>
+	<main role="main">
+	
+		<th:block layout:fragment="content">
+		
+				<div id="myCarousel" class="carousel slide" data-ride="carousel" th:if="${carousel_post_list != null and #lists.size(carousel_post_list) > 0}">
+
+					<!--하단 배너 상태바 -->
+					<ol class="carousel-indicators">
+						<li th:each="carousel, iterStat : ${carousel_post_list}"
+							data-target="#myCarousel"
+							th:data-slide-to="${iterStat.index}"
+							th:class="${iterStat.index == 0 ? 'active': ''}"></li>
+					</ol>
+
+					<!-- 배너 -->
+					<div class="carousel-inner">
+						<div th:each="carousel, iterStat : ${carousel_post_list}" th:class="${iterStat.index == 0 ? 'carousel-item active' : 'carousel-item'}">
+							<img th:src="@{/admin/carousel/image_display(dateFolderName=${carousel.carousel_up_folder}, fileName=${carousel.carousel_img})}" 
+							     class="d-block w-100" 
+								 th:alt="${carousel.carousel_title}" 
+								 style="max-height: 500px; object-fit: cover;">
+						</div>
+					</div>
+
+					<!-- 배너 좌우 버튼-->
+					<button class="carousel-control-prev" type="button" data-target="#myCarousel" data-slide="prev"
+						th:if="${carousel_post_list != null and #lists.size(carousel_post_list) > 1}">
+						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						<span class="sr-only">Previous</span>
+					</button>
+					<button class="carousel-control-next" type="button" data-target="#myCarousel" data-slide="next"
+						th:if="${carousel_post_list != null and #lists.size(carousel_post_list) > 1}">
+						<span class="carousel-control-next-icon" aria-hidden="true"></span>
+						<span class="sr-only">Next</span>
+					</button>
+
+				</div>
+			
+				<!-- 배너 리스트가 비어있을 경우 출력되는 메시지 -->
+				<div th:if="${carousel_post_list == null or #lists.size(carousel_post_list) == 0}" class="alert alert-info text-center" role="alert"
+					style="width: 100%; height: 500px; display: flex; align-items: center; justify-content: center; object-fit: cover;">
+					<strong>배너 준비중 입니다.</strong>
+				</div>
+			
+			  <!-- Marketing messaging and featurettes
+			  ================================================== -->
+			  <!-- Wrap the rest of the page in another container to center all the content. -->
+			
+				<div class="container marketing">
+			
+					<h1 style="text-align: center;"><span>NEW 5%</span></h1>
+					<br>
+					<p style="text-align: right;" th:if="${!#lists.isEmpty(new_pro_list)}">
+						<a class="btn btn-outline-secondary" href="/product/pro_list?cat_code=15&cat_name=NEW%205%25">More &#43;</a>
+					</p>
+					<!-- Three columns of text below the carousel -->
+					<div class="row" th:if="${!#lists.isEmpty(new_pro_list)}">
+						<div class="col-lg-4" th:each="product : ${new_pro_list}">
+							<img th:src="@{/product/image_display(dateFolderName=${product.pro_up_folder}, fileName=${product.pro_img})}"
+								class="bd-placeholder-img rounded-circle"
+								width="140" height="140"
+								alt="New Product Image">
+							<h5 th:text="${product.pro_name}"></h5>
+							<p th:text="${#numbers.formatInteger(product.pro_price, 3, 'COMMA') + '원'}"></p>
+							<p>
+								<a class="btn btn-light" th:href="@{/product/pro_detail(pro_num=${product.pro_num})}">상품보기 &raquo;</a>
+							</p>
+						</div>
+					</div><!-- /.row -->
+					<div th:if="${#lists.isEmpty(new_pro_list)}" style="text-align: center;"> 
+						<span style="font-weight: bold;">상품 준비 중 입니다.</span>
+					</div>	
+				
+					<!-- START THE FEATURETTES -->
+				
+					<hr class="featurette-divider">
+				
+					<h1 style="text-align: center;"><span>Best Item</span></h1>
+					<br>
+					<div class="row" th:if="${!#lists.isEmpty(best_item_list)}">
+						<div class="col-lg-4" th:each="best : ${best_item_list}">
+							<img th:src="@{/product/image_display(dateFolderName=${best['PRO_UP_FOLDER']}, fileName=${best['PRO_IMG']})}"
+								class="bd-placeholder-img rounded-circle"
+								width="140" height="140"
+								alt="Best Seller Product Image">
+							<h5 th:text="${best['PRO_NAME']}"></h5>
+							<p th:text="${#numbers.formatInteger(best['PRO_PRICE'], 3, 'COMMA') + '원'}"></p>
+							<p>
+								<a class="btn btn-light" th:href="@{/product/pro_detail(pro_num=${best['PRO_NUM']})}">상품보기 &raquo;</a>
+							</p>
+						</div>
+					</div><!-- /.row -->
+					<div th:if="${#lists.isEmpty(best_item_list)}" style="text-align: center;"> 
+						<span style="font-weight: bold;">상품 준비 중 입니다.</span>
+					</div>
+				
+					<hr class="featurette-divider">
+				
+					<!-- /END THE FEATURETTES -->
+			
+				</div><!-- /.container -->
+		</th:block>
+	</main>
+
+
+
+</body>
+</html>

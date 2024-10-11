@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{admin/layout/adminlayout}">
+
+    <th:block layout:fragment = "content">
+	  <!-- Content Wrapper. Contains page content -->
+	  <div class="content-wrapper">
+	    <!-- Content Header (Page header) -->
+	    <section th:replace="~{admin/carousel/carousel_top_menu}"></section>
+	
+	    <!-- Main content -->
+	    <section class="content container-fluid">
+	
+	      <div class="row">
+	    		<div class="col-md-12">
+	    			<div class="box box-primary">
+						<div class="box-header with-border">
+							<h3 class="box-title mt-5" style="font-weight:bold;">슬라이드 등록폼</h3>
+						</div>
+						<!-- 절대경로 /board/register -->
+						<form role="form" method="post" action="/admin/carousel/carousel_insert" enctype="multipart/form-data" style="padding-right:40px; padding-left:40px;">
+							<div class="box-body">
+
+								<div class="form-group row">
+									<label for="title" class="col-sm-2 col-form-label">메인페이지 게시여부</label>
+									<div class="col-sm-10">
+										<select class="form-control" id="carousel_view_status" name="carousel_view_status">
+										<option value="Y">게시</option>
+										<option value="N">미게시</option>
+										</select>
+									</div>
+								</div>
+								<hr>
+
+								<div class="form-group row">
+									<label for="title" class="col-sm-2 col-form-label">슬라이드 제목</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" name="carousel_title" id="carousel_title" placeholder="제목 입력...">
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="title" class="col-sm-2 col-form-label">슬라이드 설명</label>
+									<div class="col-sm-10">
+										<textarea class="form-control" name="carousel_content" id="carousel_content" rows="3"></textarea>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="title" class="col-sm-2 col-form-label">이미지 업로드</label>
+									<div class="col-sm-10">
+										<input type="file" class="form-control" name="uploadFile" id="uploadFile">
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="title" class="col-sm-2 col-form-label">이미지 미리보기</label>
+									<div class="col-sm-10">
+										<img id="img_preview" style="width:600px;height:200px;">
+									</div>
+								</div>
+							
+								
+							</div>
+							<div class="box-footer">
+								<div class="text-center">
+									<button type="submit" class="btn btn-primary">등록</button>
+									<a class="btn btn-primary" th:href="@{/admin/carousel/carousel_list}">취소</a>
+								</div>
+							</div>
+						</form>
+					</div>
+	    		</div>
+	    	</div>
+	
+	    </section>
+	    <!-- /.content -->
+	  </div>
+	  <!-- /.content-wrapper -->
+    </th:block>
+
+
+    <th:block layout:fragment = "script">
+      <script>
+		$(document).ready(function(){
+
+
+			// [파일첨부시 이미지 미리보기]
+			$("#uploadFile").on("change", function(e) {
+
+				// 관리자가 넣은 파일 
+				let file = e.target.files[0];
+
+				//reader객체 생성, FileReader: 파일을 읽고 파일의 내용을 다양한 방식으로 반환할 수 있는 객체 
+				let reader = new FileReader();
+				//file의 객체를 읽고 데이터 url로 변환
+				reader.readAsDataURL(file);
+
+				// 읽기 동작이 성공적으로 완료됐을 때 발생
+				reader.onload = function(e) {
+					// src속성을 읽어온 이미지데이터url로 변경
+					$("#img_preview").attr("src", e.target.result);
+				}
+			});
+
+
+
+
+
+		});  //ready end
+      
+      
+      </script>
+    </th:block>
+
+
+</html>

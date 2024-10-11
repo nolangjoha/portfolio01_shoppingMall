@@ -30,6 +30,17 @@
     <!-- Sidebar Menu -->
     <ul class="sidebar-menu">
       <li class="header">관리자메뉴</li>
+
+      <!-- Optionally, you can add icons to the links -->
+      <li class="treeview">
+        <a href="#"><i class="fa fa-home"></i> <span>메인페이지 관리</span> <i class="fa fa-angle-left pull-right"></i></a>
+        <ul class="treeview-menu">
+          <li><a href="/admin/carousel/carousel_insert">슬라이드 등록</a></li>
+          <li><a href="/admin/carousel/carousel_list">슬라이드 목록</a></li>
+        </ul>
+      </li>
+
+
       <!-- Optionally, you can add icons to the links -->
       <li class="treeview">
         <a href="#"><i class="fa fa-cubes"></i> <span>상품관리</span> <i class="fa fa-angle-left pull-right"></i></a>
@@ -60,11 +71,8 @@
       <li class="treeview">
         <a href="#"><i class="fa fa-commenting"></i> <span>커뮤니티관리</span> <i class="fa fa-angle-left pull-right"></i></a>
         <ul class="treeview-menu">
-          <li><a href="#">1:1상담문의</a></li>
           <li><a href="/admin/community/question/question_list">상품문의</a></li>
           <li><a href="/admin/community/review/rev_list">후기관리</a></li>
-          <li><a href="#">공지사항관리</a></li>
-          <li><a href="#">입고지연안내 관리</a></li>
         </ul>  
       </li>        
 
@@ -77,6 +85,11 @@
           <li><a href="/admin/analysischart/product_sales_stats">판매상품통계</a></li>           
         </ul>
       </li>  
+
+
+
+
+
   
     </ul><!-- /.sidebar-menu -->
   </section>

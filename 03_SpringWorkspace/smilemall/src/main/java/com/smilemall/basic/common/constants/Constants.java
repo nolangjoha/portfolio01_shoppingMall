@@ -44,7 +44,8 @@ public final class Constants {
 	// 관리자 문의관리 목록 출력개수
 	public static final int AMIN_QUESTION_LIST_AMOUNT = 5;
 	
-	
+	// 관리자 캐러섹 배너목록 출력개수
+	public static final int AMIN_CAROUSEL_LIST_AMOUNT = 5;
 	
 	
 	

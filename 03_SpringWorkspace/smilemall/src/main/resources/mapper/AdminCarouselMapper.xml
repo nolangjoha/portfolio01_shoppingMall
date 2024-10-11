@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smilemall.basic.admin.carousel.AdminCarouselMapper">
+
+	<!-- [캐러셀 등록] -->
+	<insert id="carousel_insert" parameterType="CarouselVo">
+		INSERT INTO carousel_tbl (
+			carousel_num, 
+			carousel_title, 
+			carousel_content, 
+			carousel_up_folder, 
+			carousel_img, 
+			carousel_view_status
+			)
+		VALUES (
+			seq_carousel_num.NEXTVAL, 
+			#{carousel_title}, 
+			#{carousel_content}, 
+			#{carousel_up_folder}, 
+			#{carousel_img}, 
+			#{carousel_view_status}
+		)
+	</insert>
+
+	<!-- 검색조건 : 상품명, 제조사, 내용-->
+	<sql id="criteria">
+		<trim prefix="(" suffix=")AND" prefixOverrides="OR">
+			<foreach collection="cri.typeArr" item="type">
+				<trim prefix="OR">
+					<choose>
+						<when test="type == 'T'.toString()">
+							carousel_title like '%' || #{cri.keyword} || '%'
+						</when>
+						<when test="type == 'C'.toString()">
+							carousel_content like '%' || #{cri.keyword} || '%'
+						</when>
+						<when test="type == 'N'.toString()">
+							carousel_num like '%' || #{cri.keyword} || '%'
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	</sql>
+
+	<!-- 검색조건 : 날짜  -->
+	<sql id="period">
+		<if test="start_date != null and !start_date.equals('') and end_date != null and !end_date.equals('')">
+			<![CDATA[
+			
+				carousel_date >= to_date(#{start_date}) AND carousel_date < to_date(#{end_date}) + 1 AND
+			]]>
+		
+		</if>
+	</sql>
+
+	<!-- 검색조건 : 게시여부 -->
+	<sql id="view_status">
+		<if test="carousel_view_status != null and !carousel_view_status.equals('')">
+			carousel_view_status = #{carousel_view_status} AND
+		</if>
+	</sql>
+
+	<!-- [캐러셀 목록] -->
+	<select id="carousel_list" parameterType="map" resultType="CarouselVo">
+		SELECT
+			carousel_num, 
+			carousel_title, 
+			carousel_content, 
+			carousel_up_folder, 
+			carousel_img, 
+			carousel_view_status, 
+			carousel_date
+		FROM (
+			SELECT 
+				/*+ INDEX_DESC (carousel_tbl PK_CAROUSEL_NUM)*/
+				ROWNUM AS RN,
+				carousel_num, 
+				carousel_title, 
+				carousel_content, 
+				carousel_up_folder, 
+				carousel_img, 
+				carousel_view_status, 
+				carousel_date
+			FROM
+				carousel_tbl
+			WHERE
+				<include refid="criteria"></include>
+				<include refid="view_status"></include>
+				<include refid="period"></include>
+				<![CDATA[
+					ROWNUM <= (#{cri.pageNum} * #{cri.amount})
+				]]>
+			)
+		WHERE
+			RN > (#{cri.pageNum} - 1) * #{cri.amount}
+	</select>
+
+	<!--  [전체 데이터 개수] -->
+	<select id="getTotalCount" parameterType="map" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			carousel_tbl
+		WHERE
+			<include refid="criteria"></include>
+			<include refid="view_status"></include>
+			<include refid="period">
+				<property name="date_column" value="carousel_date"></property>
+			</include>
+			carousel_num > 0
+	</select>
+
+	<!-- [메인페이지 캐러셀 출력] -->
+	<select id="carousel_post_list" resultType="CarouselVo">
+	    SELECT
+			carousel_num, 
+			carousel_up_folder, 
+			carousel_img, 
+			carousel_view_status
+		FROM 
+            carousel_tbl
+		WHERE
+			carousel_view_status = 'Y'
+    	ORDER BY carousel_num DESC
+	</select>
+
+	<!--  [캐러셀 수정 데이터 불러오기]  -->
+	<select id="carousel_edit_data" parameterType="Integer" resultType="CarouselVo">
+		SELECT
+			carousel_num, 
+			carousel_title, 
+			carousel_content, 
+			carousel_up_folder, 
+			carousel_img, 
+			carousel_view_status,
+			carousel_date
+		FROM
+			carousel_tbl
+		WHERE
+		 	carousel_num = #{carousel_num}
+	</select>
+
+	<!-- [캐러셀 수정] -->
+	<update id="carousel_edit" parameterType="CarouselVo">
+		UPDATE
+			carousel_tbl
+		SET
+			carousel_title = #{carousel_title}, 
+			carousel_content  = #{carousel_content}, 
+			carousel_up_folder  = #{carousel_up_folder}, 
+			carousel_img  = #{carousel_img}, 
+			carousel_view_status  = #{carousel_view_status}
+		WHERE
+			carousel_num = #{carousel_num}
+	</update>
+
+	<!-- [캐러셀 삭제] -->
+	<delete id="carousel_delete" parameterType="Integer">
+		DELETE FROM
+			carousel_tbl
+		WHERE
+			carousel_num = #{carousel_num}
+	</delete>
+
+	<!-- [게시상태 일괄수정] -->
+	<update id="carousel_checked_edit" parameterType="list">
+		<foreach collection="list" item="item" open="declare begin" separator=";" close="; end;"> 
+			UPDATE
+				carousel_tbl
+			SET
+				carousel_view_status  = #{item.carousel_view_status}
+			WHERE
+				carousel_num = #{item.carousel_num}
+		</foreach>
+	</update>
+
+	<!-- [일괄삭제] -->
+	<delete id="carousel_checked_delete" parameterType="list">
+		<foreach collection="list" item="item" open="declare begin" separator=";" close="; end;">
+			DELETE FROM
+				carousel_tbl
+			WHERE
+				carousel_num = #{item}
+		</foreach>
+	</delete>
+
+</mapper>

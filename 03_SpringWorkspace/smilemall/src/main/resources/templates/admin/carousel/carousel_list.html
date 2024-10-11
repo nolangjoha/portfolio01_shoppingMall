@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{admin/layout/adminlayout}">
+
+    <th:block layout:fragment = "content">
+	  <!-- Content Wrapper. Contains page content -->
+	  <div class="content-wrapper">
+	    <!-- Content Header (Page header) -->
+		<section th:replace="~{admin/carousel/carousel_top_menu}"></section>
+	
+	    <!-- Main content -->
+	    <section class="content container-fluid">
+	
+	      <div class="row">
+	    		<div class="col-md-12">
+	    			<div class="box box-primary">
+						<div class="box-header with-border">
+							<h3 class="box-title mt-5" style="font-weight:bold;">슬라이드 배너 관리</h3>
+						</div>
+						
+						<div class="box-body">
+							<!-- 검색옵션 -->
+							<div>
+								<form action="/admin/carousel/carousel_list" method="get" class="form-inline">
+									<!--검색어-->
+									<div class="form-group mr-3" >
+										<span class="mr-2" style="width: 65px; font-weight: bold;">검색어</span>
+										<select class="form-control" name="type">
+											<option selected>검색종류 선택</option>
+											<option value="N" th:selected="${pageMaker.cri.type =='N'}">배너번호</option>
+											<option value="T" th:selected="${pageMaker.cri.type =='T'}">슬라이드 제목</option>
+											<option value="C" th:selected="${pageMaker.cri.type =='C'}">슬라이드 내용</option>
+										</select>
+									</div>
+									<div class="form-group mr-3" >
+										<input type="text" class="form-control" name="keyword" th:value="${pageMaker.cri.keyword}" style="width:150px;" />
+										<input type="hidden" name="pageNum" th:value="${pageMaker.cri.pageNum}"/>
+										<input type="hidden" name="amount" th:value="${pageMaker.cri.amount}"/>
+									</div>
+
+									<!--등록일-->
+									<div style="display: inline-block; margin-left: 20px;">	
+										<span class="mr-2" style="width: 65px; font-weight: bold;">등록일</span>
+										<input type="date" class="form-control" id="search_start_date" name="start_date" th:value="${start_date}" style="width:150px;" />
+									</div>
+									<span class="mr-2">~</span>
+									<div class="form-group mr-3">
+											<input type="date" class="form-control" id="search_end_date" name="end_date" th:value="${end_date}" style="width:150px;" />
+									
+									</div>
+									<!--게시여부-->
+									<div style="display: inline-block; margin-left: 20px;">
+										<span class="mr-2" style="width: 65px; font-weight: bold;">게시여부</span>
+										<div class="form-group mr-2">
+											<input type="radio"  id="all_carousel" name="carousel_view_status" value="" 
+												th:checked="${carousel_view_status == null || carousel_view_status == ''}"/>
+											<label class="form-check-label" for="all_carousel" style="font-weight: lighter;">
+												전체
+											</label>
+											<input type="radio"  id="caraousel_y" name="carousel_view_status" value="Y"
+												th:checked="${carousel_view_status == 'Y'}"/>
+											<label class="form-check-label" for="caraousel_y" style="font-weight: lighter;">
+												Y
+											</label>
+											<input type="radio"id="caraousel_n" name="carousel_view_status" value="N"
+												th:checked="${carousel_view_status == 'N'}"/>
+											<label class="form-check-label" for="caraousel_n" style="font-weight: lighter;">
+												N
+											</label>
+										</div>
+									</div>
+									<!--검색버튼-->
+									<div style="display: inline-block; margin-left: 20px;">
+										<button type="submit" class="btn btn-primary">검색</button>
+									</div>	
+									
+								</form>
+							</div>
+							
+							<hr>
+							<!-- 캐러셀 테이블 -->
+							<table class="table table-bordered" th:if="${!#lists.isEmpty(carousel_list)}">
+			                    <tbody>
+				                    <tr>
+				                      <th style="width: 3%; text-align: center;"><input type="checkbox" id="checkAll"></th>
+				                      <th style="width: 7%; text-align: center;">배너번호</th>
+				                      <th style="width: 10%; text-align: center;">배너 이미지</th>
+				                      <th style="width: 20%; text-align: center;">제목</th>
+				                      <th style="width: 30%; text-align: center;">내용</th>
+				                      <th style="width: 7%; text-align: center;">등록일</th>
+				                      <th style="width: 7%; text-align: center;">게시여부</th>
+				                      <th style="width: 11%; text-align: center;">관리</th>
+				                    </tr>
+				                    <tr th:each="carousel : ${carousel_list}">
+										<td style="text-align: center; vertical-align: middle;">
+											<input type="checkbox" name="check" th:value="${carousel.carousel_num}">
+										</td>
+										<td style="text-align: center; vertical-align: middle;">[[${carousel.carousel_num}]]</td>
+										<td style="text-align: center; vertical-align: middle;">
+											<span>
+												<img th:src="${'/admin/carousel/image_display?dateFolderName=' + carousel.carousel_up_folder + '&fileName=s_' + carousel.carousel_img}" style="width: 150px; height:50px;">
+											</span>
+										</td>
+
+										<td style="text-align: left; vertical-align: middle;">
+											
+											<span th:text="${carousel.carousel_title}" name="carousel_title"></span>
+										</td>
+										<td style="text-align: left; vertical-align: middle;">
+											<span th:text="${carousel.carousel_content}" name="carousel_content"></span>
+										</td>
+										<td th:text="${#dates.format(carousel.carousel_date, 'yyyy-MM-dd HH:mm:ss')}" style="text-align: center; vertical-align: middle;"></td>
+										<td style="text-align: center; vertical-align: middle;">
+											<select name="carousel_view_status">
+												<option value="Y" th:selected="${carousel.carousel_view_status =='Y'}">Y</option>
+												<option value="N" th:selected="${carousel.carousel_view_status =='N'}">N</option>
+											</select>
+										</td>
+										<td style="text-align: center; vertical-align: middle;">
+											<button type="button" class="btn btn-primary" name="btn_carousel_edit" th:data-carousel_num="${carousel.carousel_num}">수정</button>
+											<button type="button" class="btn btn-danger" name="btn_carousel_del" th:data-carousel_num="${carousel.carousel_num}">삭제</button>
+										</td>
+				                    </tr>
+			                 	</tbody>
+			                 </table>
+							 <div th:if="${#lists.isEmpty(carousel_list)}" style="text-align: center;">
+								<span><strong>표시할 내역이 없습니다.</strong></span>
+							</div>									
+						
+						</div>
+                        <div class="box-footer clearfix">
+							
+							<div class="row" >
+								<div class="col-md-6">
+									<div th:if="${!#lists.isEmpty(carousel_list)}">
+										<button type="button" class="btn btn-success" id="btn_check_edit">일괄수정</button>
+										<button type="button" class="btn btn-danger" id="btn_check_delete">일괄삭제</button>
+										<!--actionForm-->	
+										<form id="actionForm" action="" method="get">
+											<input type="hidden" name="pageNum" id="pageNum" th:value="${pageMaker.cri.pageNum}" />
+											<input type="hidden" name="amount" id="amount" th:value="${pageMaker.cri.amount}" />
+											<input type="hidden" name="type" id="type" th:value="${pageMaker.cri.type}" />
+											<input type="hidden" name="keyword" id="keyword" th:value="${pageMaker.cri.keyword}" />
+
+											<input type="hidden" name="start_date" id="start_date" th:value="${start_date}" />
+											<input type="hidden" name="end_date" id="end_date" th:value="${end_date}" />
+
+											<input type="hidden" name="carousel_view_status" id="carousel_view_status" th:value="${carousel_view_status}" />
+										</form>
+									</div>
+								</div>
+								
+								<div class="col-md-6 text-right">
+									<a class="btn btn-primary" th:href="@{/admin/carousel/carousel_insert}">배너 등록</a>
+								</div>
+							</div>
+							<div class="row" th:if="${!#lists.isEmpty(carousel_list)}">
+								<!--페이징-->
+								<div class="col-md text-center">
+										
+									<nav aria-label="...">
+									  <ul class="pagination">
+										  <!-- 이전 표시여부 -->
+										  
+										  <th:block th:if="${pageMaker.prev }">
+											  <li class="page-item">
+												  <a th:href="${pageMaker.startPage - 1 }" class="page-link movepage">Previous</a>
+											  </li>
+										  </th:block>
+	  
+										  <th:block th:with="pageMaker = ${pageMaker}">
+											  <th:block th:each="num : *{#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+											  <li class='page-item' th:classappend="${pageMaker.cri.pageNum ==  num ? 'active': '' }" aria-current="page">
+												  <a class="page-link movepage" th:href="${num }" th:text="${num }"></a>
+											  </li>
+											  </th:block>
+										  </th:block>
+	  
+										  <!--  다음 표시여부 -->
+										  <th:block th:if="${pageMaker.next }">
+											  <li class="page-item">
+												  <a th:href="${pageMaker.endPage + 1 }" class="page-link movepage">Next</a>
+											  </li>
+										  </th:block>
+										  
+									  </ul>
+									  </nav>
+							  	</div>
+
+							</div>
+                        </div>
+						
+					</div>
+	    		</div>
+	    	</div>
+	
+	    </section>
+	    <!-- /.content -->
+	  </div>
+	  <!-- /.content-wrapper -->
+    </th:block>
+
+
+    <th:block layout:fragment = "script">
+      <script>
+		$(document).ready(function(){
+
+			// 액션폼 전역변수
+			let actionForm = $("#actionForm"); 
+
+			// [페이징]
+			$(".movepage").on("click", function(e) {
+				e.preventDefault();
+
+				actionForm.attr("action", "/admin/carousel/carousel_list");
+				actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+				
+				actionForm.submit();
+			});
+
+			//[수정버튼 클릭시]
+			$("button[name='btn_carousel_edit']").on("click", function() {
+				let carousel_num = $(this).data("carousel_num");  
+
+				actionForm.find("input[name='carousel_num']").remove();
+
+				//console.log("상품코드 : " + carousel_num);
+
+				let str = `<input type="hidden" name="carousel_num" id="carousel_num" value="${carousel_num}" />`;
+
+				actionForm.append(str);
+				
+				actionForm.attr("method", "get");
+				actionForm.attr("action", "/admin/carousel/carousel_edit");
+				actionForm.submit();
+			});
+
+			//[삭제버튼 클릭시] 
+			$("button[name='btn_carousel_del']").on("click", function() {
+				
+				if(!confirm("상품을 삭제하시겠습니까?")) return;
+
+				let carousel_num = $(this).data("carousel_num");
+
+				actionForm.find("input[name='carousel_num']").remove();
+
+				let str = `<input type="hidden" name="carousel_num" id="carousel_num" value="${carousel_num}" />`;
+
+				actionForm.append(str);
+				
+				actionForm.attr("method", "post");
+				actionForm.attr("action", "/admin/carousel/carousel_delete");
+				actionForm.submit();
+			});
+
+			// [일괄 체크]
+			let ischeck = true;   
+			$("#checkAll").on("click", function() {
+				$("input[name='check']").prop("checked", this.checked);
+				isCheck = this.checked;
+			});
+
+			// [목록데이터 체크]
+			$("input[name='check']").on("click", function() {
+
+				$("#checkAll").prop("checked", this.checked);
+
+				$("input[name='check']").each(function() {
+					if(!$(this).is(":checked")) {
+						$("#checkAll").prop("checked", false);
+					}
+				});
+			});
+
+			// [체크상품 일괄 수정]
+			$("#btn_check_edit").on("click", function() {
+
+				if($("input[name='check']:checked").length == 0) {
+					alert("수정할 목록을 체크하세요");
+					return;
+				}
+
+				let carousel_num_arr = [];
+				let carousel_view_status_arr = [];
+
+				$("input[name = 'check']:checked").each(function() {
+					
+					carousel_num_arr.push($(this).val());
+					carousel_view_status_arr.push($(this).parent().parent().find("select[name='carousel_view_status']").val());
+				});
+
+				$.ajax({
+					url: "/admin/carousel/carousel_checked_edit",
+					type: 'post',
+					data: {carousel_num_arr : carousel_num_arr, carousel_view_status_arr: carousel_view_status_arr},
+					dataType : 'text',
+					success: function(result) {
+						if(result == 'success') {
+							alert("체크된 목록이 수정되었습니다.");
+							location.reload();
+						}
+					},
+					error: function(xhr, status, error) {
+						alert("에러가 발생했습니다:" + error);
+					}
+				});
+			});
+
+			// [체크상품 일괄 삭제]
+			$("#btn_check_delete").on("click", function() {
+
+				// 체크상태 확인
+				if($("input[name='check']:checked").length == 0) {
+					alert("삭제할 배너를 체크하세요");
+					return;
+				}
+
+				// 삭제기능 수행 전
+				if(!confirm("정말로 삭제하시겠습니까?")) {
+					return;
+				}
+
+				let carousel_num = [];
+				
+				$("input[name = 'check']:checked").each(function() {
+					carousel_num.push($(this).val());
+				});
+				//console.log("삭제목록:"+ carousel_num);
+
+				$.ajax({
+					url: "/admin/carousel/carousel_checked_delete",
+					type: 'post',
+					data: {carousel_num : carousel_num},
+					dataType : 'text',
+					success: function(result) {
+						if(result == 'success') {
+							alert("체크 된 목록이 삭제되었습니다.");
+							location.reload();
+						}
+					},
+					error: function(xhr, status, error) {
+						alert("에러가 발생했습니다:" + error);
+					}
+				});
+			});
+
+	
+			
+
+
+		});  //ready end
+      
+      
+      </script>
+    </th:block>
+
+
+</html>

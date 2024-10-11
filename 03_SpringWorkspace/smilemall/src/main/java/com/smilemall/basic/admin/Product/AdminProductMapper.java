@@ -1,6 +1,7 @@
 package com.smilemall.basic.admin.Product;
 
 import java.util.List;
+import java.util.Map;
 
 import com.smilemall.basic.common.dto.Criteria;
 
@@ -31,6 +32,12 @@ public interface AdminProductMapper {
 	// [삼품 일괄 삭제]
 	void pro_checked_delete(List<Integer> pro_num);
 	
-	 
+	
+	// [신상품 목록]
+	List<ProductVo> new_pro_list();
+	
+	// [베스트셀러 상품 목록]
+	List<Map<String,Object>> best_item_list ();
+	
 	
 }

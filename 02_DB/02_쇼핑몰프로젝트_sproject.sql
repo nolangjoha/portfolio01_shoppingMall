@@ -135,6 +135,12 @@ INSERT INTO category_tbl (cat_code, cat_prtcode, cat_name)
     VALUES (13, 4, '양말&#38;스타킹');
 INSERT INTO category_tbl (cat_code, cat_prtcode, cat_name) 
     VALUES (14, 4, '주얼리');  
+
+--1차 카테고리 : 1(신상품)
+--2차 카테고리(신상품) : 상의, 하의, 악세사리
+INSERT INTO category_tbl (cat_code, cat_prtcode, cat_name) 
+    VALUES (15, 1, 'NEW 5&#37;');
+
   
 COMMIT;
 
@@ -387,3 +393,55 @@ VALUES (
     );    
 
 COMMIT;
+
+
+
+
+--12. 캐러셀 테이블
+CREATE TABLE carousel_tbl(
+    carousel_num         NUMBER,                             -- 캐러셀번호
+    carousel_title     VARCHAR(50)        NOT NULL,      -- 캐러셀 제목
+    carousel_content   VARCHAR(200)          NOT NULL,      -- 캐러셀 내용
+    carousel_up_folder   VARCHAR(50)          NOT NULL,      --이미지업로드폴더 경로
+    carousel_img         VARCHAR(100)         NOT NULL,      -- 이미지 파일명
+    carousel_view_status         CHAR(1)              NOT NULL,      -- 메인 표시여부 y,n
+    carousel_date        DATE DEFAULT SYSDATE NOT NULL      -- 캐러셀등록일
+);
+
+alter table carousel_tbl drop column carousel_admin_memo;
+
+/*
+carousel_tbl
+carousel_num, carousel_title, carousel_content, carousel_up_folder, carousel_img, carousel_view_status, carousel_date
+
+*/
+
+--시퀀스 생성
+CREATE SEQUENCE seq_carousel_num;
+
+--PRIMARY KEY 생성
+ALTER TABLE carousel_tbl
+ADD CONSTRAINT PK_CAROUSEL_NUM PRIMARY KEY (carousel_num);
+
+COMMIT;
+
+-- 임시데이터
+INSERT INTO 
+    carousel_tbl (
+      carousel_num, 
+      carousel_title, 
+      carousel_content, 
+      carousel_up_folder, 
+      carousel_img, 
+      carousel_view_status
+        )
+VALUES (
+    seq_carousel_num.NEXTVAL, 
+    '배너 제목', 
+    '배너 내용', 
+    '2024\10\11', 
+    '8c1f7511-cb54-4002-b51a-c925849a7792-red_shirt.jpg',
+    'N'
+    );   
+    
+    COMMIT;
