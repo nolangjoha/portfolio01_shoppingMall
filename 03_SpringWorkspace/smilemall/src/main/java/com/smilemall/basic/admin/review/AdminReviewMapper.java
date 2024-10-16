@@ -34,6 +34,6 @@ public interface AdminReviewMapper {
 	//[관리자 답변삭제]
 	void admin_rev_delete(ReviewVo vo);
 	
-	
-	
+	// [관리자 메인_리뷰리스트]
+	List<ReviewVo> admin_rev_list();
 }

@@ -105,4 +105,9 @@ public class AdminMemberService {
 	}
 	
 
+	// [관리자 메인_회원리스트]
+	public List<MemberVo> admin_member_list() {
+		return adminMemberMapper.admin_member_list();
+	}
+	
 }

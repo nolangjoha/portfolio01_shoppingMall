@@ -63,4 +63,11 @@ public class AdminReviewService {
 		adminReviewMapper.admin_rev_delete(vo);
 	}
 	
+	
+	// [관리자 메인_리뷰리스트]
+	public List<ReviewVo> admin_rev_list() {
+		return adminReviewMapper.admin_rev_list();
+	}
+	
+	
 }

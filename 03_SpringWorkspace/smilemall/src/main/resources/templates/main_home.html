@@ -62,10 +62,9 @@
 					<!-- Three columns of text below the carousel -->
 					<div class="row" th:if="${!#lists.isEmpty(new_pro_list)}">
 						<div class="col-lg-4" th:each="product : ${new_pro_list}">
-							<img th:src="@{/product/image_display(dateFolderName=${product.pro_up_folder}, fileName=${product.pro_img})}"
-								class="bd-placeholder-img rounded-circle"
-								width="140" height="140"
-								alt="New Product Image">
+							<img th:src="${'/product/image_display?dateFolderName=' + product.pro_up_folder + '&fileName=s_' + product.pro_img}" 
+							class="bd-placeholder-img rounded-circle" width="140" height="140">
+
 							<h5 th:text="${product.pro_name}"></h5>
 							<p th:text="${#numbers.formatInteger(product.pro_price, 3, 'COMMA') + '원'}"></p>
 							<p>
@@ -85,10 +84,8 @@
 					<br>
 					<div class="row" th:if="${!#lists.isEmpty(best_item_list)}">
 						<div class="col-lg-4" th:each="best : ${best_item_list}">
-							<img th:src="@{/product/image_display(dateFolderName=${best['PRO_UP_FOLDER']}, fileName=${best['PRO_IMG']})}"
-								class="bd-placeholder-img rounded-circle"
-								width="140" height="140"
-								alt="Best Seller Product Image">
+							<img th:src="${'/product/image_display?dateFolderName=' + best['PRO_UP_FOLDER'] + '&fileName=s_' + best['PRO_IMG']}" 
+								class="bd-placeholder-img rounded-circle" width="140" height="140">
 							<h5 th:text="${best['PRO_NAME']}"></h5>
 							<p th:text="${#numbers.formatInteger(best['PRO_PRICE'], 3, 'COMMA') + '원'}"></p>
 							<p>

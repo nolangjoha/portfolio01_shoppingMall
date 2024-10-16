@@ -29,6 +29,8 @@ public interface AdminOrderMapper {
 	void ordetail_delete(Long ord_code); // 2) 주문상세(상품)정보
 	void payinfo_delete(Long ord_code);  // 3) 주문결제정보
 
-
+	
+	// [관리자 메인_주문리스트]
+	List<OrderVo> admin_ord_list();
 
 }

@@ -69,7 +69,7 @@
 		on
 			o.ord_code = d.ord_code
 		and
-			TO_CHAR(o.ord_regdate, 'YYYY/MM') = #{ord_date}
+			TO_CHAR(o.ord_regdate, 'YYYY/MM') = #{ord_month}
 		group by
 			c.cat_name, TO_CHAR(o.ord_regdate, 'YYYY/MM')
 		order by
@@ -96,7 +96,7 @@
 	    on 
 	        o.ord_code=d.ord_code
 	    and 
-	        TO_CHAR(o.ord_regdate, 'YYYY/MM') =  #{ord_date}               
+	        TO_CHAR(o.ord_regdate, 'YYYY/MM') =  #{ord_month}               
 	    group by 
 	        c.cat_name, TO_CHAR(o.ord_regdate, 'YYYY/MM')
 	    order by 
@@ -219,5 +219,22 @@
  		order by
  			total_sales desc
  	</select>
+ 	
+ 	
+ 	<!-- [관리자 메인_이번달 매출]  -->
+	<select id="adminPageMonthSales" resultType="int" parameterType="String">
+	 	SELECT
+			COALESCE(sum(d.dt_amount * d.dt_price),0) as sales_total
+		FROM
+			order_tbl o
+		INNER JOIN
+			ordetail_tbl d
+		ON
+			o.ord_code = d.ord_code
+		WHERE
+			TO_CHAR(o.ord_regdate, 'YYYY/MM') = #{ord_month}
+	</select>
+
+
 
 </mapper>

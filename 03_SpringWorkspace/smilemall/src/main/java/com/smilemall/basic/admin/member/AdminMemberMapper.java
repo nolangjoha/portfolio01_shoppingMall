@@ -62,6 +62,8 @@ public interface AdminMemberMapper {
 	void mailSendCountUpdate(int mail_send_count);
 	
 
+	// [관리자 메인_회원리스트]
+	List<MemberVo> admin_member_list();
 	
 	
 }

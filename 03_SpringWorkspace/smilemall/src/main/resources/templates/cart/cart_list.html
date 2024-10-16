@@ -81,17 +81,20 @@
 									<div>
 										<div>
 											<strong>총 상품 금액</strong>
-											<span th:text="${#numbers.formatInteger(total_price, 3, 'COMMA') +'원'}"></span>
+											<span th:if="${total_price == 0}" th:text="'0원'"></span>
+											<span th:unless="${total_price == 0}" th:text="${#numbers.formatInteger(total_price, 3, 'COMMA') +'원'}"></span>
 										</div>
 										<div >
 											<strong>배송료</strong>
 											<span th:if="${total_price>=100000}" th:text="${0 +'원'}"></span>
-											<span th:if="${total_price<100000}" th:text="${#numbers.formatInteger(3000, 3, 'COMMA') +'원'}"></span>
+											<span th:if="${total_price<100000 && total_price > 0}" th:text="${#numbers.formatInteger(3000, 3, 'COMMA') +'원'}"></span>
+											<span th:if="${total_price == 0}" th:text="'0원'"></span>
 										</div>
 										<div>
 											<strong>결제 예정금액</strong>
 											<span th:if="${total_price>=100000}" th:text="${#numbers.formatInteger(total_price, 3, 'COMMA') +'원'}"></span>
-											<span th:if="${total_price<100000}" th:text="${#numbers.formatInteger(total_price + 3000, 3, 'COMMA') +'원'}"></span>
+											<span th:if="${total_price<100000 && total_price > 0}" th:text="${#numbers.formatInteger(total_price + 3000, 3, 'COMMA') +'원'}"></span>
+											<span th:if="${total_price == 0}" th:text="'0원'"></span>
 										</div>
 									</div>
 								</td>								
@@ -108,7 +111,7 @@
 							</span>
 							<span style="float:right;">
 								<button type="button" class="btn btn-dark" onclick="location.href='/'">쇼핑계속하기</button>
-								<button type="button" class="btn btn-dark">선택상품주문</button>
+								<button type="button" class="btn btn-dark" id="btn_selector_order">선택상품주문</button>
 								<button type="button" class="btn btn-dark" id="btn_order">전체상품주문</button>
 							</span>
 						</div>
@@ -203,6 +206,17 @@
 
 				});
 
+
+				// 장바구니 확인
+				let cartIsEmpty = [[${#lists.isEmpty(cart_list)}]];
+
+				//장바구니가 비어있을 경우 버튼 비활성화
+				if(cartIsEmpty) {
+					$("button#btn_order").prop("disabled", true);
+					$("button#btn_selector_order").prop("disabled", true);
+					$("button#btn_check_delete").prop("disabled", true);
+					$("button#btn_cart_empty").prop("disabled", true);
+				}
 
 				// [전체상품 주문하기] id="btn_order"
 				$("button#btn_order").on("click", function() {

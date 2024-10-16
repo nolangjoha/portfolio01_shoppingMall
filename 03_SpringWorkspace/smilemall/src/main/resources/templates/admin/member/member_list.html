@@ -342,7 +342,9 @@
 									</td>
 								</tr>
 								<tr>
-									<th scope="row" id="deposit">입금자명<br>입금계좌</th>
+									<th scope="row">
+										<span id="deposit">입금자명<br>입금계좌</span>
+									</th>
 									<td>
 										<span id="payinfo"></span>
 									</td>
@@ -807,9 +809,13 @@
 						$("#payinfo").text(result.payinfo.payinfo);
 						$("#p_status").text(result.payinfo.p_status);
 
+
 						if(result.payinfo.payinfo=='kakaopay') {
-							$("#deposit").text("");
+							$("#deposit").hide();
 							$("#payinfo").text("");
+						} else {
+							$("#deposit").show();
+							$("#payinfo").text(result.payinfo.payinfo);
 						}
 
 						// 주문자(수령인)정보

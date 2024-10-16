@@ -175,5 +175,41 @@
 	</update>
 	
 	
+	<!-- [관리자 메인_주문리스트] -->
+	<select id="admin_rev_list" resultType="ReviewVo">
+		SELECT
+			re_code, 
+			pro_num, 
+			pro_name,
+   			pro_up_folder,
+   			pro_img,
+			re_title, 
+			re_content, 
+			re_rate, 
+			re_date, 
+   			re_admin_reply_status
+		FROM (
+			SELECT
+                r.re_code, 
+				p.pro_num, 
+				p.pro_name,
+	   			p.pro_up_folder,
+	   			p.pro_img,
+				r.re_title, 
+				r.re_content, 
+				r.re_rate, 
+				r.re_date, 
+	   			r.re_admin_reply_status
+			FROM
+				review_tbl r
+           JOIN
+		        product_tbl p ON p.pro_num = r.pro_num
+			ORDER BY re_code DESC
+			)
+		WHERE
+			<![CDATA[
+			ROWNUM <=3
+			]]>
+	</select>
 	
 </mapper>

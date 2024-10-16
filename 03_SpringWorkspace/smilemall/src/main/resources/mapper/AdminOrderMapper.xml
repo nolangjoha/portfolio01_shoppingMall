@@ -174,5 +174,42 @@
 		WHERE
 			ord_code = #{ord_code}
 	</delete>
+	
+	
+	<!-- [관리자 메인_주문리스트] -->
+	<select id="admin_ord_list" resultType="OrderVo">
+		SELECT
+			ord_code, 
+			mbsp_id, 
+			ord_name, 
+			ord_tel, 
+			ord_regdate, 
+			ord_addr_zipcode, 
+			ord_addr_basic, 
+			ord_addr_detail, 
+			ord_price, 
+			ord_desc
+		FROM (
+			SELECT
+				ord_code, 
+				mbsp_id, 
+				ord_name, 
+				ord_tel, 
+				ord_regdate, 
+				ord_addr_zipcode, 
+				ord_addr_basic, 
+				ord_addr_detail, 
+				ord_price, 
+				ord_desc
+			FROM
+				order_tbl
+			ORDER BY ord_code DESC
+			)
+		WHERE
+			<![CDATA[
+			ROWNUM <=5
+			]]>
+	</select>
+
 
 </mapper>

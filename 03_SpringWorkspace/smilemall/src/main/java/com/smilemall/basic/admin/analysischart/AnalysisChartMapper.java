@@ -33,4 +33,9 @@ public interface AnalysisChartMapper {
 	// <연간 판매상품 통계>
 	List<Map<String, Object>> yearlyProductSalesRank(String ord_year);
 	
+	
+	
+	// [관리자 메인_이번달 매출] 
+	int adminPageMonthSales (String ord_month);
+	
 }

@@ -163,6 +163,9 @@
 					$.ajax({
 						url:'/cart/cart_add' ,
 						type: 'get',
+						headers:{
+							'AJAX' : 'true'
+						},
 						data: {pro_num:pro_num, cart_amount:cart_amount},
 						dataType: "text", 
 						success: function(result) {
@@ -173,7 +176,19 @@
 								}
 								$("#order_cart_popup").modal('hide');
 							}
+						},
+
+						error : function(xhr, status, error) {
+							if(xhr.status === 400) {
+								alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+								location.href = "/member/login";
+							}else {
+								alert("에러가 발생했습니다." + error);
+							}
 						}
+
+
+
 					});
 
 				});

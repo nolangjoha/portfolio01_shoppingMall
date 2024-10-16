@@ -15,7 +15,6 @@ CREATE TABLE MBSP_TBL(
         MBSP_DATESUB        DATE DEFAULT SYSDATE    NOT NULL,   -- 최초등록일
         MBSP_UPDATEDATE     DATE DEFAULT SYSDATE    NOT NULL    -- 회원정보 갱신일
 );
-
 /*
 mbsp_tbl
 mbsp_id, mbsp_name, mbsp_email, mbsp_password, mbsp_zipcode, mbsp_addr, mbsp_deaddr, mbsp_phone,
@@ -295,7 +294,6 @@ CREATE TABLE payinfo(
     p_status    VARCHAR2(10)    NOT NULL,   --완납/미납
     p_date      DATE DEFAULT    SYSDATE     --결제일
 );
-
 /*
 payinfo, seq_payinfo_id, pk_payinfo_id
 p_id, ord_code, mbsp_id, paymethod, payinfo, p_price, p_status, p_date

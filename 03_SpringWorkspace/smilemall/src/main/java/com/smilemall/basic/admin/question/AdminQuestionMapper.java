@@ -3,6 +3,7 @@ package com.smilemall.basic.admin.question;
 import java.util.List;
 
 import com.smilemall.basic.common.dto.Criteria;
+import com.smilemall.basic.member.MemberVo;
 import com.smilemall.basic.question.QuestionVo;
 
 public interface AdminQuestionMapper {
@@ -34,5 +35,8 @@ public interface AdminQuestionMapper {
 	// [관리자 답변삭제]
 	void admin_question_reply_delete(QuestionVo vo);
 	
+	
+	// [관리자 메인_문의리스트]
+	List<QuestionVo> admin_question_list();
 
 }

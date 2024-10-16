@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.smilemall.basic.admin.category.AdminCategoryService;
 import com.smilemall.basic.admin.category.CategoryVo;
+import com.smilemall.basic.common.constants.Constants;
 import com.smilemall.basic.common.dto.Criteria;
 import com.smilemall.basic.common.dto.PageDTO;
 import com.smilemall.basic.common.util.FileManagerUtils;
@@ -52,7 +53,7 @@ public class AdminProductController {
 	
 	//[상픔등록폼 페이지]
 	@GetMapping("pro_insert")
-	public void pro_insertForm(Model model) {
+	public void pro_insertForm(Model model) throws Exception  {
 		List<CategoryVo> cate_list = adminCategoryService.getFirstCategoryList();
 		model.addAttribute("cate_list", cate_list);
 	}
@@ -143,7 +144,7 @@ public class AdminProductController {
 	@GetMapping("/pro_list")
 	public void pro_list(Criteria cri, Model model) throws Exception {
 		
-		//cri.setAmount(2); 페이지 갯수 임의조정
+		cri.setAmount(Constants.AMIN_PRODUCT_LIST_AMOUNT);
 		
 		//DB에서 상품데이터 가져오기
 		List<ProductVo> pro_list = adminProductService.pro_list(cri);
@@ -199,7 +200,7 @@ public class AdminProductController {
 	
 	// [상품 수정 기능] : 수정한 데이터 DB로 보냄.
 	@PostMapping("/pro_edit")
-	public String pro_edit_ok(ProductVo vo, MultipartFile uploadFile, Criteria cri, RedirectAttributes rttr) {
+	public String pro_edit_ok(ProductVo vo, MultipartFile uploadFile, Criteria cri, RedirectAttributes rttr) throws Exception  {
 		
 		//상품 이미지 변경 시
 		if(!uploadFile.isEmpty()) {

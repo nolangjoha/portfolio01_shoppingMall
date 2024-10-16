@@ -5,25 +5,450 @@
     <th:block layout:fragment = "content">
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
-          <!-- Content Header (Page header) -->
-          <section class="content-header">
-            <h1>
-              Page Header
-              <small>Optional description</small>
-            </h1>
-            <ol class="breadcrumb">
-              <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-              <li class="active">Here</li>
-            </ol>
-          </section>
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+              <h1>
+                관리자 페이지
+              </h1>
+            </section>
 
-          <!-- Main content -->
-          <section class="content">
+            <!-- Main content -->
+            <section class="content">
 
-            <!-- Your Page Content Here -->
+                <!-- 통계 테이블 -->
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="box box-primary">
+                        <!-- 테이블 명-->
+                        <div class="box-header with-border">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <h3 class="box-title mt-5" style="font-weight:bold;">이번달 매출 통계</h3>
+                              </div>
+                              <div class="col-md-6" style="text-align: right;">
+                                <button type="button" class="btn btn-outline-primary" onclick="location.href='/admin/analysischart/sales_stats'" >통계분석 바로가기</button>
+                              </div>
+                            </div>
+                        </div>
+                        <!-- 테이블 내용-->
+                        <div class="box-body">
+                          <table class="table table-bordered">
+                            <tbody>
+                              <tr>
+                                <th style="width: 20%; text-align: center;">매출현황</th>
+                                <th style="width: 40%; text-align: center;">카테고리별 매출현황</th>
+                                <th style="width: 40%; text-align: center;">많이 판매된 상품</th>
+                              </tr>
+                              <tr>
+                                <!--매출현황-->
+                                <td style="text-align: center; vertical-align: middle;">
+                                  <span th:if="${adminPageMonthSales == 0}" th:text="'0원'"></span>
+                                  <span th:unless="${adminPageMonthSales == 0}" th:text="${#numbers.formatInteger(adminPageMonthSales, 3, 'COMMA') + '원'}"></span>
+                                </td>
+                                <!--카테고리별 매출현황-->
+                                <td style="text-align: center; vertical-align: middle;">
+                                  <table class="table table-bordered">
+                                    <tbody>
+                                      <tr>
+                                        <th style="text-align: center;">카테고리</th>
+                                        <th style="text-align: center;">매출금액</th>
+                                      </tr>
 
-          </section><!-- /.content -->
+                                      <tr th:each="category: ${topCategorySalesData}">
+                                        <td style="text-align: center;">
+                                          <span th:text="${category['PRIMARY_CD']}" ></span>
+                                        </td>
+                                        <td style="text-align: right;">
+                                          <span th:if="${category['SALES_P'] == 0}" th:text="'0원'"></span>
+                                          <span th:unless="${category['SALES_P'] == 0}" th:text="${#numbers.formatInteger(category['SALES_P'], 3, 'COMMA') + '원'}"></span>
+                                        </td>
+                                      </tr>
+                                      <!--데이터가 없을 경우-->
+                                      <tr th:if="${#lists.isEmpty(topCategorySalesData)}">
+                                        <td colspan="2" style="text-align: center;">표시할 내역이 없습니다</td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </td>
+                                <!-- 많이 판매된 상품 -->
+                                <td style="text-align: center; vertical-align: middle;">
+                                  <table class="table table-bordered">
+                                    <tbody>
+                                      <tr>
+                                        <th style="text-align: center;">상품명</th>
+                                        <th style="text-align: center;">판매량</th>
+                                        <th style="text-align: center;">개별금액</th>
+                                        <th style="text-align: center;">총 판매금액</th>
+                                      </tr>
+                                      <tr th:each="product : ${top3ProductSalesRankData}">
+                                        <td th:text="${product['PRO_NAME']}" style="text-align: center;"></td>
+                                        <td th:text="${product['TOTAL_SALES']} + ' 개'" style="text-align: right;"></td>
+                                        <td style="text-align: right;">
+                                          <span th:if="${product['PRO_PRICE'] == 0}" th:text="'0원'"></span>
+                                          <span th:unless="${product['PRO_PRICE'] == 0}" th:text="${#numbers.formatInteger(product['PRO_PRICE'], 3, 'COMMA') + '원'}"></span>
+                                        </td>
+                                        <td style="text-align: right;">
+                                          <span th:if="${product['TOTAL_SALES_PRICE'] == 0}" th:text="'0원'"></span>
+                                          <span th:unless="${product['TOTAL_SALES_PRICE'] == 0}" th:text="${#numbers.formatInteger(product['TOTAL_SALES_PRICE'], 3, 'COMMA') + '원'}"></span>
+                                        </td>
+                                      </tr>
+                                      <!--데이터가 없을 경우-->
+                                      <tr th:if="${#lists.isEmpty(top3ProductSalesRankData)}">
+                                        <td colspan="4" style="text-align: center;">표시할 내역이 없습니다</td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>	
+                        </div> 
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 주문목록 테이블 -->
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="box box-primary">
+                        <!--테이블 명-->
+                        <div class="box-header with-border">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <h3 class="box-title mt-5" style="font-weight:bold;">최근 주문내역</h3>
+                              </div>
+                              <div class="col-md-6" style="text-align: right;">
+                                <button type="button" class="btn btn-outline-primary" onclick="location.href='/admin/order/order_list'" >주문관리 바로가기</button>
+                              </div>
+                            </div>
+                        </div>
+                        <!--테이블 내용-->
+                        <div class="box-body">
+                            <table class="table table-bordered">
+                              <tbody>
+                                <tr>
+                                  <th style="width: 8%; text-align: center;">주문번호</th>
+                                  <th style="width: 10%; text-align: center;">주문자(아이디)</th>
+                                  <th style="width: 10%; text-align: center;">전화번호</th>
+                                  <th style="width: 10%; text-align: center;">결제금액</th>
+                                  <th style="width: 12%; text-align: center;">주문일시</th>
+                                  <th style="width: 50%; text-align: center;">주소</th>
+                                </tr>
+
+                                <tr th:each="order : ${admin_ord_list}" th:if="${!#lists.isEmpty(admin_ord_list)}">
+                                  <td style="text-align: center; vertical-align: middle;">
+                                    <span th:text="${order.ord_code}"></span>
+                                  </td>
+
+                                  <td style="text-align: center; vertical-align: middle;">[[${order.ord_name}]] / [[${order.mbsp_id}]]</td>
+
+                                  <td style="text-align: center; vertical-align: middle;">
+                                    <span th:text="${order.ord_tel}"></span>
+                                  </td>
+
+                                  <td style="text-align: center; vertical-align: middle;">
+                                    <span th:text="${#numbers.formatInteger(order.ord_price, '3', 'COMMA') + '원'}"></span>
+                                  </td>
+
+                                  <td th:text="${#dates.format(order.ord_regdate, 'yyyy-MM-dd HH:mm:ss')}" style="text-align: center; vertical-align: middle;"></td>
+
+                                  <td style="text-align: left; vertical-align: middle;">
+                                  ( [[${order.ord_addr_zipcode}]] ) [[${order.ord_addr_basic}]] , [[${order.ord_addr_detail}]]
+                                  </td>
+                                </tr>
+                                <!--데이터가 없을 경우-->
+                                <tr th:if="${#lists.isEmpty(admin_ord_list)}">
+                                  <td colspan="6" style="text-align: center;">표시할 내역이 없습니다</td>
+                                </tr>
+                              </tbody>
+                            </table>	
+                        </div> <!-- box-body 끝 -->
+
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 회원목록 테이블 -->
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="box box-primary">
+
+                      <div class="box-header with-border">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <h3 class="box-title mt-5" style="font-weight:bold;">최근 회원가입</h3>
+                          </div>
+                          <div class="col-md-6" style="text-align: right;">
+                            <button type="button" class="btn btn-outline-primary" onclick="location.href='/admin/member/member_list'" >회원관리 바로가기</button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="box-body">
+                        <table class="table table-bordered">
+                          <tbody>
+                            <tr>
+                              <th style="width: 10%; text-align: center;">가입일시</th>
+                              <th style="width: 5%; text-align: center;">아이디</th>
+                              <th style="width: 5%; text-align: center;">이름</th>
+                              <th style="width: 10%; text-align: center;">이메일</th>
+                              <th style="width: 8%; text-align: center;">전화번호</th>
+                              <th style="width: 20%; text-align: center;">주소</th>
+                              <th style="width: 10%; text-align: center;">마케팅 수신동의</th>
+                              <th style="width: 5%; text-align: center;">포인트</th>
+                              <th style="width: 12%; text-align: center;">최근 로그인</th>
+                            </tr>
+
+                            <tr th:each="member : ${admin_member_list}" th:if="${!#lists.isEmpty(admin_member_list)}">
+                              <td th:text="${#dates.format(member.mbsp_datesub, 'yyyy-MM-dd HH:mm:ss')}" style="text-align: center; vertical-align: middle;"></td>
+
+                              <td style="text-align: center; vertical-align: middle;">
+                                <span th:text="${member.mbsp_id}"></span>
+                              </td>
+
+                              <td style="text-align: center; vertical-align: middle;">
+                                <span th:text="${member.mbsp_name}"></span>
+                              </td>
+
+                              <td style="text-align: center; vertical-align: middle;">
+                                <span th:text="${member.mbsp_email}"></span>
+                              </td>
+
+                              <td style="text-align: center; vertical-align: middle;">
+                                <span th:text="${member.mbsp_phone}"></span>
+                              </td>
+
+                              <td style="text-align: left; vertical-align: middle;">
+                                ( [[${member.mbsp_zipcode}]] ) [[${member.mbsp_addr}]] , [[${member.mbsp_deaddr}]]
+                              </td>
+
+                              <td style="text-align: center; vertical-align: middle;">
+                                <span th:text="${member.mbsp_receive}"></span>
+                              </td>
+
+                              <td style="text-align: center; vertical-align: middle;">
+                                <span th:text="${member.mbsp_point}"></span>
+                              </td>
+
+                              <td th:text="${#dates.format(member.mbsp_lastlogin, 'yyyy-MM-dd HH:mm:ss')}" style="text-align: center; vertical-align: middle;"></td>
+
+                             
+                            </tr>
+                            <!--데이터가 없을 경우-->
+                            <tr th:if="${#lists.isEmpty(admin_member_list)}">
+                              <td colspan="9" style="text-align: center;">표시할 내역이 없습니다</td>
+                            </tr>
+                          </tbody>
+                        </table>	
+                      </div> <!-- box-body 끝 -->
+
+
+
+                    </div>
+                  </div>
+                </div>
+
+
+
+                <div class="row" style="display: flex;">
+                    <!-- 문의목록 테이블 -->
+                    <div class="col-md-6" style="display: flex; flex-direction: column;">
+                        <div class="box box-primary" style="flex: 1;">
+
+                          <div class="box-header with-border">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <h3 class="box-title mt-5" style="font-weight:bold;">최근 문의내역</h3>
+                              </div>
+                              <div class="col-md-6" style="text-align: right;">
+                                <button type="button" class="btn btn-outline-primary" onclick="location.href='/admin/community/question/question_list'" >문의관리 바로가기</button>
+                              </div>
+                            </div>
+                          </div>
+    
+                          <div class="box-body">
+                            <table class="table table-bordered">
+                              <tbody>
+                                <tr>
+                                  <th style="width: 15%; text-align: center;">문의번호</th>
+                                  <th style="width: 15%; text-align: center;">답변여부</th>
+                                  <th style="width: 20%; text-align: center;">상품정보</th>
+                                  <th style="width: 35%; text-align: center;">내용</th>
+                                  <th style="width: 15%; text-align: center;">작성일</th>
+                                </tr>
+    
+                                <tr th:each="question : ${admin_question_list}" th:if="${!#lists.isEmpty(admin_question_list)}">
+                                  <td style="text-align: center; vertical-align: middle;">[[${question.qa_code}]]</td>
+                                  <td style="text-align: center; vertical-align: middle;">
+                                    <span th:if="${question.qa_admin_reply_status =='N'}" style="color:red;">답변대기</span>
+                                    <span th:if="${question.qa_admin_reply_status =='Y'}" style="color: blue;">답변완료</span>
+                                  </td>
+                                  <td style="vertical-align: middle;">
+                                    <table>
+                                      <tbody>
+                                        <tr>
+                                          <td>
+                                            <img th:src="${'/admin/product/image_display?dateFolderName=' + question.pro_up_folder + '&fileName=s_' + question.pro_img}" style="width: 50px; height: 50px;">
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <span style="font-weight: bold; display: inline-block; max-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">([[${question.pro_num}]])[[${question.pro_name}]]</span>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </td>
+
+                                  <td style="text-align: left; vertical-align: middle;">
+                                    <span th:text="${question.qa_title}" style="font-weight: bold;"></span>
+                                    <hr style="width: 100%; margin-top: 5px; margin-bottom: 5px;">
+                                    <span th:text="${question.qa_content}" style="display: inline-block; max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></span>
+                                  </td>
+    
+                                  <td th:text="${#dates.format(question.qa_date, 'yyyy-MM-dd HH:mm:ss')}" style="text-align: center; vertical-align: middle;"></td>
+    
+                                 
+                                </tr>
+                                <!--데이터가 없을 경우-->
+                                <tr th:if="${#lists.isEmpty(admin_question_list)}">
+                                  <td colspan="5" style="text-align: center;">표시할 내역이 없습니다</td>
+                                </tr>
+                              </tbody>
+                            </table>	
+                          </div>
+
+
+
+
+
+
+                          
+                        </div>
+                    </div>
+
+                    <!-- 후기목록 테이블 -->
+                    <div class="col-md-6" style="display: flex; flex-direction: column;">
+                        <div class="box box-primary" style="flex: 1;">
+
+                          
+                          <div class="box-header with-border">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <h3 class="box-title mt-5" style="font-weight:bold;">최근 후기내역</h3>
+                              </div>
+                              <div class="col-md-6" style="text-align: right;">
+                                <button type="button" class="btn btn-outline-primary" onclick="location.href='/admin/community/review/rev_list'" >후기관리 바로가기</button>
+                              </div>
+                            </div>
+                          </div>
+    
+                          <div class="box-body">
+                            <table class="table table-bordered">
+                              <tbody>
+                                <tr>
+                                  <th style="width: 15%; text-align: center;">후기번호</th>
+                                  <th style="width: 15%; text-align: center;">답변여부</th>
+                                  <th style="width: 20%; text-align: center;">상품정보</th>
+                                  <th style="width: 35%; text-align: center;">내용</th>
+                                  <th style="width: 15%; text-align: center;">작성일</th>
+                                </tr>
+    
+                                <tr th:each="review : ${admin_rev_list}" th:if="${!#lists.isEmpty(admin_rev_list)}">
+                                  <td style="text-align: center; vertical-align: middle;">[[${review.re_code}]]</td>
+                                  <td style="text-align: center; vertical-align: middle;">
+                                    <span th:if="${review.re_admin_reply_status =='N'}" style="color:red;">답변대기</span>
+                                    <span th:if="${review.re_admin_reply_status =='Y'}" style="color: blue;">답변완료</span>
+                                  </td>
+                                  <td style="vertical-align: middle;">
+                                    <table>
+                                      <tbody>
+                                        <tr>
+                                          <td>
+                                            <img th:src="${'/admin/product/image_display?dateFolderName=' + review.pro_up_folder + '&fileName=s_' + review.pro_img}" style="width: 50px; height: 50px;">
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <span style="font-weight: bold;">([[${review.pro_num}]])</span>
+                                            <span>[[${review.pro_name}]]</span>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </td>
+
+                                  <td style="text-align: left; vertical-align: middle;">
+                                    <span class="star_rateing" th:text="${review.re_rate}" style="font-weight: bold; color: red;"></span>
+                                    <hr style="width: 100%; margin-top: 5px; margin-bottom: 5px;">
+                                    <span th:text="${review.re_title}" style="font-weight: bold; display: inline-block; max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></span>
+                                    <hr style="width: 100%; margin-top: 5px; margin-bottom: 5px;">
+                                    <span th:text="${review.re_content}" style="display: inline-block; max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></span>
+                                  </td>
+    
+                                  <td th:text="${#dates.format(review.re_date, 'yyyy-MM-dd HH:mm:ss')}" style="text-align: center; vertical-align: middle;"></td>
+    
+                                 
+                                </tr>
+                                <!--데이터가 없을 경우-->
+                                <tr th:if="${#lists.isEmpty(admin_rev_list)}">
+                                  <td colspan="5" style="text-align: center;">표시할 내역이 없습니다</td>
+                                </tr>
+                              </tbody>
+                            </table>	
+                            
+                          </div>
+
+
+
+                          
+                        </div>
+                    </div>
+                </div> 
+
+
+              
+
+            </section><!-- /.content -->
         </div><!-- /.content-wrapper -->
     </th:block>
+
+
+    <th:block layout:fragment = "script">
+        <script>
+            $(document).ready(function(){
+
+              //[별점 표시]
+              $(".star_rateing").each(function() {
+                let rating = $(this).text(); 
+                let stars = '';
+
+                switch(rating) {
+                  case '1' :
+                    stars = '★☆☆☆☆';
+                    break;
+                  case '2' :
+                    stars = '★★☆☆☆';
+                    break;
+                  case '3' :
+                    stars = '★★★☆☆';
+                    break;
+                  case '4' :
+                    stars = '★★★★☆';
+                    break;
+                  case '5' :
+                    stars = '★★★★★';
+                    break;
+                }
+                $(this).text(stars);
+              });
+            
+            });  //ready end
+        
+        
+        </script>
+    </th:block>
+
+
 
 </html>

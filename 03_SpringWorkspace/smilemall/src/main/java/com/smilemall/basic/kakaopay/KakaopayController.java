@@ -36,7 +36,7 @@ public class KakaopayController {
 	// [결제준비 요청]
 	@ResponseBody
 	@GetMapping("/kakaoPay")
-	public ReadyResponse kakaoPay(CartProductVo cp_vo, OrderVo vo, HttpSession session, String type) {
+	public ReadyResponse kakaoPay(CartProductVo cp_vo, OrderVo vo, HttpSession session, String type) throws Exception {
 		
 		log.info("type값:"+ type);
 		
@@ -162,7 +162,7 @@ public class KakaopayController {
 	
 	//[결제승인]
 	@GetMapping("/approval")
-	public void approval(String pg_token) {
+	public void approval(String pg_token) throws Exception {
 		
 		log.info("pg_token값: "+ pg_token);
 		
@@ -177,7 +177,7 @@ public class KakaopayController {
 		if(approveResponse.contains("aid")) {
 			//주문정보, 아이디, 결제방법, 상태, 결제정보를 저장하겠다.
 			//orderService.order_process(vo, mbsp_id, "kakaopay", "완료", " kakaopay");
-			orderService.order_process_direct(vo, mbsp_id, "kakaopay", "결제완료" ,"kakaopay", cp_vo, type);				
+			orderService.order_process_direct(vo, mbsp_id, "kakaopay", "완료" ,"kakaopay", cp_vo, type);				
 		}
 		
 	}

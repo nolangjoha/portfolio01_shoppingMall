@@ -1,12 +1,29 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+				layout:decorate="~{/layout/baselayout}">
+				
+  
 <body>
+	<main role="main">
 
-    <h2>카카오페이 결제 승인</h2>
+		<th:block layout:fragment="content">
+			
+			<div class="container">
+			<h1 class="mt-5 text-center" >주문완료</h1>
+				<div style="text-align: center;">
+					
+					<span>카카오페이 결제 주문이 완료되었습니다.</span>
+					<br>
+					<button type="button" class="btn btn-light" onclick="location.href='/'">홈으로</button>
+					
+				</div>
+			</div>
 
+		</th:block>
+	</main>
+	
+	
+
+    
 </body>
-</html>
+</html> 

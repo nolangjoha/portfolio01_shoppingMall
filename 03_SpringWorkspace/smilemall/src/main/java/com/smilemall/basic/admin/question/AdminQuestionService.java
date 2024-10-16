@@ -63,6 +63,9 @@ public class AdminQuestionService {
 		adminQuestionMapper.admin_question_reply_delete(vo);
 	}
 	
-	
+	// [관리자 메인_문의리스트]
+	public List<QuestionVo> admin_question_list() {
+		return adminQuestionMapper.admin_question_list();
+	}
 	
 }

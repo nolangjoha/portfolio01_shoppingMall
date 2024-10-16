@@ -310,6 +310,46 @@
 	</update>
 	
 	
+	<!-- [관리자 메인_회원리스트] -->
+	<select id="admin_member_list" resultType="MemberVo">
+		SELECT
+			mbsp_id, 
+			mbsp_name, 
+			mbsp_email, 
+			mbsp_password, 
+			mbsp_zipcode, 
+			mbsp_addr, 
+			mbsp_deaddr, 
+			mbsp_phone,
+			mbsp_nick, 
+			mbsp_receive, 
+			mbsp_point, 
+			mbsp_lastlogin, 
+			mbsp_datesub
+		FROM (
+			SELECT
+				mbsp_id, 
+				mbsp_name, 
+				mbsp_email, 
+				mbsp_password, 
+				mbsp_zipcode, 
+				mbsp_addr, 
+				mbsp_deaddr, 
+				mbsp_phone,
+				mbsp_nick, 
+				mbsp_receive, 
+				mbsp_point, 
+				mbsp_lastlogin, 
+				mbsp_datesub
+			FROM
+				mbsp_tbl
+			ORDER BY mbsp_datesub DESC
+			)
+		WHERE
+			<![CDATA[
+			ROWNUM <=5
+			]]>
+	</select>
 	
 	
 </mapper>

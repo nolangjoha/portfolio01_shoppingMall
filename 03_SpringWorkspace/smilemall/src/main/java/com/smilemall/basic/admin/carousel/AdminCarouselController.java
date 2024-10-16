@@ -38,7 +38,7 @@ public class AdminCarouselController {
 	
 	//[캐러셀 등록폼 페이지]
 	@GetMapping("/carousel_insert")
-	public void carousel_insertForm() {
+	public void carousel_insertForm() throws Exception {
 		//log.info("케러셀 등록폼 페이지");
 	}
 	

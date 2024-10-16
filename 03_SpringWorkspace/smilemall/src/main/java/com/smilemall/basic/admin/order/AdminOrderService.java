@@ -10,8 +10,10 @@ import com.smilemall.basic.order.OrderDetailVo;
 import com.smilemall.basic.order.OrderVo;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class AdminOrderService {
 
@@ -43,9 +45,12 @@ public class AdminOrderService {
 	public int calculateTotalAmount(Long ord_code) {
         List<OrderDetailInfoVo> orderDetailPrice = adminOrderMapper.order_detail_info(ord_code);
         int totalAmount = 0;
+        log.info("orderDetailPrice값:" + orderDetailPrice);
         
         for(OrderDetailInfoVo orderDetail : orderDetailPrice) {
-        	totalAmount += orderDetail.getDt_price();
+        	//totalAmount += orderDetail.getDt_price();
+        	totalAmount += orderDetail.getDt_price() * orderDetail.getDt_amount();
+        	log.info("totalAmount값:" + totalAmount);
         }
         return totalAmount;
     }
@@ -63,5 +68,9 @@ public class AdminOrderService {
 		adminOrderMapper.payinfo_delete(ord_code);
 	}
 	
-	
+	// [관리자 메인_주문리스트]
+	public List<OrderVo> admin_ord_list() {
+		return adminOrderMapper.admin_ord_list();
+	}
+
 }

@@ -29,13 +29,13 @@ public class AnalysisChartService {
 	
 	
 	// <월간 상위카테고리 매출 현황>
-	public List<Map<String,Object>> monthlySalesStatusByTopCategory(String ord_date) {
-		return analysisChartMapper.monthlySalesStatusByTopCategory(ord_date);
+	public List<Map<String,Object>> monthlySalesStatusByTopCategory(String ord_month) {
+		return analysisChartMapper.monthlySalesStatusByTopCategory(ord_month);
 	}
 	
 	// <월간 하위카테고리 매출 현황>
-	public List<Map<String,Object>> monthlySalesStatusBySubCategory(String ord_date) {
-		return analysisChartMapper.monthlySalesStatusBySubCategory(ord_date);
+	public List<Map<String,Object>> monthlySalesStatusBySubCategory(String ord_month) {
+		return analysisChartMapper.monthlySalesStatusBySubCategory(ord_month);
 	}
 	
 	// <연간 상위카테고리 매출 현황>
@@ -60,5 +60,10 @@ public class AnalysisChartService {
 		return analysisChartMapper.yearlyProductSalesRank(ord_year);
 	}
 	
+	
+	// [관리자 메인_이번달 매출] 
+	public int adminPageMonthSales (String ord_month) {
+		return analysisChartMapper.adminPageMonthSales(ord_month);
+	}
 	
 }

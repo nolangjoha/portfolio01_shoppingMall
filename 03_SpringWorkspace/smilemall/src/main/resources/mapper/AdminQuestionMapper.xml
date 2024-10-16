@@ -172,4 +172,40 @@
 	</update>
 
 
+	<!-- [관리자 메인_주문리스트] -->
+	<select id="admin_question_list" resultType="QuestionVo">
+		SELECT
+			qa_code, 
+			pro_num, 
+			pro_name, 
+			pro_up_folder, 
+			pro_img,
+			qa_title, 
+			qa_content, 
+			qa_date, 
+			qa_admin_reply_status
+		FROM (
+			SELECT
+                q.qa_code, 
+		        q.pro_num,
+		        p.pro_name,
+		        p.pro_up_folder,
+		        p.pro_img,
+		        q.qa_title, 
+		        q.qa_content, 
+		        q.qa_date, 
+		        q.qa_admin_reply_status
+			FROM
+				qa_tbl q
+           JOIN
+		        product_tbl p ON p.pro_num = q.pro_num
+			ORDER BY qa_code DESC
+			)
+		WHERE
+			<![CDATA[
+			ROWNUM <=3
+			]]>
+	</select>
+	
+	
 </mapper>

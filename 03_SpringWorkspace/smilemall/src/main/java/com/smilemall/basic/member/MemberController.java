@@ -139,8 +139,22 @@ public class MemberController {
  			if(passwordEncoder.matches(dto.getMbsp_password(), vo.getMbsp_password())) {
  				vo.setMbsp_password(""); //사용자가 입력한 비번을 비워줌. 암호화 되어있지만 그래도 비밀번호니까 보안.
  				session.setAttribute("login_status", vo); //로그인 상태
- 				
  				memberService.last_login(vo.getMbsp_id()); // 최근 로그인 시간 update
+ 				
+ 				
+ 				// 세션에서 원래 가려했던 url값
+ 				String targetUrl = (String) session.getAttribute("targetUrl");
+ 				log.info("targetUrl값:" + targetUrl);
+ 				
+ 				if(targetUrl != null) {
+ 					session.removeAttribute("targetUrl");
+ 					return "redirect:" + targetUrl;
+ 					
+ 				} else {
+ 					return "redirect:" + url;
+ 				}
+ 				
+ 			
  			}else {
  				msg = "failPW";  //비밀번호 틀리면
  				url = "/member/login";  //로그인 페이지로 다시 이동
@@ -314,13 +328,13 @@ public class MemberController {
 	
 	//[비밀번호 변경 페이지]
 	@GetMapping("/changepw")
-	public void changePwForm() {
+	public void changePwForm() throws Exception {
 		log.info("changePwForm출력");
 	}
 	
 	// [비밀번호 변경하기]
 	@PostMapping("/changepw")
-	public String changepwOk(String cur_mbsp_password, String new_mbsp_password, HttpSession session, RedirectAttributes rttr) {
+	public String changepwOk(String cur_mbsp_password, String new_mbsp_password, HttpSession session, RedirectAttributes rttr) throws Exception {
 		
 		//사용자가 입력한 아이디를 대입한다.
 		String mbsp_id = ((MemberVo) session.getAttribute("login_status")).getMbsp_id();
@@ -354,7 +368,7 @@ public class MemberController {
 	
 	// [회원탈퇴 페이지]
 	@GetMapping("/delete")
-	public void deletdForm() {
+	public void deletdForm() throws Exception {
 		log.info("deleteForm 출력");
 	}
 	
@@ -397,7 +411,7 @@ public class MemberController {
 	// [나의 상품리뷰 페이지]
 	@GetMapping("/my_review")
 	public void my_review(HttpSession session, Model model, Criteria cri, @ModelAttribute("reply_status") String reply_status,
-			@ModelAttribute("start_date") String start_date,@ModelAttribute("end_date") String end_date) {
+			@ModelAttribute("start_date") String start_date,@ModelAttribute("end_date") String end_date) throws Exception {
 		//만약 로그인 상태라면
 		if(session.getAttribute("login_status") != null) {
 			//로그인상태로 지정된 세션의 아이디를 mbsp_id에 대입한다.
@@ -494,7 +508,7 @@ public class MemberController {
 	// [나의 문의 페이지]
 	@GetMapping("/my_question")
 	public void my_question(HttpSession session, Model model, Criteria cri, @ModelAttribute("reply_status") String reply_status,
-			@ModelAttribute("start_date") String start_date,@ModelAttribute("end_date") String end_date) {
+			@ModelAttribute("start_date") String start_date,@ModelAttribute("end_date") String end_date) throws Exception {
 		//만약 로그인 상태라면
 		if(session.getAttribute("login_status") != null) {
 			//로그인상태로 지정된 세션의 아이디를 mbsp_id에 대입한다.

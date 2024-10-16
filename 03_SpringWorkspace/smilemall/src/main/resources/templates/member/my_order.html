@@ -135,8 +135,8 @@
 													<h4><span class="badge badge-danger" th:if="${order.p_status} =='미납'">결제대기</span></h4>
 													<h4><span class="badge badge-primary" th:if="${order.p_status} =='완료'">결제완료</span></h4>
 													<span>주문일: <span th:text="${#dates.format(order.ord_regdate, 'yyyy-MM-dd HH:mm:ss')}" style="font-size: 14px;"></span></span>
-													<br>
-													<span>상품금액: <span th:text="${order.dt_price}"></span></span>
+													<br>  
+													<span>상품금액: <span th:text="${#numbers.formatInteger(order.dt_price * order.dt_amount, '3', 'COMMA') + '원'}"></span></span> 
 													<br>
 													<button type="button" class="btn btn-sm btn-outline-secondary" name="btn_order_info" th:data-ord_code="${order.ord_code}">상세보기</button>
 												
@@ -260,7 +260,7 @@
 								<tr>
 									<th scope="row">결제상태</th>
 									<td>
-										<span id="p_status"></span>
+										<span id="p_status_info"></span>
 									</td>
 									<th scope="row">배송비</th>
 									<td style="text-align: right;">
@@ -268,7 +268,9 @@
 									</td>
 								</tr>
 								<tr>
-									<th scope="row" id="deposit">입금자명<br>입금계좌</th>
+									<th scope="row">
+										<span id="deposit">입금자명<br>입금계좌</span>
+									</th>
 									<td>
 										<span id="payinfo"></span>
 									</td>
@@ -442,12 +444,16 @@
 
 						$("#mbsp_id").text(result.payinfo.mbsp_id);
 						$("#payinfo").text(result.payinfo.payinfo);
-						$("#p_status").text(result.payinfo.p_status);
+						$("#p_status_info").text(result.payinfo.p_status);
 
 						if(result.payinfo.payinfo=='kakaopay') {
-							$("#deposit").text("");
+							$("#deposit").hide();
 							$("#payinfo").text("");
+						} else {
+							$("#deposit").show();
+							$("#payinfo").text(result.payinfo.payinfo);
 						}
+
 
 						// 주문자(수령인)정보
 						$("#ord_name").text(result.ord_basic.ord_name);
@@ -455,7 +461,7 @@
 						$("#sample2_postcode").text(result.ord_basic.ord_addr_zipcode);
 						$("#sample2_address").text(result.ord_basic.ord_addr_basic);
 						$("#sample2_detailAddress").text(result.ord_basic.ord_addr_detail);
-						$("#ord_desc").val(result.ord_basic.ord_desc);
+						$("#ord_desc").text(result.ord_basic.ord_desc);
 
 						// 주문상품정보
 						print_order_product_info(result.ord_pro_list, $("#order_product_info"), $("#order_product_template"));

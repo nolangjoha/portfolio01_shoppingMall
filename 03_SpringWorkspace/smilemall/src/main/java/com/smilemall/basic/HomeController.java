@@ -41,12 +41,26 @@ public class HomeController {
 		// [신상품 목록 불러오기]
 		List<ProductVo> new_pro_list = adminProductService.new_pro_list();
 		//log.info("신제품" + new_pro_list);
+		//이미지 폴더 구분자 변환
+		new_pro_list.forEach(vo -> {
+			vo.setPro_up_folder(vo.getPro_up_folder().replace("\\", "/"));
+		});
+		
 		model.addAttribute("new_pro_list", new_pro_list);
 		
 		// [베스트 셀러 상품 불러오기]
 		List<Map<String,Object>> best_item_list = adminProductService.best_item_list();
+		
+		//이미지 폴더 구분자 변환
+		best_item_list.forEach(item -> {
+		    String pro_up_folder = (String) item.get("PRO_UP_FOLDER");
+		    if (pro_up_folder != null) {
+		        item.put("PRO_UP_FOLDER", pro_up_folder.replace("\\", "/"));
+		    }
+		});
+		
 		model.addAttribute("best_item_list", best_item_list);
-		//log.info("베스트셀러" + best_item_list);
+		log.info("베스트셀러" + best_item_list);
 		
 //		for (Map<String, Object> item : best_item_list) {
 //		    log.info("상품명: " + item.get("PRO_NAME"));
