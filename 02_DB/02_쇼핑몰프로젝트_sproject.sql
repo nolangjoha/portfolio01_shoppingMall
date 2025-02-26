@@ -83,6 +83,23 @@ pro_amount, pro_buy, pro_date, pro_updatedate)
 산뜻한 베이지숄','2024\07\15','842f4ce8-7766-4484-96c5-17f72ad0e027-beige_shawl.jpg', 1,'Y', '24/07/15', '24/07/15');
 
 
+INSERT INTO product_tbl (pro_num, cat_code, pro_name, pro_price, pro_discount, pro_publisher, pro_content, pro_up_folder, pro_img, 
+pro_amount, pro_buy, pro_date, pro_updatedate) 
+    VALUES (seq_pro_num.NEXTVAL,
+    9,
+    '회색바지', 
+    30000, 
+    10, 
+    '회색회색', 
+    '<img alt="" src="/admin/product/display/2147911515.jpg" style="height:667px; width:1000px" /><br />회색바지',
+    '2025/02/23',
+    '4d0967ec-075c-4cda-875a-964d5b4ded34-2147911515.jpg', 
+    100,
+    'Y', 
+    '25/02/23', 
+    '25/02/23'
+);
+
 COMMIT;
 
 --4. 카테고리 테이블
@@ -443,3 +460,18 @@ VALUES (
     );   
     
     COMMIT;
+
+
+
+
+order_tbl,ORDETAIL_TBL,PAYINFO
+
+--
+desc CART_TBL;
+
+desc order_tbl;
+
+desc ORDETAIL_TBL;
+
+desc PAYINFO;
+

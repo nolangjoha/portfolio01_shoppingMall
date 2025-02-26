@@ -42,37 +42,11 @@ public class OrderController {
 			log.info("결제타입:" + type);
 			
 		// <상품리스트(pro_list.html), 상품상세(pro_detail.html)에서 구매하기 버튼 클릭시>
-		// 만약 상품번호가 0이 아니고, 장바구니 상품의 양이 0이 아니면	
 		if(type.equals("direct")) {
-			//장바구니담은 상품 객체 생성
-			CartProductVo cp_vo = new CartProductVo();
+			model.addAttribute("cart_list", vo);
 			
-			log.info("cp_vo값 1" + cp_vo);
-			
-			// 담은상품의 정보를 장바구니 담은 상품에 지정
-			cp_vo.setPro_num(vo.getPro_num());
-			cp_vo.setPro_name(vo.getPro_name());
-			cp_vo.setPro_up_folder(vo.getPro_up_folder()); 
-			cp_vo.setPro_img(vo.getPro_img());
-			cp_vo.setPro_price(vo.getPro_price());
-			cp_vo.setCart_amount(vo.getCart_amount());
-			
-			log.info("cp_vo값 2" + cp_vo);
-			
-			
-			//상품목록 리스트객체 생성
-			List<CartProductVo> cart_list = new ArrayList<>();
-			cart_list.add(cp_vo);
-			model.addAttribute("cart_list", cart_list);
-			
-			log.info("cart_list값" + cart_list);
-			
-			int total_price = 0;
-			for(int i=0; i<cart_list.size(); i++) {
-				total_price += cart_list.get(i).getPro_price()*cart_list.get(i).getCart_amount();
-			}
+			int total_price = vo.getCart_amount() * vo.getPro_price();
 			model.addAttribute("total_price", total_price);
-			log.info("total_price값: "+total_price);
 			
 		} else if(type.equals("cart")) {
 			// <장바구니(cart_list.html)에서 구매하기 버튼 클릭시>
@@ -113,30 +87,8 @@ public class OrderController {
 		return entity;
 	}
 	
-//	// [무통장입금]
-//	@PostMapping("/ordersasve")
-//	public String ordersave(OrderVo vo, String pay_nobank, String pay_nobank_user, HttpSession session) throws Exception {
-//		
-//		log.info("무통자입금 주문정보:" + vo);
-//		log.info("입금은행:" + pay_nobank);
-//		log.info("예금주:" + pay_nobank_user);
-//		
-//		
-//		// 아이디 확보
-//		String mbsp_id = ((MemberVO) session.getAttribute("login_status")).getMbsp_id();
-//		vo.setMbsp_id(mbsp_id);
-//		
-//		// 결제정보 : 은행주 + 예금주
-//		String payinfo = pay_nobank + "/" + pay_nobank_user;
-//		
-//		//결제정보 :DB insert
-//		orderService.order_process(vo, mbsp_id, "무통장입금", "미납", payinfo);
-//		
-//		return "redirect:/order/ordercomplete";		
-//		
-//	}
 	
-	// [무통장입금] 수정중
+	// [무통장입금] 
 	@PostMapping("/ordersasve")
 	public String ordersave(OrderVo vo, String pay_nobank, String pay_nobank_user, HttpSession session, 
 			CartProductVo cp_vo, @ModelAttribute("type") String type) throws Exception {
